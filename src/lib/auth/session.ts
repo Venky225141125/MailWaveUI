@@ -1,26 +1,14 @@
 import Cookies from "js-cookie";
-import type { Role } from "./types";
+import type { Role, Session } from "@/types";
+import { ROUTES } from "@/constants/routes.constants";
 
-// NOTE (production hardening): these cookies are set client-side with
-// js-cookie, so they are readable by any JS running on the page (not
-// httpOnly). That's acceptable for this scaffold, but a real deployment
-// should move login behind a Next.js Route Handler that proxies to the
-// backend and sets an httpOnly, Secure, SameSite=strict cookie instead of
-// exposing the JWT to client-side JS at all.
-
+// Production note: prefer httpOnly Secure cookies via a Next.js BFF Route Handler.
 const TOKEN_COOKIE = "eb_token";
 const ROLE_COOKIE = "eb_role";
 const USERNAME_COOKIE = "eb_username";
 const USERID_COOKIE = "eb_userid";
 
 const COOKIE_OPTS = { expires: 1, sameSite: "lax" as const };
-
-export interface Session {
-  token: string;
-  role: Role;
-  id: number;
-  username: string;
-}
 
 export function setSession(session: Session): void {
   Cookies.set(TOKEN_COOKIE, session.token, COOKIE_OPTS);
@@ -56,25 +44,25 @@ export function logout(): void {
 export function roleHomePath(role: Role): string {
   switch (role) {
     case "SUPER_ADMIN":
-      return "/super-admin/dashboard";
+      return ROUTES.superAdmin.dashboard;
     case "CLIENT":
-      return "/client/dashboard";
+      return ROUTES.client.dashboard;
     case "USER":
-      return "/user/dashboard";
+      return ROUTES.user.dashboard;
     default:
-      return "/";
+      return ROUTES.home;
   }
 }
 
 export function roleLoginPath(role: Role): string {
   switch (role) {
     case "SUPER_ADMIN":
-      return "/login/super-admin";
+      return ROUTES.login.superAdmin;
     case "CLIENT":
-      return "/login/client";
+      return ROUTES.login.client;
     case "USER":
-      return "/login/user";
+      return ROUTES.login.user;
     default:
-      return "/";
+      return ROUTES.home;
   }
 }

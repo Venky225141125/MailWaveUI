@@ -1,9 +1,5 @@
-import { AppShell } from "@/components/AppShell";
-
-const NAV_ITEMS = [
-  { label: "Dashboard", href: "/client/dashboard" },
-  { label: "Users", href: "/client/users" },
-];
+import { AppShell } from "@/components/Layouts/AppShell";
+import { CLIENT_NAV } from "@/constants/nav.constants";
 
 export default function ClientLayout({
   children,
@@ -11,7 +7,7 @@ export default function ClientLayout({
   children: React.ReactNode;
 }) {
   return (
-    <AppShell roleLabel="Client" navItems={NAV_ITEMS}>
+    <AppShell roleLabel="Client" navItems={CLIENT_NAV}>
       {children}
     </AppShell>
   );

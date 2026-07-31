@@ -1,10 +1,5 @@
-import { AppShell } from "@/components/AppShell";
-
-const NAV_ITEMS = [
-  { label: "Dashboard", href: "/user/dashboard" },
-  { label: "Uploads", href: "/user/uploads" },
-  { label: "Campaigns", href: "/user/campaigns" },
-];
+import { AppShell } from "@/components/Layouts/AppShell";
+import { USER_NAV } from "@/constants/nav.constants";
 
 export default function UserLayout({
   children,
@@ -12,7 +7,7 @@ export default function UserLayout({
   children: React.ReactNode;
 }) {
   return (
-    <AppShell roleLabel="User" navItems={NAV_ITEMS}>
+    <AppShell roleLabel="User" navItems={USER_NAV}>
       {children}
     </AppShell>
   );

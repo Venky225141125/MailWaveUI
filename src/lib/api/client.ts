@@ -1,34 +1,21 @@
-import { getToken } from "./auth";
-import type { ApiErrorBody } from "./types";
+import { getToken } from "@/lib/auth/session";
+import { ApiError, toApiError } from "./errors";
 
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8080/api";
 
-export class ApiError extends Error {
-  errorCode: string;
-  status: number;
-
-  constructor(errorCode: string, message: string, status: number) {
-    super(message);
-    this.name = "ApiError";
-    this.errorCode = errorCode;
-    this.status = status;
-  }
-}
-
-interface ApiFetchOptions extends Omit<RequestInit, "body"> {
-  /** JSON-serializable body, or a FormData instance for multipart requests. */
+export interface ApiFetchOptions extends Omit<RequestInit, "body"> {
+  /** JSON-serializable body, or FormData for multipart requests. */
   body?: unknown;
-  /** Attach the Authorization: Bearer header. Defaults to true. */
+  /** Attach Authorization: Bearer. Defaults to true. */
   auth?: boolean;
 }
 
 /**
- * Small typed fetch wrapper around the backend at NEXT_PUBLIC_API_BASE_URL.
- * Attaches the JWT (if present) and normalizes the error shape from
- * docs/api-contract.md: { errorCode, message, timestamp }.
+ * Central HTTP gateway for all domain services.
+ * Resolves NEXT_PUBLIC_API_BASE_URL, attaches JWT, normalizes contract errors.
  */
-export async function apiFetch<T>(
+export async function apiClient<T>(
   path: string,
   opts: ApiFetchOptions = {}
 ): Promise<T> {
@@ -39,7 +26,6 @@ export async function apiFetch<T>(
 
   if (body instanceof FormData) {
     finalBody = body;
-    // Let the browser set the multipart boundary itself.
   } else if (body !== undefined) {
     finalHeaders.set("Content-Type", "application/json");
     finalBody = JSON.stringify(body);
@@ -73,12 +59,7 @@ export async function apiFetch<T>(
   const data = text ? safeJsonParse(text) : undefined;
 
   if (!res.ok) {
-    const errBody = data as Partial<ApiErrorBody> | undefined;
-    throw new ApiError(
-      errBody?.errorCode ?? `HTTP_${res.status}`,
-      errBody?.message ?? res.statusText ?? "Request failed",
-      res.status
-    );
+    throw toApiError(data, res.status, res.statusText);
   }
 
   return data as T;
@@ -91,3 +72,6 @@ function safeJsonParse(text: string): unknown {
     return undefined;
   }
 }
+
+export { ApiError };
+export { apiClient as apiFetch };
