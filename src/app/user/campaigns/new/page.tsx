@@ -3,8 +3,9 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { ApiError } from "@/lib/api";
+import { TIMEZONE_OPTIONS, zonedDateTimeToUtcIso } from "@/lib/timezone";
 import { listUploads } from "@/services/userUploadService";
-import { createCampaign } from "@/services/userCampaignService";
+import { createCampaign, sendTestEmail } from "@/services/userCampaignService";
 import { useAsyncData } from "@/hooks/useAsyncData";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { Alert } from "@/components/ui/Alert";
@@ -27,8 +28,28 @@ export default function NewCampaignPage() {
   const [fromName, setFromName] = useState("");
   const [bodyHtml, setBodyHtml] = useState("");
   const [scheduledAt, setScheduledAt] = useState("");
+  const [timezone, setTimezone] = useState(TIMEZONE_OPTIONS[TIMEZONE_OPTIONS.length - 1].value);
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+
+  const [testEmailStatus, setTestEmailStatus] = useState<string | null>(null);
+  const [testEmailError, setTestEmailError] = useState<string | null>(null);
+  const [sendingTest, setSendingTest] = useState(false);
+  const canSendTest = subject.trim() && fromName.trim() && bodyHtml.trim();
+
+  async function handleSendTestEmail() {
+    setTestEmailError(null);
+    setTestEmailStatus(null);
+    setSendingTest(true);
+    try {
+      const result = await sendTestEmail({ subject, fromName, bodyHtml });
+      setTestEmailStatus(`Test email sent to ${result.sentTo}`);
+    } catch (err) {
+      setTestEmailError(err instanceof ApiError ? err.message : GENERIC_ERROR);
+    } finally {
+      setSendingTest(false);
+    }
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -46,7 +67,7 @@ export default function NewCampaignPage() {
         fromName,
         bodyHtml,
         ...(scheduledAt
-          ? { scheduledAt: new Date(scheduledAt).toISOString() }
+          ? { scheduledAt: zonedDateTimeToUtcIso(scheduledAt, timezone) }
           : {}),
       });
       router.push(ROUTES.user.campaign(campaign.id));
@@ -114,13 +135,37 @@ export default function NewCampaignPage() {
           value={bodyHtml}
           onChange={(e) => setBodyHtml(e.target.value)}
         />
-        <Input
-          label="Scheduled At (optional)"
-          type="datetime-local"
-          hint="Leave blank to send as soon as possible."
-          value={scheduledAt}
-          onChange={(e) => setScheduledAt(e.target.value)}
-        />
+        <Alert tone="success" message={testEmailStatus} />
+        <Alert message={testEmailError} />
+        <Button
+          type="button"
+          variant="secondary"
+          disabled={!canSendTest || sendingTest}
+          onClick={handleSendTestEmail}
+        >
+          {sendingTest ? "Sending…" : "Send Test Email to Myself"}
+        </Button>
+        <div className="flex gap-3">
+          <Input
+            label="Scheduled At (optional)"
+            type="datetime-local"
+            hint="Leave blank to send as soon as possible. Interpreted in the timezone selected below."
+            value={scheduledAt}
+            onChange={(e) => setScheduledAt(e.target.value)}
+            className="flex-1"
+          />
+          <Select
+            label="Timezone"
+            value={timezone}
+            onChange={(e) => setTimezone(e.target.value)}
+          >
+            {TIMEZONE_OPTIONS.map((tz) => (
+              <option key={tz.value} value={tz.value}>
+                {tz.label}
+              </option>
+            ))}
+          </Select>
+        </div>
         <Button type="submit" disabled={submitting} className="mt-2">
           {submitting ? "Creating…" : "Create Campaign"}
         </Button>

@@ -22,3 +22,13 @@ export interface CreateCampaignPayload {
   bodyHtml: string;
   scheduledAt?: string;
 }
+
+export interface SendTestEmailPayload {
+  subject: string;
+  fromName: string;
+  bodyHtml: string;
+}
+
+export interface TestEmailSentResponse {
+  sentTo: string;
+}

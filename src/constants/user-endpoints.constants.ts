@@ -5,4 +5,5 @@ export const USER_ENDPOINTS = {
     `/user/uploads/${batchId}/records`,
   campaigns: "/user/campaigns",
   campaign: (id: string | number) => `/user/campaigns/${id}`,
+  testSendCampaign: "/user/campaigns/test-send",
 } as const;

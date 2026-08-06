@@ -52,6 +52,30 @@ export async function rejectClient(id: string | number): Promise<ClientSummary> 
   });
 }
 
+export async function activateClient(id: string | number): Promise<ClientSummary> {
+  return apiClient<ClientSummary>(SUPER_ADMIN_ENDPOINTS.activateClient(id), {
+    method: "POST",
+  });
+}
+
+export async function deactivateClient(id: string | number): Promise<ClientSummary> {
+  return apiClient<ClientSummary>(SUPER_ADMIN_ENDPOINTS.deactivateClient(id), {
+    method: "POST",
+  });
+}
+
+export async function activateUser(userId: string | number): Promise<UserSummary> {
+  return apiClient<UserSummary>(SUPER_ADMIN_ENDPOINTS.activateUser(userId), {
+    method: "POST",
+  });
+}
+
+export async function deactivateUser(userId: string | number): Promise<UserSummary> {
+  return apiClient<UserSummary>(SUPER_ADMIN_ENDPOINTS.deactivateUser(userId), {
+    method: "POST",
+  });
+}
+
 export async function listClientUsers(
   clientId: string | number
 ): Promise<UserSummary[]> {

@@ -4,7 +4,9 @@ import { useState } from "react";
 import Link from "next/link";
 import { ApiError } from "@/lib/api";
 import {
+  activateClient,
   approveClient,
+  deactivateClient,
   listClients,
   rejectClient,
 } from "@/services/superAdminService";
@@ -51,6 +53,32 @@ export default function ClientsPage() {
     setActingId(id);
     try {
       await rejectClient(id);
+      reload();
+    } catch (err) {
+      setActionError(err instanceof ApiError ? err.message : GENERIC_ERROR);
+    } finally {
+      setActingId(null);
+    }
+  }
+
+  async function handleActivate(id: number) {
+    setActionError(null);
+    setActingId(id);
+    try {
+      await activateClient(id);
+      reload();
+    } catch (err) {
+      setActionError(err instanceof ApiError ? err.message : GENERIC_ERROR);
+    } finally {
+      setActingId(null);
+    }
+  }
+
+  async function handleDeactivate(id: number) {
+    setActionError(null);
+    setActingId(id);
+    try {
+      await deactivateClient(id);
       reload();
     } catch (err) {
       setActionError(err instanceof ApiError ? err.message : GENERIC_ERROR);
@@ -160,6 +188,24 @@ export default function ClientsPage() {
                     Reject
                   </Button>
                 </div>
+              ) : client.status === "ACTIVE" ? (
+                <Button
+                  size="sm"
+                  variant="danger"
+                  disabled={actingId === client.id}
+                  onClick={() => handleDeactivate(client.id)}
+                >
+                  Deactivate
+                </Button>
+              ) : client.status === "DISABLED" ? (
+                <Button
+                  size="sm"
+                  disabled={actingId === client.id}
+                  onClick={() => handleActivate(client.id)}
+                  className="!bg-emerald-600 !text-white hover:!bg-emerald-700"
+                >
+                  Activate
+                </Button>
               ) : (
                 <span className="text-[var(--text-subtle)]">—</span>
               )}

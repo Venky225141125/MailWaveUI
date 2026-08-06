@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import type { UserSummary } from "@/types";
 import Link from "next/link";
 import { DataTable } from "@/components/ui/DataTable";
@@ -10,6 +11,7 @@ interface UsersTableProps {
   hrefForUser: (user: UserSummary) => string;
   linkLabel?: string;
   emptyMessage?: string;
+  renderActions?: (user: UserSummary) => ReactNode;
 }
 
 export function UsersTable({
@@ -18,6 +20,7 @@ export function UsersTable({
   hrefForUser,
   linkLabel = "View",
   emptyMessage = "No users yet.",
+  renderActions,
 }: UsersTableProps) {
   return (
     <DataTable
@@ -42,12 +45,24 @@ export function UsersTable({
             {formatDateTime(user.createdAt)}
           </td>
           <td className="px-4 py-2.5 text-right">
-            <Link
-              href={hrefForUser(user)}
-              className="text-sm font-medium text-[var(--brand)] hover:underline"
-            >
-              {linkLabel}
-            </Link>
+            {renderActions ? (
+              <div className="flex justify-end gap-3">
+                {renderActions(user)}
+                <Link
+                  href={hrefForUser(user)}
+                  className="text-sm font-medium text-[var(--brand)] hover:underline"
+                >
+                  {linkLabel}
+                </Link>
+              </div>
+            ) : (
+              <Link
+                href={hrefForUser(user)}
+                className="text-sm font-medium text-[var(--brand)] hover:underline"
+              >
+                {linkLabel}
+              </Link>
+            )}
           </td>
         </tr>
       ))}
