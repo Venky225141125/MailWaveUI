@@ -1,7 +1,7 @@
 "use client";
 
 import { LoginForm, AuthLink } from "@/components/Auth/LoginForm";
-import { loginClient } from "@/services/authService";
+import { loginClient, resendOtp, verifyOtp } from "@/services/authService";
 import { CLIENT_LOGIN_ERROR_COPY } from "@/constants/error-messages.constants";
 import { ROUTES } from "@/constants/routes.constants";
 
@@ -14,7 +14,10 @@ export default function ClientLoginPage() {
       identifierType="email"
       identifierName="email"
       errorCopy={CLIENT_LOGIN_ERROR_COPY}
+      forgotPasswordHref={ROUTES.forgotPassword.client}
       onLogin={(email, password) => loginClient({ email, password })}
+      onVerifyOtp={(challengeToken, code) => verifyOtp({ challengeToken, code })}
+      onResendOtp={(challengeToken) => resendOtp({ challengeToken })}
       footer={
         <>
           <div className="text-gray-400">Don't have an account?{" "}</div>

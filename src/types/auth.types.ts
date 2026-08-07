@@ -37,3 +37,32 @@ export interface LoginPayload {
   username?: string;
   password: string;
 }
+
+export interface OtpChallengeResponse {
+  challengeToken: string;
+  maskedEmail: string;
+  expiresInSeconds: number;
+}
+
+export interface VerifyOtpPayload {
+  challengeToken: string;
+  code: string;
+}
+
+export interface ResendOtpPayload {
+  challengeToken: string;
+}
+
+export interface ForgotPasswordPayload {
+  email: string;
+}
+
+export interface ResetPasswordPayload {
+  token: string;
+  newPassword: string;
+  confirmPassword: string;
+}
+
+export interface MessageResponse {
+  message: string;
+}

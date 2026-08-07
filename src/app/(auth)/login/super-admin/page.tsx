@@ -1,7 +1,7 @@
 "use client";
 
 import { LoginForm, AuthLink } from "@/components/Auth/LoginForm";
-import { loginSuperAdmin } from "@/services/authService";
+import { loginSuperAdmin, resendOtp, verifyOtp } from "@/services/authService";
 import { ROUTES } from "@/constants/routes.constants";
 
 export default function SuperAdminLoginPage() {
@@ -10,9 +10,12 @@ export default function SuperAdminLoginPage() {
       title="Super Admin Login"
       identifierLabel="Username or email"
       identifierName="username"
+      forgotPasswordHref={ROUTES.forgotPassword.superAdmin}
       onLogin={(usernameOrEmail, password) =>
         loginSuperAdmin({ usernameOrEmail, password })
       }
+      onVerifyOtp={(challengeToken, code) => verifyOtp({ challengeToken, code })}
+      onResendOtp={(challengeToken) => resendOtp({ challengeToken })}
       footer={
         <>
           Platform operator access only.{" "}
