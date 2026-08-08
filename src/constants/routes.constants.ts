@@ -5,6 +5,12 @@ export const ROUTES = {
     client: "/login/client",
     user: "/login/user",
   },
+  forgotPassword: {
+    superAdmin: "/forgot-password/super-admin",
+    client: "/forgot-password/client",
+    user: "/forgot-password/user",
+  },
+  resetPassword: "/reset-password",
   register: {
     client: "/register/client",
     freelancer: "/register/freelancer",

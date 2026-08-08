@@ -28,7 +28,7 @@ const PROTECTED_PREFIXES: Array<{ prefix: string; role: string }> = [
   { prefix: "/user", role: "USER" },
 ];
 
-const AUTH_PREFIXES = ["/login", "/register"];
+const AUTH_PREFIXES = ["/login", "/register", "/forgot-password", "/reset-password"];
 
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -66,6 +66,8 @@ export const config = {
     "/user/:path*",
     "/login/:path*",
     "/register/:path*",
+    "/forgot-password/:path*",
+    "/reset-password/:path*",
   ],
 };
 
