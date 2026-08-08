@@ -180,7 +180,7 @@ export function AppShell({
             <DropdownMenuTrigger asChild>
               <button
                 type="button"
-                className="inline-flex max-w-[13rem] items-center gap-2 rounded-full border border-border bg-card py-1 pr-2.5 pl-1 text-left shadow-sm transition-colors hover:bg-muted/70"
+                className="inline-flex max-w-[13rem] cursor-pointer items-center gap-2 rounded-full border border-border bg-card py-1 pr-2.5 pl-1 text-left shadow-sm transition-colors hover:bg-muted/70"
               >
                 <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary text-xs font-semibold text-primary-foreground">
                   {username ? initials : <UserRound className="size-4" />}

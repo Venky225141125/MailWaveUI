@@ -126,18 +126,16 @@ export default function NewCampaignPage() {
             label="Upload Batch"
             required
             value={batchId}
-            onChange={(e) => setBatchId(e.target.value)}
-            disabled={loadingBatches}
-          >
-            <option value="">
-              {loadingBatches ? "Loading…" : "Select a batch"}
-            </option>
-            {batches.map((b) => (
-              <option key={b.id} value={b.id}>
-                {b.originalFilename} — {b.validCount} valid
-              </option>
-            ))}
-          </Select>
+            onValueChange={setBatchId}
+            disabled={loadingBatches || !isActive}
+            placeholder={loadingBatches ? "Loading…" : "Select a batch"}
+            options={[
+              ...batches.map((b) => ({
+                value: String(b.id),
+                label: `${b.originalFilename} — ${b.validCount} valid`,
+              })),
+            ]}
+          />
           {!loadingBatches && batches.length === 0 ? (
             <Alert
               tone="info"
@@ -173,7 +171,7 @@ export default function NewCampaignPage() {
           >
             {sendingTest ? "Sending…" : "Send Test Email to Myself"}
           </Button>
-          <div className="flex gap-3">
+          <div className="flex flex-col gap-4 sm:flex-row">
             <Input
               label="Scheduled At (optional)"
               type="datetime-local"
@@ -185,14 +183,13 @@ export default function NewCampaignPage() {
             <Select
               label="Timezone"
               value={timezone}
-              onChange={(e) => setTimezone(e.target.value)}
-            >
-              {TIMEZONE_OPTIONS.map((tz) => (
-                <option key={tz.value} value={tz.value}>
-                  {tz.label}
-                </option>
-              ))}
-            </Select>
+              onValueChange={setTimezone}
+              className="sm:w-56"
+              options={TIMEZONE_OPTIONS.map((tz) => ({
+                value: tz.value,
+                label: tz.label,
+              }))}
+            />
           </div>
           <Button
             type="submit"

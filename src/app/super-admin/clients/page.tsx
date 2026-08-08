@@ -65,29 +65,27 @@ export default function ClientsPage() {
         title="Clients"
         description="Organizations and freelancers on the platform. Approve pending freelancers here."
       />
-      <div className="flex flex-wrap gap-3 rounded-xl border border-border/80 bg-card/80 p-3 shadow-sm">
+      <div className="flex flex-wrap gap-3 rounded-xl border border-border/80 bg-card/80 p-3 shadow-sm dark:bg-card">
         <Select
           aria-label="Filter by status"
           value={status}
-          onChange={(e) => setStatus(e.target.value)}
-        >
-          {STATUS_OPTIONS.map((opt) => (
-            <option key={opt || "all-status"} value={opt}>
-              {opt === "" ? "All statuses" : opt.replaceAll("_", " ")}
-            </option>
-          ))}
-        </Select>
+          onValueChange={setStatus}
+          placeholder="All statuses"
+          options={STATUS_OPTIONS.map((opt) => ({
+            value: opt,
+            label: opt === "" ? "All statuses" : opt.replaceAll("_", " "),
+          }))}
+        />
         <Select
           aria-label="Filter by type"
           value={type}
-          onChange={(e) => setType(e.target.value)}
-        >
-          {TYPE_OPTIONS.map((opt) => (
-            <option key={opt || "all-type"} value={opt}>
-              {opt === "" ? "All types" : opt}
-            </option>
-          ))}
-        </Select>
+          onValueChange={setType}
+          placeholder="All types"
+          options={TYPE_OPTIONS.map((opt) => ({
+            value: opt,
+            label: opt === "" ? "All types" : opt,
+          }))}
+        />
       </div>
       <Alert message={error ?? actionError} />
       <DataTable

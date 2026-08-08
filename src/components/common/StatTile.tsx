@@ -8,28 +8,26 @@ interface StatTileProps {
 }
 
 const TONE_CLASSES: Record<NonNullable<StatTileProps["tone"]>, string> = {
-  default: "text-[#0f172a]",
-  good: "text-[#16a34a]",
-  bad: "text-[#ef4444]",
-  warn: "text-[#d97706]",
-  info: "text-[#0284c7]",
+  default: "text-foreground",
+  good: "text-emerald-600 dark:text-emerald-400",
+  bad: "text-red-600 dark:text-red-400",
+  warn: "text-amber-600 dark:text-amber-400",
+  info: "text-sky-600 dark:text-sky-400",
 };
-
 
 const ACCENT_BAR: Record<NonNullable<StatTileProps["tone"]>, string> = {
-  default: "from-[#2563eb]/50 to-[#2563eb]/10",
-  good: "from-[#16a34a]/50 to-[#16a34a]/10",
-  bad: "from-[#ef4444]/50 to-[#ef4444]/10",
-  warn: "from-[#f59e0b]/50 to-[#f59e0b]/10",
-  info: "from-[#0ea5e9]/50 to-[#0ea5e9]/10",
+  default: "from-primary/60 to-primary/15",
+  good: "from-emerald-500/60 to-emerald-500/15",
+  bad: "from-red-500/60 to-red-500/15",
+  warn: "from-amber-500/60 to-amber-500/15",
+  info: "from-sky-500/60 to-sky-500/15",
 };
-
 
 export function StatTile({ label, value, tone = "default" }: StatTileProps) {
   return (
     <Card
       size="sm"
-      className="relative overflow-hidden border-border/80 bg-card/90 shadow-sm"
+      className="relative overflow-hidden border-border/80 bg-card shadow-sm dark:border-border dark:bg-card"
     >
       <div
         aria-hidden

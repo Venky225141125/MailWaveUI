@@ -31,14 +31,13 @@ export function EmailRecordsPanel({
         <Select
           label="Filter by status"
           value={status}
-          onChange={(e) => onStatusChange(e.target.value)}
-        >
-          {EMAIL_RECORD_STATUS_OPTIONS.map((opt) => (
-            <option key={opt || "all"} value={opt}>
-              {opt === "" ? "All" : opt.replaceAll("_", " ")}
-            </option>
-          ))}
-        </Select>
+          onValueChange={onStatusChange}
+          placeholder="All"
+          options={EMAIL_RECORD_STATUS_OPTIONS.map((opt) => ({
+            value: opt,
+            label: opt === "" ? "All" : opt.replaceAll("_", " "),
+          }))}
+        />
       </div>
 
       <DataTable
