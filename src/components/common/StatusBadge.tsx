@@ -1,39 +1,105 @@
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 
-const STATUS_CLASSES: Record<string, string> = {
-  VALID: "border-transparent bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300",
-  ACTIVE: "border-transparent bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300",
-  SENT: "border-transparent bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300",
-  COMPLETED: "border-transparent bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300",
+type Tone = "success" | "warning" | "danger" | "info" | "neutral";
+type Appearance = "soft" | "solid";
 
-  PENDING: "border-transparent bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300",
-  PENDING_APPROVAL: "border-transparent bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300",
-  DRAFT: "border-transparent bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300",
+const STATUS_TONE: Record<string, Tone> = {
+  VALID: "success",
+  ACTIVE: "success",
+  SENT: "success",
+  COMPLETED: "success",
 
-  PROCESSING: "border-transparent bg-sky-100 text-sky-800 dark:bg-sky-900/40 dark:text-sky-300",
-  SCHEDULED: "border-transparent bg-sky-100 text-sky-800 dark:bg-sky-900/40 dark:text-sky-300",
-  SENDING: "border-transparent bg-sky-100 text-sky-800 dark:bg-sky-900/40 dark:text-sky-300",
+  PENDING: "warning",
+  PENDING_APPROVAL: "warning",
+  DRAFT: "neutral",
+  SOFT_BOUNCE: "warning",
 
-  SOFT_BOUNCE: "border-transparent bg-orange-100 text-orange-800 dark:bg-orange-900/40 dark:text-orange-300",
+  PROCESSING: "info",
+  SCHEDULED: "info",
+  SENDING: "info",
 
-  INVALID: "border-transparent bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300",
-  HARD_BOUNCE: "border-transparent bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300",
-  REJECTED: "border-transparent bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300",
-  DISABLED: "border-transparent bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300",
+  INVALID: "danger",
+  HARD_BOUNCE: "danger",
+  REJECTED: "danger",
+  DISABLED: "danger",
+  INACTIVE: "danger",
+
+  ORGANIZATION: "info",
+  FREELANCER: "neutral",
 };
 
-export function StatusBadge({ status }: { status: string }) {
+/** Solid badges for bounce / send outcomes (matches design kit) */
+const SOLID_STATUSES = new Set([
+  "HARD_BOUNCE",
+  "SOFT_BOUNCE",
+  "SENT",
+  "INVALID",
+  "REJECTED",
+]);
+
+const SOFT_CLASSES: Record<Tone, string> = {
+  success: "border-[#bbf7d0] bg-[#f0fdf4] text-[#15803d]",
+  warning: "border-[#fde68a] bg-[#fffbeb] text-[#b45309]",
+  danger: "border-[#fecaca] bg-[#fef2f2] text-[#b91c1c]",
+  info: "border-[#bae6fd] bg-[#f0f9ff] text-[#0369a1]",
+  neutral: "border-[#e2e8f0] bg-[#f8fafc] text-[#475569]",
+};
+
+const SOLID_CLASSES: Record<Tone, string> = {
+  success: "border-transparent bg-[#16a34a] text-white",
+  warning: "border-transparent bg-[#f59e0b] text-white",
+  danger: "border-transparent bg-[#ef4444] text-white",
+  info: "border-transparent bg-[#0ea5e9] text-white",
+  neutral: "border-transparent bg-[#64748b] text-white",
+};
+
+const DOT_CLASSES: Record<Tone, string> = {
+  success: "bg-[#16a34a]",
+  warning: "bg-[#f59e0b]",
+  danger: "bg-[#ef4444]",
+  info: "bg-[#0ea5e9]",
+  neutral: "bg-[#94a3b8]",
+};
+
+function friendlyLabel(status: string) {
+  if (status === "ACTIVE") return "Active";
+  if (status === "DISABLED" || status === "INACTIVE") return "Inactive";
+  return status
+    .replaceAll("_", " ")
+    .toLowerCase()
+    .replace(/^\w/, (c) => c.toUpperCase());
+}
+
+export function StatusBadge({
+  status,
+  className,
+  appearance,
+}: {
+  status: string;
+  className?: string;
+  appearance?: Appearance;
+}) {
+  const tone = STATUS_TONE[status] ?? "neutral";
+  const style: Appearance =
+    appearance ?? (SOLID_STATUSES.has(status) ? "solid" : "soft");
+
   return (
     <Badge
       variant="outline"
       className={cn(
-        "rounded-full font-medium",
-        STATUS_CLASSES[status] ??
-          "border-transparent bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300"
+        "h-6 gap-1.5 rounded-full px-2.5 text-[11px] font-semibold tracking-wide",
+        style === "solid" ? SOLID_CLASSES[tone] : SOFT_CLASSES[tone],
+        className
       )}
     >
-      {status.replaceAll("_", " ")}
+      {style === "soft" ? (
+        <span
+          aria-hidden
+          className={cn("size-1.5 rounded-full", DOT_CLASSES[tone])}
+        />
+      ) : null}
+      {friendlyLabel(status)}
     </Badge>
   );
 }

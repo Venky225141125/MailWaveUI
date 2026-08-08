@@ -7,7 +7,11 @@ export default function SuperAdminLayout({
   children: React.ReactNode;
 }) {
   return (
-    <AppShell roleLabel="Super Admin" navItems={SUPER_ADMIN_NAV}>
+    <AppShell
+      roleLabel="Super Admin"
+      navItems={SUPER_ADMIN_NAV}
+      theme="super-admin"
+    >
       {children}
     </AppShell>
   );

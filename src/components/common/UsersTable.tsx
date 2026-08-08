@@ -1,71 +1,86 @@
+"use client";
+
 import type { ReactNode } from "react";
 import type { UserSummary } from "@/types";
-import Link from "next/link";
+import {
+  TableCell,
+  TableRow,
+} from "@/components/ui/table";
 import { DataTable } from "@/components/shared/data-table";
+import { RowActions, type RowAction } from "@/components/shared/row-actions";
 import { StatusBadge } from "@/components/common/StatusBadge";
 import { formatDateTime } from "@/lib/helpers";
 
 interface UsersTableProps {
   users: UserSummary[];
   loading?: boolean;
-  hrefForUser: (user: UserSummary) => string;
-  linkLabel?: string;
   emptyMessage?: string;
+  actionsForUser?: (user: UserSummary) => RowAction[];
+  /** @deprecated Prefer actionsForUser — kept for simple custom cells */
   renderActions?: (user: UserSummary) => ReactNode;
 }
 
 export function UsersTable({
   users,
   loading,
-  hrefForUser,
-  linkLabel = "View",
-  emptyMessage = "No users yet.",
+  emptyMessage = "No users yet. Add your first team member to get started.",
+  actionsForUser,
   renderActions,
 }: UsersTableProps) {
   return (
     <DataTable
-      columns={["Username", "Email", "Status", "Created", ""]}
+      columns={["User", "Email", "Status", "Created", ""]}
       loading={loading}
       empty={!loading && users.length === 0}
       emptyMessage={emptyMessage}
-      minWidth="700px"
+      minWidth="720px"
     >
-      {users.map((user) => (
-        <tr key={user.id} className="hover:bg-[var(--surface-muted)]">
-          <td className="px-4 py-2.5 font-medium text-[var(--text)]">
-            {user.username}
-          </td>
-          <td className="px-4 py-2.5 text-[var(--text-muted)]">
-            {user.officialEmail}
-          </td>
-          <td className="px-4 py-2.5">
-            <StatusBadge status={user.status} />
-          </td>
-          <td className="px-4 py-2.5 text-[var(--text-muted)]">
-            {formatDateTime(user.createdAt)}
-          </td>
-          <td className="px-4 py-2.5 text-right">
-            {renderActions ? (
-              <div className="flex justify-end gap-3">
-                {renderActions(user)}
-                <Link
-                  href={hrefForUser(user)}
-                  className="text-sm font-medium text-[var(--brand)] hover:underline"
+      {users.map((user) => {
+        const actions = actionsForUser?.(user) ?? [];
+        return (
+          <TableRow key={user.id} className="group">
+            <TableCell className="px-4 py-3.5">
+              <div className="flex items-center gap-3">
+                <div
+                  aria-hidden
+                  className="flex size-9 shrink-0 items-center justify-center rounded-full bg-primary/10 text-xs font-semibold text-primary"
                 >
-                  {linkLabel}
-                </Link>
+                  {user.username.slice(0, 2).toUpperCase()}
+                </div>
+                <div className="min-w-0">
+                  <div className="truncate font-medium text-foreground">
+                    {user.username}
+                  </div>
+                  <div className="truncate text-xs text-muted-foreground sm:hidden">
+                    {user.officialEmail}
+                  </div>
+                </div>
               </div>
-            ) : (
-              <Link
-                href={hrefForUser(user)}
-                className="text-sm font-medium text-[var(--brand)] hover:underline"
-              >
-                {linkLabel}
-              </Link>
-            )}
-          </td>
-        </tr>
-      ))}
+            </TableCell>
+            <TableCell className="hidden px-4 py-3.5 text-muted-foreground sm:table-cell">
+              {user.officialEmail}
+            </TableCell>
+            <TableCell className="px-4 py-3.5">
+              <StatusBadge status={user.status} />
+            </TableCell>
+            <TableCell className="px-4 py-3.5 text-muted-foreground">
+              {formatDateTime(user.createdAt)}
+            </TableCell>
+            <TableCell className="px-2 py-3.5 text-right">
+              {renderActions ? (
+                <div className="flex items-center justify-end gap-1">
+                  {renderActions(user)}
+                  {actions.length > 0 ? (
+                    <RowActions actions={actions} />
+                  ) : null}
+                </div>
+              ) : actions.length > 0 ? (
+                <RowActions actions={actions} />
+              ) : null}
+            </TableCell>
+          </TableRow>
+        );
+      })}
     </DataTable>
   );
 }

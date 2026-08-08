@@ -13,8 +13,17 @@
   position: relative;
   overflow: hidden;
   background:
-    radial-gradient(ellipse 80% 60% at 20% 20%, var(--brand-muted), transparent 55%),
-    linear-gradient(160deg, #0f766e 0%, #0f172a 55%, #042f2e 100%);
+    radial-gradient(
+      ellipse 90% 70% at 15% 15%,
+      rgb(37 99 235 / 0.45),
+      transparent 55%
+    ),
+    radial-gradient(
+      ellipse 60% 50% at 85% 80%,
+      rgb(6 182 212 / 0.28),
+      transparent 50%
+    ),
+    linear-gradient(155deg, #1e3a8a 0%, #0f172a 55%, #164e63 100%);
   color: #f8fafc;
   padding: clamp(1.25rem, 2.5vh, 2rem) clamp(1.25rem, 2.5vw, 2.25rem);
 }
@@ -44,7 +53,7 @@
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: color-mix(in srgb, #ccfbf1 85%, white);
+  color: color-mix(in srgb, #93c5fd 85%, white);
 }
 
 .register-split__title {

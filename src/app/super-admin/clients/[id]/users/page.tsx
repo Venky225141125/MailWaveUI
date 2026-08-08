@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
+import { FolderOpen, UserCheck, UserX } from "lucide-react";
 import { ApiError } from "@/lib/api";
 import {
   activateUser,
@@ -11,13 +12,13 @@ import {
 import { useAsyncData } from "@/hooks/useAsyncData";
 import { PageHeader } from "@/components/shared/page-header";
 import { Alert } from "@/components/shared/alert";
-import { Button } from "@/components/shared/button";
 import { UsersTable } from "@/components/common/UsersTable";
 import { ROUTES } from "@/constants/routes.constants";
 import { GENERIC_ERROR } from "@/constants/error-messages.constants";
 
 export default function ClientUsersPage() {
   const params = useParams<{ id: string }>();
+  const router = useRouter();
   const { data: users, loading, error, reload } = useAsyncData(
     () => listClientUsers(params.id),
     [params.id]
@@ -55,6 +56,7 @@ export default function ClientUsersPage() {
     <div className="flex flex-col gap-6">
       <PageHeader
         title="Client Users"
+        description="Activate or deactivate team members for this organization."
         backHref={ROUTES.superAdmin.client(params.id)}
         backLabel="Client detail"
       />
@@ -62,29 +64,30 @@ export default function ClientUsersPage() {
       <UsersTable
         users={users ?? []}
         loading={loading}
-        linkLabel="Uploads"
-        hrefForUser={(u) => ROUTES.superAdmin.userUploads(u.id)}
-        renderActions={(user) =>
-          user.status === "ACTIVE" ? (
-            <Button
-              size="sm"
-              variant="danger"
-              disabled={actingId === user.id}
-              onClick={() => handleDeactivate(user.id)}
-            >
-              Deactivate
-            </Button>
-          ) : (
-            <Button
-              size="sm"
-              disabled={actingId === user.id}
-              onClick={() => handleActivate(user.id)}
-              className="!bg-emerald-600 !text-white hover:!bg-emerald-700"
-            >
-              Activate
-            </Button>
-          )
-        }
+        actionsForUser={(user) => [
+          {
+            label: "View uploads",
+            icon: <FolderOpen className="size-4" />,
+            onSelect: () =>
+              router.push(ROUTES.superAdmin.userUploads(user.id)),
+          },
+          user.status === "ACTIVE"
+            ? {
+                label: actingId === user.id ? "Deactivating…" : "Deactivate",
+                icon: <UserX className="size-4" />,
+                destructive: true,
+                disabled: actingId === user.id,
+                separatorBefore: true,
+                onSelect: () => handleDeactivate(user.id),
+              }
+            : {
+                label: actingId === user.id ? "Activating…" : "Activate",
+                icon: <UserCheck className="size-4" />,
+                disabled: actingId === user.id,
+                separatorBefore: true,
+                onSelect: () => handleActivate(user.id),
+              },
+        ]}
       />
     </div>
   );

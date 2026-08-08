@@ -1,7 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
+import {
+  CheckCircle2,
+  Eye,
+  Power,
+  PowerOff,
+  Users,
+  XCircle,
+} from "lucide-react";
 import { ApiError } from "@/lib/api";
 import {
   activateClient,
@@ -13,10 +21,11 @@ import {
 import { useAsyncData } from "@/hooks/useAsyncData";
 import { PageHeader } from "@/components/shared/page-header";
 import { Alert } from "@/components/shared/alert";
-import { Button } from "@/components/shared/button";
 import { Select } from "@/components/shared/select";
 import { DataTable } from "@/components/shared/data-table";
+import { RowActions, type RowAction } from "@/components/shared/row-actions";
 import { StatusBadge } from "@/components/common/StatusBadge";
+import { TableCell, TableRow } from "@/components/ui/table";
 import { formatDateTime } from "@/lib/helpers";
 import { ROUTES } from "@/constants/routes.constants";
 import { GENERIC_ERROR } from "@/constants/error-messages.constants";
@@ -25,6 +34,7 @@ const STATUS_OPTIONS = ["", "ACTIVE", "PENDING_APPROVAL", "DISABLED", "REJECTED"
 const TYPE_OPTIONS = ["", "ORGANIZATION", "FREELANCER"];
 
 export default function ClientsPage() {
+  const router = useRouter();
   const [status, setStatus] = useState("");
   const [type, setType] = useState("");
   const [actionError, setActionError] = useState<string | null>(null);
@@ -35,50 +45,11 @@ export default function ClientsPage() {
     [status, type]
   );
 
-  async function handleApprove(id: number) {
+  async function runAction(id: number, action: () => Promise<unknown>) {
     setActionError(null);
     setActingId(id);
     try {
-      await approveClient(id);
-      reload();
-    } catch (err) {
-      setActionError(err instanceof ApiError ? err.message : GENERIC_ERROR);
-    } finally {
-      setActingId(null);
-    }
-  }
-
-  async function handleReject(id: number) {
-    setActionError(null);
-    setActingId(id);
-    try {
-      await rejectClient(id);
-      reload();
-    } catch (err) {
-      setActionError(err instanceof ApiError ? err.message : GENERIC_ERROR);
-    } finally {
-      setActingId(null);
-    }
-  }
-
-  async function handleActivate(id: number) {
-    setActionError(null);
-    setActingId(id);
-    try {
-      await activateClient(id);
-      reload();
-    } catch (err) {
-      setActionError(err instanceof ApiError ? err.message : GENERIC_ERROR);
-    } finally {
-      setActingId(null);
-    }
-  }
-
-  async function handleDeactivate(id: number) {
-    setActionError(null);
-    setActingId(id);
-    try {
-      await deactivateClient(id);
+      await action();
       reload();
     } catch (err) {
       setActionError(err instanceof ApiError ? err.message : GENERIC_ERROR);
@@ -93,7 +64,7 @@ export default function ClientsPage() {
         title="Clients"
         description="Organizations and freelancers on the platform. Approve pending freelancers here."
       />
-      <div className="flex flex-wrap gap-3">
+      <div className="flex flex-wrap gap-3 rounded-xl border border-border/80 bg-card/80 p-3 shadow-sm">
         <Select
           aria-label="Filter by status"
           value={status}
@@ -126,92 +97,107 @@ export default function ClientsPage() {
           "Email",
           "Status",
           "Registered",
-          "Users",
-          "Actions",
+          "",
         ]}
         loading={loading}
         empty={!loading && (clients?.length ?? 0) === 0}
         emptyMessage="No clients found."
         minWidth="820px"
       >
-        {(clients ?? []).map((client) => (
-          <tr key={client.id}>
-            <td className="px-4 py-2.5 font-medium">
-              <Link
-                href={ROUTES.superAdmin.client(client.id)}
-                className="text-[var(--brand)] hover:underline"
-              >
-                {client.companyName}
-              </Link>
-            </td>
-            <td className="px-4 py-2.5 text-[var(--text-muted)]">
-              {client.clientType}
-            </td>
-            <td className="px-4 py-2.5 text-[var(--text-muted)]">
-              {client.username}
-            </td>
-            <td className="px-4 py-2.5 text-[var(--text-muted)]">
-              {client.officialEmail}
-            </td>
-            <td className="px-4 py-2.5">
-              <StatusBadge status={client.status} />
-            </td>
-            <td className="px-4 py-2.5 text-[var(--text-muted)]">
-              {formatDateTime(client.createdAt)}
-            </td>
-            <td className="px-4 py-2.5">
-              <Link
-                href={ROUTES.superAdmin.clientUsers(client.id)}
-                className="font-medium text-[var(--brand)] hover:underline"
-              >
-                View
-              </Link>
-            </td>
-            <td className="px-4 py-2.5">
-              {client.clientType === "FREELANCER" &&
-              client.status === "PENDING_APPROVAL" ? (
-                <div className="flex gap-2">
-                  <Button
-                    size="sm"
-                    disabled={actingId === client.id}
-                    onClick={() => handleApprove(client.id)}
-                    className="!bg-emerald-600 !text-white hover:!bg-emerald-700"
-                  >
-                    Approve
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="danger"
-                    disabled={actingId === client.id}
-                    onClick={() => handleReject(client.id)}
-                  >
-                    Reject
-                  </Button>
-                </div>
-              ) : client.status === "ACTIVE" ? (
-                <Button
-                  size="sm"
-                  variant="danger"
-                  disabled={actingId === client.id}
-                  onClick={() => handleDeactivate(client.id)}
+        {(clients ?? []).map((client) => {
+          const busy = actingId === client.id;
+          const actions: RowAction[] = [
+            {
+              label: "View detail",
+              icon: <Eye className="size-4" />,
+              onSelect: () =>
+                router.push(ROUTES.superAdmin.client(client.id)),
+            },
+            {
+              label: "View users",
+              icon: <Users className="size-4" />,
+              onSelect: () =>
+                router.push(ROUTES.superAdmin.clientUsers(client.id)),
+            },
+          ];
+
+          if (
+            client.clientType === "FREELANCER" &&
+            client.status === "PENDING_APPROVAL"
+          ) {
+            actions.push(
+              {
+                label: busy ? "Approving…" : "Approve",
+                icon: <CheckCircle2 className="size-4" />,
+                disabled: busy,
+                separatorBefore: true,
+                onSelect: () =>
+                  runAction(client.id, () => approveClient(client.id)),
+              },
+              {
+                label: busy ? "Rejecting…" : "Reject",
+                icon: <XCircle className="size-4" />,
+                destructive: true,
+                disabled: busy,
+                onSelect: () =>
+                  runAction(client.id, () => rejectClient(client.id)),
+              }
+            );
+          } else if (client.status === "ACTIVE") {
+            actions.push({
+              label: busy ? "Deactivating…" : "Deactivate",
+              icon: <PowerOff className="size-4" />,
+              destructive: true,
+              disabled: busy,
+              separatorBefore: true,
+              onSelect: () =>
+                runAction(client.id, () => deactivateClient(client.id)),
+            });
+          } else if (client.status === "DISABLED") {
+            actions.push({
+              label: busy ? "Activating…" : "Activate",
+              icon: <Power className="size-4" />,
+              disabled: busy,
+              separatorBefore: true,
+              onSelect: () =>
+                runAction(client.id, () => activateClient(client.id)),
+            });
+          }
+
+          return (
+            <TableRow key={client.id}>
+              <TableCell className="px-4 py-3.5 font-medium">
+                <button
+                  type="button"
+                  className="text-left text-primary hover:underline"
+                  onClick={() =>
+                    router.push(ROUTES.superAdmin.client(client.id))
+                  }
                 >
-                  Deactivate
-                </Button>
-              ) : client.status === "DISABLED" ? (
-                <Button
-                  size="sm"
-                  disabled={actingId === client.id}
-                  onClick={() => handleActivate(client.id)}
-                  className="!bg-emerald-600 !text-white hover:!bg-emerald-700"
-                >
-                  Activate
-                </Button>
-              ) : (
-                <span className="text-[var(--text-subtle)]">—</span>
-              )}
-            </td>
-          </tr>
-        ))}
+                  {client.companyName}
+                </button>
+              </TableCell>
+              <TableCell className="px-4 py-3.5">
+                <StatusBadge status={client.clientType} />
+              </TableCell>
+              <TableCell className="px-4 py-3.5 text-muted-foreground">
+                {client.username}
+              </TableCell>
+              <TableCell className="px-4 py-3.5 text-muted-foreground">
+                {client.officialEmail}
+              </TableCell>
+              <TableCell className="px-4 py-3.5">
+                <StatusBadge status={client.status} />
+              </TableCell>
+              <TableCell className="px-4 py-3.5 text-muted-foreground">
+                {formatDateTime(client.createdAt)}
+              </TableCell>
+              <TableCell className="px-2 py-3.5 text-right">
+                <RowActions actions={actions} />
+              </TableCell>
+            </TableRow>
+          );
+        })}
       </DataTable>
     </div>
   );

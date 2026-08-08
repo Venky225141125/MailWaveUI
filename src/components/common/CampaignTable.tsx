@@ -1,5 +1,9 @@
 import type { CampaignSummary } from "@/types";
 import Link from "next/link";
+import {
+  TableCell,
+  TableRow,
+} from "@/components/ui/table";
 import { DataTable } from "@/components/shared/data-table";
 import { StatusBadge } from "@/components/common/StatusBadge";
 import { formatDateTime, formatNumber } from "@/lib/helpers";
@@ -34,38 +38,38 @@ export function CampaignTable({
       minWidth="860px"
     >
       {campaigns.map((campaign) => (
-        <tr key={campaign.id} className="hover:bg-[var(--surface-muted)]">
-          <td className="px-4 py-2.5 font-medium text-[var(--text)]">
+        <TableRow key={campaign.id}>
+          <TableCell className="px-4 py-3.5 font-medium">
             {hrefForCampaign ? (
               <Link
                 href={hrefForCampaign(campaign)}
-                className="text-[var(--brand)] hover:underline"
+                className="text-primary hover:underline"
               >
                 {campaign.name}
               </Link>
             ) : (
               campaign.name
             )}
-          </td>
-          <td className="px-4 py-2.5">
+          </TableCell>
+          <TableCell className="px-4 py-3.5">
             <StatusBadge status={campaign.status} />
-          </td>
-          <td className="px-4 py-2.5 tabular-nums text-[var(--text-muted)]">
+          </TableCell>
+          <TableCell className="px-4 py-3.5 tabular-nums text-muted-foreground">
             {formatNumber(campaign.recipientsCount)}
-          </td>
-          <td className="px-4 py-2.5 tabular-nums text-[var(--text-muted)]">
+          </TableCell>
+          <TableCell className="px-4 py-3.5 tabular-nums text-muted-foreground">
             {formatNumber(campaign.sentCount)}
-          </td>
-          <td className="px-4 py-2.5 tabular-nums text-[var(--text-muted)]">
+          </TableCell>
+          <TableCell className="px-4 py-3.5 tabular-nums text-muted-foreground">
             {formatNumber(campaign.openedCount)}
-          </td>
-          <td className="px-4 py-2.5 tabular-nums text-[var(--text-muted)]">
+          </TableCell>
+          <TableCell className="px-4 py-3.5 tabular-nums text-muted-foreground">
             {formatNumber(campaign.notOpenedCount)}
-          </td>
-          <td className="px-4 py-2.5 text-[var(--text-muted)]">
+          </TableCell>
+          <TableCell className="px-4 py-3.5 text-muted-foreground">
             {formatDateTime(campaign.createdAt)}
-          </td>
-        </tr>
+          </TableCell>
+        </TableRow>
       ))}
     </DataTable>
   );

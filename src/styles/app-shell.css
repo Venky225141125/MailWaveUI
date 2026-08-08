@@ -1,16 +1,16 @@
-/* App shell — sidebar + content chrome */
+/* App shell — role-colored sidebar + light content chrome */
 
 .app-shell {
   display: flex;
   min-height: 100vh;
-  background: var(--surface-muted);
+  background: var(--background);
 }
 
 .app-shell__overlay {
   position: fixed;
   inset: 0;
   z-index: 40;
-  background: rgb(15 23 42 / 0.4);
+  background: rgb(15 23 42 / 0.45);
   opacity: 0;
   pointer-events: none;
   transition: opacity var(--motion-base) var(--ease-out);
@@ -30,9 +30,10 @@
   height: 100vh;
   width: var(--sidebar-width);
   flex-direction: column;
-  border-right: 1px solid var(--border);
-  background: var(--surface);
-  box-shadow: var(--shadow-sm);
+  border-right: 1px solid var(--sidebar-border);
+  background: var(--sidebar);
+  color: var(--sidebar-foreground);
+  box-shadow: var(--shadow-md);
   transform: translateX(-100%);
   transition:
     width var(--motion-base) var(--ease-out),
@@ -52,7 +53,7 @@
   height: var(--header-height);
   align-items: center;
   gap: var(--space-3);
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid var(--sidebar-border);
   padding: 0 var(--space-4);
   overflow: hidden;
 }
@@ -63,9 +64,9 @@
   width: 2rem;
   flex-shrink: 0;
   place-items: center;
-  border-radius: var(--radius-sm);
-  background: var(--brand);
-  color: var(--brand-foreground);
+  border-radius: 0.5rem;
+  background: rgb(255 255 255 / 18%);
+  color: #ffffff;
   font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: -0.02em;
@@ -75,6 +76,24 @@
   min-width: 0;
   opacity: 1;
   transition: opacity var(--motion-fast) var(--ease-out);
+}
+
+.app-shell__brand-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--sidebar-foreground);
+}
+
+.app-shell__brand-role {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.75rem;
+  color: var(--sidebar-muted);
 }
 
 .app-shell__sidebar.is-collapsed .app-shell__brand-text {
@@ -97,9 +116,9 @@
   display: flex;
   align-items: center;
   gap: var(--space-3);
-  border-radius: var(--radius-sm);
+  border-radius: 0.5rem;
   padding: 0.625rem 0.75rem;
-  color: var(--text-muted);
+  color: var(--sidebar-muted);
   font-size: 0.875rem;
   font-weight: 500;
   text-decoration: none;
@@ -109,13 +128,14 @@
 }
 
 .app-shell__nav-link:hover {
-  background: var(--surface-muted);
-  color: var(--text);
+  background: var(--sidebar-hover);
+  color: var(--sidebar-foreground);
 }
 
 .app-shell__nav-link.is-active {
-  background: var(--brand);
-  color: var(--brand-foreground);
+  background: var(--sidebar-accent);
+  color: var(--sidebar-accent-foreground);
+  box-shadow: none;
 }
 
 .app-shell__nav-icon {
@@ -150,7 +170,7 @@
 }
 
 .app-shell__sidebar-footer {
-  border-top: 1px solid var(--border);
+  border-top: 1px solid var(--sidebar-border);
   padding: var(--space-2);
 }
 
@@ -161,9 +181,9 @@
   justify-content: center;
   gap: var(--space-2);
   border: 0;
-  border-radius: var(--radius-sm);
+  border-radius: 0.5rem;
   background: transparent;
-  color: var(--text-muted);
+  color: var(--sidebar-muted);
   cursor: pointer;
   font-size: 0.8125rem;
   font-weight: 500;
@@ -174,8 +194,8 @@
 }
 
 .app-shell__collapse-btn:hover {
-  background: var(--surface-muted);
-  color: var(--text);
+  background: var(--sidebar-hover);
+  color: var(--sidebar-foreground);
 }
 
 .app-shell__main {
@@ -195,8 +215,8 @@
   justify-content: space-between;
   gap: var(--space-3);
   border-bottom: 1px solid var(--border);
-  background: color-mix(in srgb, var(--surface) 92%, transparent);
-  backdrop-filter: blur(10px);
+  background: rgb(255 255 255 / 90%);
+  backdrop-filter: blur(12px);
   padding: 0 var(--space-4);
 }
 
@@ -214,7 +234,7 @@
   align-items: center;
   justify-content: center;
   border: 1px solid var(--border-strong);
-  border-radius: var(--radius-sm);
+  border-radius: 0.5rem;
   background: var(--surface);
   color: var(--text);
   cursor: pointer;
@@ -224,6 +244,8 @@
   flex: 1;
   min-width: 0;
   width: 100%;
+  max-width: 1400px;
+  margin-inline: auto;
   padding: var(--space-3);
   animation: page-enter var(--motion-slow) var(--ease-out);
 }

@@ -1,5 +1,9 @@
 import type { UploadBatchSummary } from "@/types";
 import Link from "next/link";
+import {
+  TableCell,
+  TableRow,
+} from "@/components/ui/table";
 import { DataTable } from "@/components/shared/data-table";
 import { StatusBadge } from "@/components/common/StatusBadge";
 import { formatDateTime, formatNumber } from "@/lib/helpers";
@@ -35,41 +39,41 @@ export function UploadBatchTable({
       minWidth="880px"
     >
       {batches.map((batch) => (
-        <tr key={batch.id} className="hover:bg-[var(--surface-muted)]">
-          <td className="px-4 py-2.5 font-medium text-[var(--text)]">
+        <TableRow key={batch.id}>
+          <TableCell className="px-4 py-3.5 font-medium">
             {hrefForBatch ? (
               <Link
                 href={hrefForBatch(batch)}
-                className="text-[var(--brand)] hover:underline"
+                className="text-primary hover:underline"
               >
                 {batch.originalFilename}
               </Link>
             ) : (
               batch.originalFilename
             )}
-          </td>
-          <td className="px-4 py-2.5">
+          </TableCell>
+          <TableCell className="px-4 py-3.5">
             <StatusBadge status={batch.status} />
-          </td>
-          <td className="px-4 py-2.5 tabular-nums text-[var(--text-muted)]">
+          </TableCell>
+          <TableCell className="px-4 py-3.5 tabular-nums text-muted-foreground">
             {formatNumber(batch.totalRecords)}
-          </td>
-          <td className="px-4 py-2.5 tabular-nums text-[var(--text-muted)]">
+          </TableCell>
+          <TableCell className="px-4 py-3.5 tabular-nums text-muted-foreground">
             {formatNumber(batch.validCount)}
-          </td>
-          <td className="px-4 py-2.5 tabular-nums text-[var(--text-muted)]">
+          </TableCell>
+          <TableCell className="px-4 py-3.5 tabular-nums text-muted-foreground">
             {formatNumber(batch.invalidCount)}
-          </td>
-          <td className="px-4 py-2.5 tabular-nums text-[var(--text-muted)]">
+          </TableCell>
+          <TableCell className="px-4 py-3.5 tabular-nums text-muted-foreground">
             {formatNumber(batch.softBounceCount)}
-          </td>
-          <td className="px-4 py-2.5 tabular-nums text-[var(--text-muted)]">
+          </TableCell>
+          <TableCell className="px-4 py-3.5 tabular-nums text-muted-foreground">
             {formatNumber(batch.hardBounceCount)}
-          </td>
-          <td className="px-4 py-2.5 text-[var(--text-muted)]">
+          </TableCell>
+          <TableCell className="px-4 py-3.5 text-muted-foreground">
             {formatDateTime(batch.uploadedAt)}
-          </td>
-        </tr>
+          </TableCell>
+        </TableRow>
       ))}
     </DataTable>
   );

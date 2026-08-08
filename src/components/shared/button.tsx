@@ -22,7 +22,7 @@ const SIZE_MAP: Record<
   React.ComponentProps<typeof ShadcnButton>["size"]
 > = {
   sm: "sm",
-  md: "default",
+  md: "lg",
 };
 
 interface ButtonProps extends Omit<

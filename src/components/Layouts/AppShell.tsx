@@ -23,9 +23,16 @@ interface AppShellProps {
   roleLabel: string;
   navItems: NavItem[];
   children: React.ReactNode;
+  /** Role color theme from the design system */
+  theme?: "super-admin" | "client" | "user";
 }
 
-export function AppShell({ roleLabel, navItems, children }: AppShellProps) {
+export function AppShell({
+  roleLabel,
+  navItems,
+  children,
+  theme = "super-admin",
+}: AppShellProps) {
   const pathname = usePathname();
   const router = useRouter();
   const [username, setUsername] = useState<string | undefined>(undefined);
@@ -65,7 +72,7 @@ export function AppShell({ roleLabel, navItems, children }: AppShellProps) {
   }
 
   return (
-    <div className="app-shell">
+    <div className={`app-shell theme-${theme}`}>
       <div
         className={`app-shell__overlay${mobileOpen ? " is-open" : ""}`}
         onClick={() => setMobileOpen(false)}
@@ -83,16 +90,12 @@ export function AppShell({ roleLabel, navItems, children }: AppShellProps) {
             MW
           </div>
           <div className="app-shell__brand-text">
-            <div className="truncate text-sm font-semibold tracking-tight text-[var(--text)]">
-              {BRAND_NAME}
-            </div>
-            <div className="truncate text-xs text-[var(--text-muted)]">
-              {roleLabel}
-            </div>
+            <div className="app-shell__brand-name">{BRAND_NAME}</div>
+            <div className="app-shell__brand-role">{roleLabel}</div>
           </div>
           <button
             type="button"
-            className="ml-auto inline-flex h-8 w-8 items-center justify-center rounded-[var(--radius-sm)] text-[var(--text-muted)] sm:hidden"
+            className="ml-auto inline-flex h-8 w-8 items-center justify-center rounded-md text-[var(--sidebar-muted)] hover:text-[var(--sidebar-foreground)] sm:hidden"
             onClick={() => setMobileOpen(false)}
             aria-label="Close navigation"
           >
@@ -146,9 +149,9 @@ export function AppShell({ roleLabel, navItems, children }: AppShellProps) {
             >
               <IconMenu />
             </button>
-            <div className="truncate text-sm text-[var(--text-muted)]">
+            <div className="truncate text-sm text-muted-foreground">
               Signed in as{" "}
-              <span className="font-medium text-[var(--text)]">
+              <span className="font-medium text-foreground">
                 {username ?? "…"}
               </span>
             </div>

@@ -7,7 +7,7 @@ export default function UserLayout({
   children: React.ReactNode;
 }) {
   return (
-    <AppShell roleLabel="User" navItems={USER_NAV}>
+    <AppShell roleLabel="User" navItems={USER_NAV} theme="user">
       {children}
     </AppShell>
   );

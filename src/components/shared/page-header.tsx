@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
 
 interface PageHeaderProps {
   title: string;
@@ -17,27 +18,28 @@ export function PageHeader({
   backLabel = "Back",
 }: PageHeaderProps) {
   return (
-    <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
+    <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between sm:gap-4">
       <div className="min-w-0">
         {backHref ? (
           <Link
             href={backHref}
-            className="mb-1.5 inline-block text-xs font-medium text-primary hover:underline sm:text-sm"
+            className="mb-2 inline-flex items-center gap-1 text-xs font-medium text-muted-foreground transition-colors hover:text-primary sm:text-sm"
           >
-            ← {backLabel}
+            <ArrowLeft className="size-3.5" />
+            {backLabel}
           </Link>
         ) : null}
-        <h1 className="text-lg font-semibold tracking-tight sm:text-xl">
+        <h1 className="text-xl font-semibold tracking-tight text-foreground sm:text-2xl">
           {title}
         </h1>
         {description ? (
-          <p className="mt-1 max-w-2xl text-xs text-muted-foreground sm:text-sm">
+          <p className="mt-1.5 max-w-2xl text-sm leading-relaxed text-muted-foreground">
             {description}
           </p>
         ) : null}
       </div>
       {action ? (
-        <div className="flex shrink-0 flex-wrap gap-2">{action}</div>
+        <div className="flex shrink-0 flex-wrap items-center gap-2">{action}</div>
       ) : null}
     </div>
   );

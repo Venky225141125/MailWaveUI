@@ -109,34 +109,43 @@
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse 70% 50% at 50% -10%, var(--brand-muted), transparent 60%),
-    linear-gradient(180deg, var(--surface-muted), var(--surface));
+    radial-gradient(
+      ellipse 70% 50% at 12% 8%,
+      rgb(37 99 235 / 0.12),
+      transparent 55%
+    ),
+    radial-gradient(
+      ellipse 60% 45% at 92% 88%,
+      rgb(6 182 212 / 0.1),
+      transparent 50%
+    ),
+    linear-gradient(180deg, #f8fafc 0%, #eff6ff 50%, #f8fafc 100%);
 }
 
 .auth-scene__blob {
   pointer-events: none;
   position: absolute;
   border-radius: 9999px;
-  filter: blur(40px);
-  opacity: 0.55;
-  animation: float-blob 14s var(--ease-out) infinite;
+  filter: blur(48px);
+  opacity: 0.4;
+  animation: float-blob 16s var(--ease-out) infinite;
 }
 
 .auth-scene__blob--one {
-  top: 12%;
-  right: -4rem;
-  height: 16rem;
-  width: 16rem;
-  background: color-mix(in srgb, var(--brand) 28%, transparent);
+  top: 8%;
+  right: -3rem;
+  height: 18rem;
+  width: 18rem;
+  background: rgb(37 99 235 / 0.28);
 }
 
 .auth-scene__blob--two {
-  bottom: 8%;
-  left: -5rem;
-  height: 14rem;
-  width: 14rem;
-  background: color-mix(in srgb, var(--info) 22%, transparent);
-  animation-delay: -4s;
+  bottom: 6%;
+  left: -4rem;
+  height: 16rem;
+  width: 16rem;
+  background: rgb(124 58 237 / 0.18);
+  animation-delay: -5s;
 }
 
 .auth-scene__inner {
@@ -156,18 +165,18 @@
 }
 
 .auth-card {
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  background: var(--surface);
-  box-shadow: var(--shadow-lg);
+  border: 1px solid #e2e8f0;
+  border-radius: 0.75rem;
+  background: #ffffff;
+  box-shadow: var(--shadow-auth);
   padding: 2rem;
   animation: auth-card-in 0.6s var(--ease-spring) 0.12s both;
 }
 
 .auth-card__title {
-  font-size: 1.25rem;
-  font-weight: 600;
-  letter-spacing: -0.02em;
+  font-size: 1.35rem;
+  font-weight: 650;
+  letter-spacing: -0.03em;
   color: var(--text);
 }
 

@@ -7,7 +7,7 @@ export default function ClientLayout({
   children: React.ReactNode;
 }) {
   return (
-    <AppShell roleLabel="Client" navItems={CLIENT_NAV}>
+    <AppShell roleLabel="Client" navItems={CLIENT_NAV} theme="client">
       {children}
     </AppShell>
   );
