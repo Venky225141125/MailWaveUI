@@ -5,9 +5,9 @@ import { useSearchParams } from "next/navigation";
 import { ApiError } from "@/lib/api";
 import { resetPassword } from "@/services/authService";
 import { AuthLink } from "@/components/Auth/LoginForm";
-import { Alert } from "@/components/ui/Alert";
-import { Button } from "@/components/ui/Button";
-import { Input } from "@/components/ui/Input";
+import { Alert } from "@/components/shared/alert";
+import { Button } from "@/components/shared/button";
+import { Input } from "@/components/shared/input";
 import { GENERIC_ERROR } from "@/constants/error-messages.constants";
 import { ROUTES } from "@/constants/routes.constants";
 

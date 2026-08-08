@@ -3,9 +3,9 @@
 import { useState } from "react";
 import { ApiError } from "@/lib/api";
 import { forgotPassword } from "@/services/authService";
-import { Alert } from "@/components/ui/Alert";
-import { Button } from "@/components/ui/Button";
-import { Input } from "@/components/ui/Input";
+import { Alert } from "@/components/shared/alert";
+import { Button } from "@/components/shared/button";
+import { Input } from "@/components/shared/input";
 import { GENERIC_ERROR } from "@/constants/error-messages.constants";
 
 const GENERIC_CONFIRMATION =
