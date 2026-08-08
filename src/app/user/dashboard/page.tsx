@@ -1,11 +1,11 @@
 "use client";
 
 import { listUploads } from "@/services/userUploadService";
-import { aggregateUploadBatches } from "@/lib/utils";
+import { aggregateUploadBatches } from "@/lib/helpers";
 import { useAsyncData } from "@/hooks/useAsyncData";
-import { PageHeader } from "@/components/ui/PageHeader";
-import { LinkButton } from "@/components/ui/LinkButton";
-import { Alert } from "@/components/ui/Alert";
+import { PageHeader } from "@/components/shared/page-header";
+import { LinkButton } from "@/components/shared/link-button";
+import { Alert } from "@/components/shared/alert";
 import { ValidationStatsGrid } from "@/components/common/ValidationStatsGrid";
 import { DashboardSkeleton } from "@/components/common/Skeleton";
 import { ROUTES } from "@/constants/routes.constants";

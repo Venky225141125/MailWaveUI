@@ -3,13 +3,13 @@
 import { useParams } from "next/navigation";
 import { getCampaign } from "@/services/userCampaignService";
 import { useAsyncData } from "@/hooks/useAsyncData";
-import { PageHeader } from "@/components/ui/PageHeader";
-import { Alert } from "@/components/ui/Alert";
+import { PageHeader } from "@/components/shared/page-header";
+import { Alert } from "@/components/shared/alert";
 import { StatTile } from "@/components/common/StatTile";
 import { StatusBadge } from "@/components/common/StatusBadge";
-import { DetailList, DetailRow } from "@/components/ui/DetailList";
+import { DetailList, DetailRow } from "@/components/shared/detail-list";
 import { DetailSkeleton } from "@/components/common/Skeleton";
-import { formatDateTime } from "@/lib/utils";
+import { formatDateTime } from "@/lib/helpers";
 import { ROUTES } from "@/constants/routes.constants";
 
 export default function CampaignDetailPage() {

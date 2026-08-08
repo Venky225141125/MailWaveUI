@@ -6,9 +6,9 @@ import { useRouter } from "next/navigation";
 import { ApiError } from "@/lib/api";
 import { setSession, roleHomePath } from "@/lib/auth";
 import type { AuthResponse } from "@/types";
-import { Alert } from "@/components/ui/Alert";
-import { Button } from "@/components/ui/Button";
-import { Input } from "@/components/ui/Input";
+import { Alert } from "@/components/shared/alert";
+import { Button } from "@/components/shared/button";
+import { Input } from "@/components/shared/input";
 import { GENERIC_ERROR } from "@/constants/error-messages.constants";
 
 interface LoginFormProps {

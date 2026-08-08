@@ -1,12 +1,12 @@
 "use client";
 
 import type { EmailRecordResponse, Page } from "@/types";
-import { DataTable } from "@/components/ui/DataTable";
-import { Select } from "@/components/ui/Select";
+import { DataTable } from "@/components/shared/data-table";
+import { Select } from "@/components/shared/select";
 import { StatusBadge } from "@/components/common/StatusBadge";
 import { Pagination } from "@/components/common/Pagination";
 import { EMAIL_RECORD_STATUS_OPTIONS } from "@/constants/upload.constants";
-import { formatDateTime } from "@/lib/utils";
+import { formatDateTime } from "@/lib/helpers";
 
 interface EmailRecordsPanelProps {
   records: Page<EmailRecordResponse> | null;

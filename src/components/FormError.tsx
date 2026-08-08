@@ -1,2 +1,2 @@
-/** Compatibility — prefer `@/components/ui/Alert` */
-export { FormError, FormSuccess, Alert } from "@/components/ui/Alert";
+/** Compatibility — prefer `@/components/shared/alert` */
+export { FormError, FormSuccess, Alert, FormAlert } from "@/components/shared/alert";

@@ -7,12 +7,12 @@ import { TIMEZONE_OPTIONS, zonedDateTimeToUtcIso } from "@/lib/timezone";
 import { listUploads } from "@/services/userUploadService";
 import { createCampaign, sendTestEmail } from "@/services/userCampaignService";
 import { useAsyncData } from "@/hooks/useAsyncData";
-import { PageHeader } from "@/components/ui/PageHeader";
-import { Alert } from "@/components/ui/Alert";
-import { Button } from "@/components/ui/Button";
-import { Input } from "@/components/ui/Input";
-import { Select } from "@/components/ui/Select";
-import { Textarea } from "@/components/ui/Textarea";
+import { PageHeader } from "@/components/shared/page-header";
+import { Alert } from "@/components/shared/alert";
+import { Button } from "@/components/shared/button";
+import { Input } from "@/components/shared/input";
+import { Select } from "@/components/shared/select";
+import { Textarea } from "@/components/shared/textarea";
 import { ROUTES } from "@/constants/routes.constants";
 import { GENERIC_ERROR } from "@/constants/error-messages.constants";
 

@@ -1,8 +1,8 @@
 "use client";
 
 import { useId, useRef, useState } from "react";
-import { formatFileSize } from "@/lib/utils";
-import { isAcceptedUploadFile } from "@/lib/utils";
+import { formatFileSize, isAcceptedUploadFile } from "@/lib/helpers";
+import { cn } from "@/lib/utils";
 
 interface FileDropzoneProps {
   accept: readonly string[];
@@ -25,9 +25,7 @@ export function FileDropzone({
     const f = files?.[0];
     if (!f) return;
     if (!isAcceptedUploadFile(f.name, accept)) {
-      onReject?.(
-        `Unsupported file type. Accepted: ${accept.join(", ")}`
-      );
+      onReject?.(`Unsupported file type. Accepted: ${accept.join(", ")}`);
       return;
     }
     onFileChange(f);
@@ -56,21 +54,22 @@ export function FileDropzone({
           setDragActive(false);
           handleFiles(e.dataTransfer.files);
         }}
-        className={`flex w-full cursor-pointer flex-col items-center justify-center rounded-[var(--radius-md)] border-2 border-dashed px-6 py-12 text-center transition-colors ${
+        className={cn(
+          "flex w-full cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed px-6 py-12 text-center transition-colors",
           dragActive
-            ? "border-[var(--brand)] bg-[var(--brand-muted)]"
-            : "border-[var(--border-strong)] bg-[var(--surface)] hover:bg-[var(--surface-muted)]"
-        }`}
+            ? "border-primary bg-accent"
+            : "border-border bg-card hover:bg-muted/50"
+        )}
       >
-        <p className="text-sm font-medium text-[var(--text)]">
+        <p className="text-sm font-medium">
           {file ? file.name : "Drag & drop a file here, or click to browse"}
         </p>
         {file ? (
-          <p className="mt-1 text-xs text-[var(--text-muted)]">
+          <p className="mt-1 text-xs text-muted-foreground">
             {formatFileSize(file.size)}
           </p>
         ) : (
-          <p className="mt-1 text-xs text-[var(--text-muted)]">
+          <p className="mt-1 text-xs text-muted-foreground">
             {accept.join(" · ")}
           </p>
         )}

@@ -1,9 +1,9 @@
 import type { ReactNode } from "react";
 import type { UserSummary } from "@/types";
 import Link from "next/link";
-import { DataTable } from "@/components/ui/DataTable";
+import { DataTable } from "@/components/shared/data-table";
 import { StatusBadge } from "@/components/common/StatusBadge";
-import { formatDateTime } from "@/lib/utils";
+import { formatDateTime } from "@/lib/helpers";
 
 interface UsersTableProps {
   users: UserSummary[];

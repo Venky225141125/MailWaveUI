@@ -3,8 +3,8 @@
 import { useParams } from "next/navigation";
 import { listUserUploads } from "@/services/superAdminService";
 import { useAsyncData } from "@/hooks/useAsyncData";
-import { PageHeader } from "@/components/ui/PageHeader";
-import { Alert } from "@/components/ui/Alert";
+import { PageHeader } from "@/components/shared/page-header";
+import { Alert } from "@/components/shared/alert";
 import { UploadBatchTable } from "@/components/common/UploadBatchTable";
 import { ROUTES } from "@/constants/routes.constants";
 

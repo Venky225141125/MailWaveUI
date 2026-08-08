@@ -3,10 +3,10 @@
 import { useState } from "react";
 import { ApiError } from "@/lib/api";
 import { registerFreelancer } from "@/services/authService";
-import { Alert } from "@/components/ui/Alert";
-import { Button } from "@/components/ui/Button";
-import { Input } from "@/components/ui/Input";
-import { LinkButton } from "@/components/ui/LinkButton";
+import { Alert } from "@/components/shared/alert";
+import { Button } from "@/components/shared/button";
+import { Input } from "@/components/shared/input";
+import { LinkButton } from "@/components/shared/link-button";
 import {
   RegisterLoginHint,
   RegisterSplitLayout,
@@ -17,7 +17,7 @@ import {
   freelancerRegisterSchema,
   validateAddressProof,
   zodFieldErrors,
-} from "@/lib/utils/validation.utils";
+} from "@/lib/helpers/validation.utils";
 
 interface FormState {
   username: string;

@@ -9,9 +9,9 @@ import {
   listClientUsers,
 } from "@/services/superAdminService";
 import { useAsyncData } from "@/hooks/useAsyncData";
-import { PageHeader } from "@/components/ui/PageHeader";
-import { Alert } from "@/components/ui/Alert";
-import { Button } from "@/components/ui/Button";
+import { PageHeader } from "@/components/shared/page-header";
+import { Alert } from "@/components/shared/alert";
+import { Button } from "@/components/shared/button";
 import { UsersTable } from "@/components/common/UsersTable";
 import { ROUTES } from "@/constants/routes.constants";
 import { GENERIC_ERROR } from "@/constants/error-messages.constants";

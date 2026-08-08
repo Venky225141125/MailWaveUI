@@ -1,76 +1,19 @@
-import type { InputHTMLAttributes } from "react";
+import * as React from "react"
 
-interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
-  label?: string;
-  hint?: string;
-  error?: string | null;
-  /** Visual density — use compact on dense forms like registration. */
-  density?: "compact" | "default";
-}
+import { cn } from "@/lib/utils"
 
-export function Input({
-  label,
-  hint,
-  error,
-  density = "default",
-  id,
-  className = "",
-  ...rest
-}: InputProps) {
-  const inputId =
-    id ?? (label ? label.toLowerCase().replace(/\s+/g, "-") : undefined);
-  const errorId = error && inputId ? `${inputId}-error` : undefined;
-  const compact = density === "compact";
-
+function Input({ className, type, ...props }: React.ComponentProps<"input">) {
   return (
-    <div className={`flex flex-col ${compact ? "gap-0.5" : "gap-1"}`}>
-      {label ? (
-        <label
-          htmlFor={inputId}
-          className={`font-medium text-[var(--text)] ${
-            compact ? "text-xs" : "text-sm"
-          }`}
-        >
-          {label}
-          {rest.required ? (
-            <span className="ml-0.5 text-red-600" aria-hidden>
-              *
-            </span>
-          ) : null}
-        </label>
-      ) : null}
-      <input
-        id={inputId}
-        aria-invalid={error ? true : undefined}
-        aria-describedby={errorId}
-        className={`w-full rounded-[var(--radius-sm)] border bg-[var(--surface)] text-[var(--text)] placeholder:text-[var(--text-subtle)] transition-colors ${
-          compact ? "px-2.5 py-1.5 text-xs" : "px-3 py-2 text-sm"
-        } ${
-          error
-            ? "border-red-400 focus:border-red-500 dark:border-red-500"
-            : "border-[var(--border-strong)]"
-        } ${className}`}
-        {...rest}
-      />
-      {error ? (
-        <p
-          id={errorId}
-          role="alert"
-          className={`font-medium text-red-600 dark:text-red-400 ${
-            compact ? "text-[11px] leading-tight" : "text-xs"
-          }`}
-        >
-          {error}
-        </p>
-      ) : hint ? (
-        <p
-          className={`text-[var(--text-muted)] ${
-            compact ? "text-[11px] leading-tight" : "text-xs"
-          }`}
-        >
-          {hint}
-        </p>
-      ) : null}
-    </div>
-  );
+    <input
+      type={type}
+      data-slot="input"
+      className={cn(
+        "h-8 w-full min-w-0 rounded-lg border border-input bg-transparent px-2.5 py-1 text-base transition-colors outline-none file:inline-flex file:h-6 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-input/50 disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 md:text-sm dark:bg-input/30 dark:disabled:bg-input/80 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40",
+        className
+      )}
+      {...props}
+    />
+  )
 }
+
+export { Input }

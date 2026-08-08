@@ -1,7 +1,7 @@
 import { apiClient } from "@/lib/api";
 import { USER_ENDPOINTS } from "@/constants/user-endpoints.constants";
 import { DEFAULT_PAGE_SIZE } from "@/constants/upload.constants";
-import { buildQueryString } from "@/lib/utils";
+import { buildQueryString } from "@/lib/helpers";
 import type {
   EmailRecordQuery,
   EmailRecordResponse,

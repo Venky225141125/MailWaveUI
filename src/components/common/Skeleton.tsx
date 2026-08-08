@@ -1,4 +1,6 @@
+import { Skeleton as ShadcnSkeleton } from "@/components/ui/skeleton";
 import type { CSSProperties } from "react";
+import { cn } from "@/lib/utils";
 
 interface SkeletonProps {
   className?: string;
@@ -6,7 +8,7 @@ interface SkeletonProps {
 }
 
 export function Skeleton({ className = "", style }: SkeletonProps) {
-  return <div className={`skeleton ${className}`} style={style} aria-hidden />;
+  return <ShadcnSkeleton className={cn(className)} style={style} aria-hidden />;
 }
 
 export function StatsGridSkeleton({ count = 6 }: { count?: number }) {
@@ -17,7 +19,7 @@ export function StatsGridSkeleton({ count = 6 }: { count?: number }) {
       aria-label="Loading statistics"
     >
       {Array.from({ length: count }).map((_, i) => (
-        <Skeleton key={i} className="skeleton--tile" />
+        <Skeleton key={i} className="h-[5.25rem] rounded-xl" />
       ))}
       <span className="sr-only">Loading…</span>
     </div>
@@ -33,28 +35,28 @@ export function TableSkeleton({
 }) {
   return (
     <div
-      className="overflow-hidden rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface)]"
+      className="overflow-hidden rounded-xl border bg-card"
       role="status"
       aria-label="Loading table"
     >
-      <div className="border-b border-[var(--border)] bg-[var(--surface-muted)] px-4 py-3">
+      <div className="border-b bg-muted/40 px-4 py-3">
         <div className="flex gap-4">
           {Array.from({ length: columns }).map((_, i) => (
             <Skeleton
               key={i}
-              className="skeleton--text"
+              className="h-3.5"
               style={{ width: `${60 + (i % 3) * 20}px` }}
             />
           ))}
         </div>
       </div>
-      <div className="divide-y divide-[var(--border)]">
+      <div className="divide-y">
         {Array.from({ length: rows }).map((_, row) => (
           <div key={row} className="flex items-center gap-4 px-4 py-3.5">
             {Array.from({ length: columns }).map((_, col) => (
               <Skeleton
                 key={col}
-                className="skeleton--text flex-1"
+                className="h-3.5 flex-1"
                 style={{ maxWidth: col === 0 ? "40%" : "20%" }}
               />
             ))}
@@ -70,13 +72,13 @@ export function DetailSkeleton() {
   return (
     <div className="flex flex-col gap-6" role="status" aria-label="Loading details">
       <div className="flex flex-col gap-2">
-        <Skeleton className="skeleton--title" />
-        <Skeleton className="skeleton--text" style={{ width: "12rem" }} />
+        <Skeleton className="h-5 w-48" />
+        <Skeleton className="h-3.5 w-40" />
       </div>
       <StatsGridSkeleton count={4} />
       <div className="grid gap-3 sm:grid-cols-2">
         {Array.from({ length: 4 }).map((_, i) => (
-          <Skeleton key={i} className="skeleton--tile" />
+          <Skeleton key={i} className="h-[5.25rem] rounded-xl" />
         ))}
       </div>
       <span className="sr-only">Loading…</span>
@@ -88,10 +90,10 @@ export function PageHeaderSkeleton() {
   return (
     <div className="flex items-start justify-between gap-4">
       <div className="flex flex-col gap-2">
-        <Skeleton className="skeleton--title" />
-        <Skeleton className="skeleton--text" style={{ width: "18rem" }} />
+        <Skeleton className="h-5 w-48" />
+        <Skeleton className="h-3.5 w-64" />
       </div>
-      <Skeleton style={{ height: "2.5rem", width: "8rem" }} />
+      <Skeleton className="h-9 w-32" />
     </div>
   );
 }

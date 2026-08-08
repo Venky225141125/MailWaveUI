@@ -2,10 +2,10 @@
 
 import { listOrganizations, listClients } from "@/services/superAdminService";
 import { useAsyncData } from "@/hooks/useAsyncData";
-import { PageHeader } from "@/components/ui/PageHeader";
-import { Alert } from "@/components/ui/Alert";
+import { PageHeader } from "@/components/shared/page-header";
+import { Alert } from "@/components/shared/alert";
 import { StatTile } from "@/components/common/StatTile";
-import { LinkButton } from "@/components/ui/LinkButton";
+import { LinkButton } from "@/components/shared/link-button";
 import { DashboardSkeleton } from "@/components/common/Skeleton";
 import { ROUTES } from "@/constants/routes.constants";
 

@@ -5,9 +5,9 @@ import { useRouter } from "next/navigation";
 import { ApiError } from "@/lib/api";
 import { setSession, roleHomePath } from "@/lib/auth";
 import { registerClient } from "@/services/authService";
-import { Alert } from "@/components/ui/Alert";
-import { Button } from "@/components/ui/Button";
-import { Input } from "@/components/ui/Input";
+import { Alert } from "@/components/shared/alert";
+import { Button } from "@/components/shared/button";
+import { Input } from "@/components/shared/input";
 import {
   RegisterLoginHint,
   RegisterSplitLayout,
@@ -19,7 +19,7 @@ import {
 import {
   clientRegisterSchema,
   zodFieldErrors,
-} from "@/lib/utils/validation.utils";
+} from "@/lib/helpers/validation.utils";
 import type { ClientRegisterPayload } from "@/types";
 
 const INITIAL: ClientRegisterPayload = {

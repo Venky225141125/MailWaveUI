@@ -8,13 +8,13 @@ import {
   listUploadRecords,
 } from "@/services/userUploadService";
 import type { EmailRecordResponse, Page, UploadBatchSummary } from "@/types";
-import { PageHeader } from "@/components/ui/PageHeader";
-import { Alert } from "@/components/ui/Alert";
+import { PageHeader } from "@/components/shared/page-header";
+import { Alert } from "@/components/shared/alert";
 import { StatusBadge } from "@/components/common/StatusBadge";
 import { ValidationStatsGrid } from "@/components/common/ValidationStatsGrid";
 import { EmailRecordsPanel } from "@/components/common/EmailRecordsPanel";
 import { StatsGridSkeleton } from "@/components/common/Skeleton";
-import { formatDateTime } from "@/lib/utils";
+import { formatDateTime } from "@/lib/helpers";
 import { ROUTES } from "@/constants/routes.constants";
 import { DEFAULT_PAGE_SIZE } from "@/constants/upload.constants";
 import { GENERIC_ERROR } from "@/constants/error-messages.constants";

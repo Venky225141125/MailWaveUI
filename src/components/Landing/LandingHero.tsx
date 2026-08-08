@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { BRAND_NAME, BRAND_TAGLINE } from "@/constants/upload.constants";
 import { ROUTES } from "@/constants/routes.constants";
-import { LinkButton } from "@/components/ui/LinkButton";
+import { LinkButton } from "@/components/shared/link-button";
 
 export function LandingHero() {
   return (

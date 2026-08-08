@@ -5,14 +5,14 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { getUsername, logout } from "@/lib/auth";
 import { BRAND_NAME } from "@/constants/upload.constants";
-import { Button } from "@/components/ui/Button";
+import { Button } from "@/components/shared/button";
 import {
   IconChevronLeft,
   IconChevronRight,
   IconClose,
   IconMenu,
   NavIcon,
-} from "@/components/ui/Icons";
+} from "@/components/shared/icons";
 import type { NavItem } from "@/types/nav.types";
 
 export type { NavItem };

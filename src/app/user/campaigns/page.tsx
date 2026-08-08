@@ -2,9 +2,9 @@
 
 import { listCampaigns } from "@/services/userCampaignService";
 import { useAsyncData } from "@/hooks/useAsyncData";
-import { PageHeader } from "@/components/ui/PageHeader";
-import { LinkButton } from "@/components/ui/LinkButton";
-import { Alert } from "@/components/ui/Alert";
+import { PageHeader } from "@/components/shared/page-header";
+import { LinkButton } from "@/components/shared/link-button";
+import { Alert } from "@/components/shared/alert";
 import { CampaignTable } from "@/components/common/CampaignTable";
 import { ROUTES } from "@/constants/routes.constants";
 

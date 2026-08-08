@@ -6,8 +6,8 @@ import {
   listUserUploads,
 } from "@/services/clientService";
 import { useAsyncData } from "@/hooks/useAsyncData";
-import { PageHeader } from "@/components/ui/PageHeader";
-import { Alert } from "@/components/ui/Alert";
+import { PageHeader } from "@/components/shared/page-header";
+import { Alert } from "@/components/shared/alert";
 import { UploadBatchTable } from "@/components/common/UploadBatchTable";
 import { CampaignTable } from "@/components/common/CampaignTable";
 import { ROUTES } from "@/constants/routes.constants";

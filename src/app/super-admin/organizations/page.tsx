@@ -7,13 +7,13 @@ import {
   listOrganizations,
 } from "@/services/superAdminService";
 import { useAsyncData } from "@/hooks/useAsyncData";
-import { PageHeader } from "@/components/ui/PageHeader";
-import { Alert } from "@/components/ui/Alert";
-import { Button } from "@/components/ui/Button";
-import { Input } from "@/components/ui/Input";
-import { Card } from "@/components/ui/Card";
-import { DataTable } from "@/components/ui/DataTable";
-import { formatDateTime } from "@/lib/utils";
+import { PageHeader } from "@/components/shared/page-header";
+import { Alert } from "@/components/shared/alert";
+import { Button } from "@/components/shared/button";
+import { Input } from "@/components/shared/input";
+import { Card } from "@/components/shared/card";
+import { DataTable } from "@/components/shared/data-table";
+import { formatDateTime } from "@/lib/helpers";
 import { GENERIC_ERROR } from "@/constants/error-messages.constants";
 
 export default function OrganizationsPage() {

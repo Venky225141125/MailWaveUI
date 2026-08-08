@@ -4,11 +4,11 @@ import { useState } from "react";
 import { ApiError } from "@/lib/api";
 import { createUser } from "@/services/clientService";
 import type { CreateUserResponse } from "@/types";
-import { PageHeader } from "@/components/ui/PageHeader";
-import { Alert } from "@/components/ui/Alert";
-import { Button } from "@/components/ui/Button";
-import { Input } from "@/components/ui/Input";
-import { LinkButton } from "@/components/ui/LinkButton";
+import { PageHeader } from "@/components/shared/page-header";
+import { Alert } from "@/components/shared/alert";
+import { Button } from "@/components/shared/button";
+import { Input } from "@/components/shared/input";
+import { LinkButton } from "@/components/shared/link-button";
 import { ROUTES } from "@/constants/routes.constants";
 import { GENERIC_ERROR } from "@/constants/error-messages.constants";
 

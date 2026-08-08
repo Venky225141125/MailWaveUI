@@ -1,6 +1,6 @@
 import { apiClient } from "@/lib/api";
 import { SUPER_ADMIN_ENDPOINTS } from "@/constants/super-admin-endpoints.constants";
-import { buildQueryString } from "@/lib/utils";
+import { buildQueryString } from "@/lib/helpers";
 import type {
   ClientListFilters,
   ClientSummary,

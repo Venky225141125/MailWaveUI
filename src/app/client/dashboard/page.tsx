@@ -2,8 +2,8 @@
 
 import { listUsers, listUserUploads } from "@/services/clientService";
 import { useAsyncData } from "@/hooks/useAsyncData";
-import { PageHeader } from "@/components/ui/PageHeader";
-import { Alert } from "@/components/ui/Alert";
+import { PageHeader } from "@/components/shared/page-header";
+import { Alert } from "@/components/shared/alert";
 import { StatTile } from "@/components/common/StatTile";
 import { DashboardSkeleton } from "@/components/common/Skeleton";
 

@@ -1,8 +1,8 @@
 import type { UploadBatchSummary } from "@/types";
 import Link from "next/link";
-import { DataTable } from "@/components/ui/DataTable";
+import { DataTable } from "@/components/shared/data-table";
 import { StatusBadge } from "@/components/common/StatusBadge";
-import { formatDateTime, formatNumber } from "@/lib/utils";
+import { formatDateTime, formatNumber } from "@/lib/helpers";
 
 interface UploadBatchTableProps {
   batches: UploadBatchSummary[];

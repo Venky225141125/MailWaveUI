@@ -6,10 +6,10 @@ import { ApiError } from "@/lib/api";
 import { createUpload } from "@/services/userUploadService";
 import { ACCEPTED_UPLOAD_EXTENSIONS } from "@/constants/upload.constants";
 import { ROUTES } from "@/constants/routes.constants";
-import { PageHeader } from "@/components/ui/PageHeader";
-import { Alert } from "@/components/ui/Alert";
-import { Button } from "@/components/ui/Button";
-import { FileDropzone } from "@/components/ui/FileDropzone";
+import { PageHeader } from "@/components/shared/page-header";
+import { Alert } from "@/components/shared/alert";
+import { Button } from "@/components/shared/button";
+import { FileDropzone } from "@/components/shared/file-dropzone";
 import { GENERIC_ERROR } from "@/constants/error-messages.constants";
 
 export default function NewUploadPage() {
