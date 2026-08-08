@@ -115,11 +115,11 @@
 .app-shell__nav-link {
   display: flex;
   align-items: center;
-  gap: var(--space-3);
+  gap: 0.625rem;
   border-radius: 0.5rem;
-  padding: 0.625rem 0.75rem;
+  padding: 0.5rem 0.625rem;
   color: var(--sidebar-muted);
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
   font-weight: 500;
   text-decoration: none;
   transition:

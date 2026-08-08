@@ -1,4 +1,7 @@
+"use client";
+
 import * as React from "react";
+import { Eye, EyeOff } from "lucide-react";
 import { Input as ShadcnInput } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
@@ -18,20 +21,21 @@ export function FormInput({
   density = "default",
   id,
   className,
+  type,
   ...rest
 }: FormInputProps) {
+  const [showPassword, setShowPassword] = React.useState(false);
   const inputId =
     id ?? (label ? label.toLowerCase().replace(/\s+/g, "-") : undefined);
   const errorId = error && inputId ? `${inputId}-error` : undefined;
   const compact = density === "compact";
+  const isPassword = type === "password";
+  const resolvedType = isPassword && showPassword ? "text" : type;
 
   return (
     <div className={cn("flex flex-col", compact ? "gap-0.5" : "gap-1.5")}>
       {label ? (
-        <Label
-          htmlFor={inputId}
-          className={cn(compact && "text-xs")}
-        >
+        <Label htmlFor={inputId} className={cn(compact && "text-xs")}>
           {label}
           {rest.required ? (
             <span className="ml-0.5 text-destructive" aria-hidden>
@@ -40,13 +44,35 @@ export function FormInput({
           ) : null}
         </Label>
       ) : null}
-      <ShadcnInput
-        id={inputId}
-        aria-invalid={error ? true : undefined}
-        aria-describedby={errorId}
-        className={cn(compact && "h-7 text-xs", className)}
-        {...rest}
-      />
+      <div className="relative">
+        <ShadcnInput
+          id={inputId}
+          type={resolvedType}
+          aria-invalid={error ? true : undefined}
+          aria-describedby={errorId}
+          className={cn(
+            compact && "h-7 text-xs",
+            isPassword && "pr-9",
+            className
+          )}
+          {...rest}
+        />
+        {isPassword ? (
+          <button
+            type="button"
+            tabIndex={-1}
+            onClick={() => setShowPassword((v) => !v)}
+            className="absolute top-1/2 right-2 inline-flex size-6 -translate-y-1/2 items-center justify-center rounded-md text-muted-foreground transition-colors hover:text-foreground"
+            aria-label={showPassword ? "Hide password" : "Show password"}
+          >
+            {showPassword ? (
+              <EyeOff className="size-4" />
+            ) : (
+              <Eye className="size-4" />
+            )}
+          </button>
+        ) : null}
+      </div>
       {error ? (
         <p
           id={errorId}

@@ -3,9 +3,9 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { ChevronDown, LogOut, UserRound } from "lucide-react";
 import { getUsername, logout } from "@/lib/auth";
 import { BRAND_NAME } from "@/constants/upload.constants";
-import { Button } from "@/components/shared/button";
 import {
   IconChevronLeft,
   IconChevronRight,
@@ -13,6 +13,14 @@ import {
   IconMenu,
   NavIcon,
 } from "@/components/shared/icons";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import type { NavItem } from "@/types/nav.types";
 
 export type { NavItem };
@@ -70,6 +78,14 @@ export function AppShell({
     logout();
     router.push("/");
   }
+
+  const displayName = username ?? "Account";
+  const initials = displayName
+    .split(/[\s._-]+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0]?.toUpperCase() ?? "")
+    .join("") || "U";
 
   return (
     <div className={`app-shell theme-${theme}`}>
@@ -149,16 +165,49 @@ export function AppShell({
             >
               <IconMenu />
             </button>
-            <div className="truncate text-sm text-muted-foreground">
-              Signed in as{" "}
-              <span className="font-medium text-foreground">
-                {username ?? "…"}
-              </span>
+            <div className="hidden text-sm font-medium text-foreground sm:block">
+              {roleLabel}
             </div>
           </div>
-          <Button variant="secondary" size="sm" onClick={handleLogout}>
-            Log out
-          </Button>
+
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button
+                type="button"
+                className="inline-flex max-w-[14rem] items-center gap-2 rounded-lg border border-border bg-card px-2 py-1.5 text-left transition-colors hover:bg-muted/60"
+              >
+                <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary text-xs font-semibold text-primary-foreground">
+                  {username ? initials : <UserRound className="size-4" />}
+                </span>
+                <span className="min-w-0 flex-1">
+                  <span className="block truncate text-sm font-medium text-foreground">
+                    {displayName}
+                  </span>
+                  <span className="block truncate text-[11px] text-muted-foreground">
+                    {roleLabel}
+                  </span>
+                </span>
+                <ChevronDown className="size-4 shrink-0 text-muted-foreground" />
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="min-w-48">
+              <DropdownMenuLabel className="font-normal">
+                <div className="truncate text-sm font-medium">{displayName}</div>
+                <div className="truncate text-xs text-muted-foreground">
+                  {roleLabel}
+                </div>
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                variant="destructive"
+                onSelect={handleLogout}
+                className="gap-2"
+              >
+                <LogOut className="size-4" />
+                Log out
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </header>
         <main className="app-shell__content">{children}</main>
       </div>
