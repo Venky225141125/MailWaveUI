@@ -1,10 +1,5 @@
-import { AppShell } from "@/components/AppShell";
-
-const NAV_ITEMS = [
-  { label: "Dashboard", href: "/super-admin/dashboard" },
-  { label: "Organizations", href: "/super-admin/organizations" },
-  { label: "Clients", href: "/super-admin/clients" },
-];
+import { AppShell } from "@/components/Layouts/AppShell";
+import { SUPER_ADMIN_NAV } from "@/constants/nav.constants";
 
 export default function SuperAdminLayout({
   children,
@@ -12,7 +7,11 @@ export default function SuperAdminLayout({
   children: React.ReactNode;
 }) {
   return (
-    <AppShell roleLabel="Super Admin" navItems={NAV_ITEMS}>
+    <AppShell
+      roleLabel="Super Admin"
+      navItems={SUPER_ADMIN_NAV}
+      theme="super-admin"
+    >
       {children}
     </AppShell>
   );
