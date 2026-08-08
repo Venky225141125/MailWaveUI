@@ -226,27 +226,85 @@
   --card-foreground: #f8fafc;
   --popover: #1e293b;
   --popover-foreground: #f8fafc;
-  --primary: #3b82f6;
-  --primary-foreground: #ffffff;
   --secondary: #334155;
   --secondary-foreground: #f8fafc;
   --muted: #334155;
   --muted-foreground: #94a3b8;
-  --accent: #1e3a8a;
-  --accent-foreground: #bfdbfe;
   --destructive: #f87171;
   --border: rgb(255 255 255 / 10%);
   --input: rgb(255 255 255 / 12%);
-  --ring: #3b82f6;
-  --brand: var(--primary);
-  --brand-hover: #60a5fa;
-  --brand-muted: #1e3a8a;
   --surface: var(--card);
   --surface-muted: var(--background);
   --text: var(--foreground);
   --text-muted: var(--muted-foreground);
   --border-strong: rgb(255 255 255 / 16%);
+  --primary: #3b82f6;
+  --primary-foreground: #ffffff;
+  --brand: var(--primary);
+  --brand-hover: #60a5fa;
+  --brand-muted: #1e3a8a;
+  --accent: #1e3a8a;
+  --accent-foreground: #bfdbfe;
+  --ring: #3b82f6;
 }
+
+.dark .theme-super-admin,
+html.dark .theme-super-admin {
+  --primary: #3b82f6;
+  --primary-foreground: #ffffff;
+  --brand: #3b82f6;
+  --brand-hover: #60a5fa;
+  --brand-muted: #1e3a8a;
+  --accent: #1e3a8a;
+  --accent-foreground: #bfdbfe;
+  --ring: #3b82f6;
+  --sidebar: #172554;
+  --sidebar-foreground: #f8fafc;
+  --sidebar-accent: rgb(255 255 255 / 14%);
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: rgb(255 255 255 / 10%);
+  --sidebar-muted: rgb(255 255 255 / 65%);
+  --sidebar-hover: rgb(255 255 255 / 10%);
+}
+
+.dark .theme-client,
+html.dark .theme-client {
+  --primary: #a78bfa;
+  --primary-foreground: #1e1b4b;
+  --brand: #a78bfa;
+  --brand-hover: #c4b5fd;
+  --brand-muted: #2e1065;
+  --accent: #2e1065;
+  --accent-foreground: #ddd6fe;
+  --ring: #a78bfa;
+  --sidebar: #4c1d95;
+  --sidebar-foreground: #faf5ff;
+  --sidebar-accent: rgb(255 255 255 / 14%);
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: rgb(255 255 255 / 10%);
+  --sidebar-muted: rgb(255 255 255 / 65%);
+  --sidebar-hover: rgb(255 255 255 / 10%);
+}
+
+.dark .theme-user,
+html.dark .theme-user {
+  --primary: #22d3ee;
+  --primary-foreground: #083344;
+  --brand: #22d3ee;
+  --brand-hover: #67e8f9;
+  --brand-muted: #164e63;
+  --accent: #164e63;
+  --accent-foreground: #a5f3fc;
+  --ring: #22d3ee;
+  --sidebar: #155e75;
+  --sidebar-foreground: #ecfeff;
+  --sidebar-accent: rgb(255 255 255 / 14%);
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: rgb(255 255 255 / 10%);
+  --sidebar-muted: rgb(255 255 255 / 65%);
+  --sidebar-hover: rgb(255 255 255 / 10%);
+}
+
 
 @layer base {
   * {

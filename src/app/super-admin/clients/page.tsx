@@ -29,6 +29,7 @@ import { TableCell, TableRow } from "@/components/ui/table";
 import { formatDateTime } from "@/lib/helpers";
 import { ROUTES } from "@/constants/routes.constants";
 import { GENERIC_ERROR } from "@/constants/error-messages.constants";
+import { CopyableText } from "@/components/shared/copyable-text";
 
 const STATUS_OPTIONS = ["", "ACTIVE", "PENDING_APPROVAL", "DISABLED", "REJECTED"];
 const TYPE_OPTIONS = ["", "ORGANIZATION", "FREELANCER"];
@@ -184,7 +185,7 @@ export default function ClientsPage() {
                 {client.username}
               </TableCell>
               <TableCell className="px-4 py-3.5 text-muted-foreground">
-                {client.officialEmail}
+                <CopyableText value={client.officialEmail} />
               </TableCell>
               <TableCell className="px-4 py-3.5">
                 <StatusBadge status={client.status} />

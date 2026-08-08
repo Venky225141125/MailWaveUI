@@ -110,7 +110,13 @@ export function ClientRegisterForm() {
     setLoading(true);
     try {
       const auth = await registerClient(parsed.data);
-      setSession(auth);
+      setSession({
+        token: auth.token,
+        role: auth.role,
+        id: auth.id,
+        username: auth.username,
+        status: auth.status ?? "ACTIVE",
+      });
       router.push(roleHomePath(auth.role));
     } catch (err) {
       if (err instanceof ApiError) {

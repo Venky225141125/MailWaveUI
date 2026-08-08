@@ -7,14 +7,18 @@ const TOKEN_COOKIE = "eb_token";
 const ROLE_COOKIE = "eb_role";
 const USERNAME_COOKIE = "eb_username";
 const USERID_COOKIE = "eb_userid";
+const STATUS_COOKIE = "eb_status";
 
 const COOKIE_OPTS = { expires: 1, sameSite: "lax" as const };
+
+export type AccountStatus = "ACTIVE" | "DISABLED" | string;
 
 export function setSession(session: Session): void {
   Cookies.set(TOKEN_COOKIE, session.token, COOKIE_OPTS);
   Cookies.set(ROLE_COOKIE, session.role, COOKIE_OPTS);
   Cookies.set(USERNAME_COOKIE, session.username, COOKIE_OPTS);
   Cookies.set(USERID_COOKIE, String(session.id), COOKIE_OPTS);
+  Cookies.set(STATUS_COOKIE, session.status ?? "ACTIVE", COOKIE_OPTS);
 }
 
 export function getToken(): string | undefined {
@@ -34,11 +38,20 @@ export function getUserId(): number | undefined {
   return raw ? Number(raw) : undefined;
 }
 
+export function getAccountStatus(): AccountStatus | undefined {
+  return Cookies.get(STATUS_COOKIE);
+}
+
+export function setAccountStatus(status: AccountStatus): void {
+  Cookies.set(STATUS_COOKIE, status, COOKIE_OPTS);
+}
+
 export function logout(): void {
   Cookies.remove(TOKEN_COOKIE);
   Cookies.remove(ROLE_COOKIE);
   Cookies.remove(USERNAME_COOKIE);
   Cookies.remove(USERID_COOKIE);
+  Cookies.remove(STATUS_COOKIE);
 }
 
 export function roleHomePath(role: Role): string {

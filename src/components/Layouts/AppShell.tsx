@@ -3,9 +3,16 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { ChevronDown, LogOut, UserRound } from "lucide-react";
+import {
+  ChevronDown,
+  LogOut,
+  Moon,
+  Sun,
+  UserRound,
+} from "lucide-react";
 import { getUsername, logout } from "@/lib/auth";
 import { BRAND_NAME } from "@/constants/upload.constants";
+import { useTheme } from "@/components/providers/theme-provider";
 import {
   IconChevronLeft,
   IconChevronRight,
@@ -43,6 +50,7 @@ export function AppShell({
 }: AppShellProps) {
   const pathname = usePathname();
   const router = useRouter();
+  const { theme: colorMode, toggleTheme } = useTheme();
   const [username, setUsername] = useState<string | undefined>(undefined);
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -80,12 +88,13 @@ export function AppShell({
   }
 
   const displayName = username ?? "Account";
-  const initials = displayName
-    .split(/[\s._-]+/)
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((part) => part[0]?.toUpperCase() ?? "")
-    .join("") || "U";
+  const initials =
+    displayName
+      .split(/[\s._-]+/)
+      .filter(Boolean)
+      .slice(0, 2)
+      .map((part) => part[0]?.toUpperCase() ?? "")
+      .join("") || "U";
 
   return (
     <div className={`app-shell theme-${theme}`}>
@@ -111,7 +120,7 @@ export function AppShell({
           </div>
           <button
             type="button"
-            className="ml-auto inline-flex h-8 w-8 items-center justify-center rounded-md text-[var(--sidebar-muted)] hover:text-[var(--sidebar-foreground)] sm:hidden"
+            className="ml-auto inline-flex h-8 w-8 items-center justify-center rounded-full text-[var(--sidebar-muted)] hover:text-[var(--sidebar-foreground)] sm:hidden"
             onClick={() => setMobileOpen(false)}
             aria-label="Close navigation"
           >
@@ -165,43 +174,47 @@ export function AppShell({
             >
               <IconMenu />
             </button>
-            <div className="hidden text-sm font-medium text-foreground sm:block">
-              {roleLabel}
-            </div>
           </div>
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <button
                 type="button"
-                className="inline-flex max-w-[14rem] items-center gap-2 rounded-lg border border-border bg-card px-2 py-1.5 text-left transition-colors hover:bg-muted/60"
+                className="inline-flex max-w-[13rem] items-center gap-2 rounded-full border border-border bg-card py-1 pr-2.5 pl-1 text-left shadow-sm transition-colors hover:bg-muted/70"
               >
                 <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary text-xs font-semibold text-primary-foreground">
                   {username ? initials : <UserRound className="size-4" />}
                 </span>
-                <span className="min-w-0 flex-1">
-                  <span className="block truncate text-sm font-medium text-foreground">
-                    {displayName}
-                  </span>
-                  <span className="block truncate text-[11px] text-muted-foreground">
-                    {roleLabel}
-                  </span>
+                <span className="min-w-0 flex-1 truncate text-sm font-medium text-foreground">
+                  {displayName}
                 </span>
-                <ChevronDown className="size-4 shrink-0 text-muted-foreground" />
+                <ChevronDown className="size-3.5 shrink-0 text-muted-foreground" />
               </button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="min-w-48">
-              <DropdownMenuLabel className="font-normal">
-                <div className="truncate text-sm font-medium">{displayName}</div>
-                <div className="truncate text-xs text-muted-foreground">
-                  {roleLabel}
-                </div>
+            <DropdownMenuContent align="end" className="min-w-52 p-1.5">
+              <DropdownMenuLabel className="px-2.5 py-2 font-normal">
+                <div className="truncate text-sm font-semibold">{displayName}</div>
               </DropdownMenuLabel>
-              <DropdownMenuSeparator />
+              <DropdownMenuSeparator className="my-1.5" />
+              <DropdownMenuItem
+                onSelect={(e) => {
+                  e.preventDefault();
+                  toggleTheme();
+                }}
+                className="cursor-pointer gap-2 rounded-lg px-2.5 py-2"
+              >
+                {colorMode === "dark" ? (
+                  <Sun className="size-4" />
+                ) : (
+                  <Moon className="size-4" />
+                )}
+                {colorMode === "dark" ? "Light mode" : "Dark mode"}
+              </DropdownMenuItem>
+              <DropdownMenuSeparator className="my-1.5" />
               <DropdownMenuItem
                 variant="destructive"
                 onSelect={handleLogout}
-                className="gap-2"
+                className="cursor-pointer gap-2 rounded-lg px-2.5 py-2"
               >
                 <LogOut className="size-4" />
                 Log out

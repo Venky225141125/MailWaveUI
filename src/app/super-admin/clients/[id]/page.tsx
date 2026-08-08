@@ -20,6 +20,7 @@ import { DetailSkeleton } from "@/components/common/Skeleton";
 import { formatDateTime } from "@/lib/helpers";
 import { ROUTES } from "@/constants/routes.constants";
 import { GENERIC_ERROR } from "@/constants/error-messages.constants";
+import { CopyableText } from "@/components/shared/copyable-text";
 
 export default function ClientDetailPage() {
   const params = useParams<{ id: string }>();
@@ -72,7 +73,9 @@ export default function ClientDetailPage() {
           <DetailList>
             <DetailRow label="Client Type">{client.clientType}</DetailRow>
             <DetailRow label="Username">{client.username}</DetailRow>
-            <DetailRow label="Official Email">{client.officialEmail}</DetailRow>
+            <DetailRow label="Official Email">
+              <CopyableText value={client.officialEmail} />
+            </DetailRow>
             <DetailRow label="Phone Number">{client.phoneNumber}</DetailRow>
             <DetailRow label="Registered">
               {formatDateTime(client.createdAt)}

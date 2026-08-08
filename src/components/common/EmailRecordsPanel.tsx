@@ -3,8 +3,10 @@
 import type { EmailRecordResponse, Page } from "@/types";
 import { DataTable } from "@/components/shared/data-table";
 import { Select } from "@/components/shared/select";
+import { CopyableText } from "@/components/shared/copyable-text";
 import { StatusBadge } from "@/components/common/StatusBadge";
 import { Pagination } from "@/components/common/Pagination";
+import { TableCell, TableRow } from "@/components/ui/table";
 import { EMAIL_RECORD_STATUS_OPTIONS } from "@/constants/upload.constants";
 import { formatDateTime } from "@/lib/helpers";
 
@@ -46,20 +48,20 @@ export function EmailRecordsPanel({
         emptyMessage="No records found."
       >
         {(records?.content ?? []).map((record) => (
-          <tr key={record.id}>
-            <td className="px-4 py-2.5 font-medium text-[var(--text)]">
-              {record.email}
-            </td>
-            <td className="px-4 py-2.5">
+          <TableRow key={record.id}>
+            <TableCell className="px-4 py-3.5 font-medium">
+              <CopyableText value={record.email} />
+            </TableCell>
+            <TableCell className="px-4 py-3.5">
               <StatusBadge status={record.status} />
-            </td>
-            <td className="px-4 py-2.5 text-[var(--text-muted)]">
+            </TableCell>
+            <TableCell className="px-4 py-3.5 text-muted-foreground">
               {record.invalidReason ?? "—"}
-            </td>
-            <td className="px-4 py-2.5 text-[var(--text-muted)]">
+            </TableCell>
+            <TableCell className="px-4 py-3.5 text-muted-foreground">
               {formatDateTime(record.validatedAt)}
-            </td>
-          </tr>
+            </TableCell>
+          </TableRow>
         ))}
       </DataTable>
 

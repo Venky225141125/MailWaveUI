@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/table";
 import { DataTable } from "@/components/shared/data-table";
 import { RowActions, type RowAction } from "@/components/shared/row-actions";
+import { CopyableText } from "@/components/shared/copyable-text";
 import { StatusBadge } from "@/components/common/StatusBadge";
 import { formatDateTime } from "@/lib/helpers";
 
@@ -52,13 +53,13 @@ export function UsersTable({
                     {user.username}
                   </div>
                   <div className="truncate text-xs text-muted-foreground sm:hidden">
-                    {user.officialEmail}
+                    <CopyableText value={user.officialEmail} />
                   </div>
                 </div>
               </div>
             </TableCell>
             <TableCell className="hidden px-4 py-3.5 text-muted-foreground sm:table-cell">
-              {user.officialEmail}
+              <CopyableText value={user.officialEmail} />
             </TableCell>
             <TableCell className="px-4 py-3.5">
               <StatusBadge status={user.status} />

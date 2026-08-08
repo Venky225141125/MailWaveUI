@@ -6,6 +6,8 @@ export interface AuthResponse {
   id: number;
   username: string;
   name?: string;
+  /** Account lifecycle status when returned by the API */
+  status?: string;
   mustResetPassword?: boolean;
 }
 
@@ -14,6 +16,7 @@ export interface Session {
   role: Role;
   id: number;
   username: string;
+  status?: string;
 }
 
 export interface FreelancerRegisterResponse {

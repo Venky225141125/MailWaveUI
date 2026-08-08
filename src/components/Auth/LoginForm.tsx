@@ -91,7 +91,13 @@ export function LoginForm({
     setOtpLoading(true);
     try {
       const auth = await onVerifyOtp(challenge.challengeToken, code);
-      setSession(auth);
+      setSession({
+        token: auth.token,
+        role: auth.role,
+        id: auth.id,
+        username: auth.username,
+        status: auth.status ?? "ACTIVE",
+      });
       router.push(roleHomePath(auth.role));
     } catch (err) {
       setOtpError(err instanceof ApiError ? err.message : GENERIC_ERROR);

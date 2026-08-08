@@ -7,6 +7,7 @@ interface LinkButtonProps {
   children: React.ReactNode;
   variant?: "primary" | "secondary";
   className?: string;
+  disabled?: boolean;
 }
 
 export function LinkButton({
@@ -14,7 +15,20 @@ export function LinkButton({
   children,
   variant = "primary",
   className,
+  disabled,
 }: LinkButtonProps) {
+  if (disabled) {
+    return (
+      <Button
+        variant={variant === "primary" ? "default" : "outline"}
+        disabled
+        className={cn(className)}
+      >
+        {children}
+      </Button>
+    );
+  }
+
   return (
     <Button
       asChild
