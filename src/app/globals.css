@@ -326,3 +326,55 @@ html.dark .theme-user {
     @apply font-sans;
   }
 }
+
+/* TipTap rich text editor */
+.rich-text-editor__content .tiptap {
+  min-height: inherit;
+}
+
+.rich-text-editor__content .tiptap p.is-editor-empty:first-child::before,
+.rich-text-editor__content .tiptap p.is-empty:first-child::before {
+  color: var(--muted-foreground);
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+
+.rich-text-editor__content .tiptap p {
+  margin: 0.5rem 0;
+}
+
+.rich-text-editor__content .tiptap h2 {
+  margin: 0.75rem 0 0.5rem;
+  font-size: 1.125rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.rich-text-editor__content .tiptap ul,
+.rich-text-editor__content .tiptap ol {
+  margin: 0.5rem 0;
+  padding-left: 1.25rem;
+}
+
+.rich-text-editor__content .tiptap ul {
+  list-style: disc;
+}
+
+.rich-text-editor__content .tiptap ol {
+  list-style: decimal;
+}
+
+.rich-text-editor__content .tiptap blockquote {
+  margin: 0.5rem 0;
+  border-left: 3px solid var(--border);
+  padding-left: 0.75rem;
+  color: var(--muted-foreground);
+}
+
+.rich-text-editor__content .tiptap a {
+  color: var(--primary);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}

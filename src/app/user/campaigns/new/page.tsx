@@ -16,7 +16,7 @@ import { Alert } from "@/components/shared/alert";
 import { Button } from "@/components/shared/button";
 import { Input } from "@/components/shared/input";
 import { Select } from "@/components/shared/select";
-import { Textarea } from "@/components/shared/textarea";
+import { RichTextEditor } from "@/components/shared/rich-text-editor";
 import { ROUTES } from "@/constants/routes.constants";
 import { GENERIC_ERROR } from "@/constants/error-messages.constants";
 
@@ -154,12 +154,13 @@ export default function NewCampaignPage() {
             value={fromName}
             onChange={(e) => setFromName(e.target.value)}
           />
-          <Textarea
+          <RichTextEditor
             label="Body (HTML)"
             required
-            rows={10}
             value={bodyHtml}
-            onChange={(e) => setBodyHtml(e.target.value)}
+            onChange={setBodyHtml}
+            disabled={!isActive}
+            placeholder="Write the campaign message your recipients will see…"
           />
           <Alert tone="success" message={testEmailStatus} />
           <Alert message={testEmailError} />
