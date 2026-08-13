@@ -1,43 +1,35 @@
-import * as React from "react";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { cn } from "@/lib/utils";
+"use client";
+
+import { useEffect } from "react";
+import { toastByTone, type ToastTone } from "@/lib/helpers/toast.utils";
 
 interface FormAlertProps {
-  tone?: "error" | "success" | "info";
+  tone?: ToastTone;
   message?: string | null;
   className?: string;
 }
 
-/** Simple message alert used across pages. */
+/**
+ * @deprecated Use `toastError`, `toastSuccess`, etc. from `@/lib/helpers/toast.utils`.
+ * Renders nothing — shows a Sonner toast when `message` is set.
+ */
 export function FormAlert({
   tone = "error",
   message,
-  className,
 }: FormAlertProps) {
-  if (!message) return null;
+  useEffect(() => {
+    if (message) toastByTone(tone, message);
+  }, [message, tone]);
 
-  return (
-    <Alert
-      variant={tone === "error" ? "destructive" : "default"}
-      className={cn(
-        tone === "success" &&
-          "border-emerald-300 bg-emerald-50 text-emerald-900 dark:border-emerald-900 dark:bg-emerald-950/40 dark:text-emerald-200",
-        tone === "info" &&
-          "border-sky-300 bg-sky-50 text-sky-900 dark:border-sky-900 dark:bg-sky-950/40 dark:text-sky-200",
-        className
-      )}
-    >
-      <AlertDescription>{message}</AlertDescription>
-    </Alert>
-  );
+  return null;
 }
 
-/** @deprecated Prefer FormAlert */
+/** @deprecated Use toast helpers from `@/lib/helpers/toast.utils`. */
 export function FormError({ message }: { message?: string | null }) {
   return <FormAlert tone="error" message={message} />;
 }
 
-/** @deprecated Prefer FormAlert */
+/** @deprecated Use toast helpers from `@/lib/helpers/toast.utils`. */
 export function FormSuccess({ message }: { message?: string | null }) {
   return <FormAlert tone="success" message={message} />;
 }

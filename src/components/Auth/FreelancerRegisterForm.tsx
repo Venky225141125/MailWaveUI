@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { ApiError } from "@/lib/api";
 import { registerFreelancer } from "@/services/authService";
-import { Alert } from "@/components/shared/alert";
 import { Button } from "@/components/shared/button";
 import { Input } from "@/components/shared/input";
 import { LinkButton } from "@/components/shared/link-button";
@@ -12,12 +11,14 @@ import {
   RegisterSplitLayout,
 } from "@/components/Auth/RegisterSplitLayout";
 import { GENERIC_ERROR } from "@/constants/error-messages.constants";
+import { FORM_PLACEHOLDERS } from "@/constants/form-placeholders.constants";
 import { ROUTES } from "@/constants/routes.constants";
 import {
   freelancerRegisterSchema,
   validateAddressProof,
   zodFieldErrors,
 } from "@/lib/helpers/validation.utils";
+import { toastError, toastSuccess } from "@/lib/helpers/toast.utils";
 
 interface FormState {
   username: string;
@@ -39,6 +40,9 @@ const INITIAL: FormState = {
 
 type FieldKey = keyof FormState | "addressProof";
 
+const SUCCESS_MESSAGE =
+  "Registration submitted — you'll be able to log in once a Super Admin approves your account.";
+
 export function FreelancerRegisterForm() {
   const [form, setForm] = useState(INITIAL);
   const [addressProof, setAddressProof] = useState<File | null>(null);
@@ -46,8 +50,7 @@ export function FreelancerRegisterForm() {
     {}
   );
   const [touched, setTouched] = useState<Partial<Record<FieldKey, boolean>>>({});
-  const [formError, setFormError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
 
   function update<K extends keyof FormState>(key: K, value: string) {
@@ -101,8 +104,7 @@ export function FreelancerRegisterForm() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setFormError(null);
-    setSuccess(null);
+    setSuccess(false);
 
     const parsed = freelancerRegisterSchema.safeParse(form);
     const fileError = validateAddressProof(addressProof);
@@ -123,7 +125,7 @@ export function FreelancerRegisterForm() {
         confirmPassword: true,
         addressProof: true,
       });
-      setFormError("Please fix the highlighted fields and try again.");
+      toastError("Please fix the highlighted fields and try again.");
       return;
     }
 
@@ -139,9 +141,8 @@ export function FreelancerRegisterForm() {
       fd.append("addressProof", addressProof as File);
 
       await registerFreelancer(fd);
-      setSuccess(
-        "Registration submitted — you'll be able to log in once a Super Admin approves your account."
-      );
+      toastSuccess(SUCCESS_MESSAGE);
+      setSuccess(true);
       setForm(INITIAL);
       setAddressProof(null);
       setFieldErrors({});
@@ -154,9 +155,9 @@ export function FreelancerRegisterForm() {
         } else if (code === "EMAIL_TAKEN") {
           setFieldErrors((prev) => ({ ...prev, email: err.message }));
         }
-        setFormError(err.message);
+        toastError(err.message);
       } else {
-        setFormError(GENERIC_ERROR);
+        toastError(GENERIC_ERROR);
       }
     } finally {
       setLoading(false);
@@ -191,11 +192,7 @@ export function FreelancerRegisterForm() {
       {success ? (
         <div className="flex flex-col gap-3">
           <h1 className="auth-card__title">Application received</h1>
-          <Alert
-            tone="success"
-            message={success}
-            className="!px-2 !py-1.5 !text-xs leading-snug"
-          />
+          <p className="text-sm text-muted-foreground">{SUCCESS_MESSAGE}</p>
           <LinkButton href={ROUTES.login.client}>Go to Client Login</LinkButton>
         </div>
       ) : (
@@ -206,11 +203,6 @@ export function FreelancerRegisterForm() {
           </p>
 
           <form onSubmit={handleSubmit} className="register-form" noValidate>
-            <Alert
-              message={formError}
-              className="!px-2 !py-1.5 !text-xs leading-snug"
-            />
-
             <div className="register-form__grid register-form__grid--2 space-x-2 mb-2">
               <Input
                 density="compact"
@@ -221,6 +213,7 @@ export function FreelancerRegisterForm() {
                 error={err("username")}
                 onChange={(e) => update("username", e.target.value)}
                 onBlur={() => handleBlur("username")}
+                placeholder={FORM_PLACEHOLDERS.freelancerRegister.username}
               />
               <Input
                 density="compact"
@@ -241,7 +234,7 @@ export function FreelancerRegisterForm() {
                 required
                 inputMode="tel"
                 autoComplete="tel"
-                placeholder="+91 98765 43210"
+                placeholder={FORM_PLACEHOLDERS.freelancerRegister.phoneNumber}
                 value={form.phoneNumber}
                 error={err("phoneNumber")}
                 onChange={(e) => update("phoneNumber", e.target.value)}
@@ -257,6 +250,7 @@ export function FreelancerRegisterForm() {
                 error={err("email")}
                 onChange={(e) => update("email", e.target.value)}
                 onBlur={() => handleBlur("email")}
+                placeholder={FORM_PLACEHOLDERS.freelancerRegister.email}
               />
             </div>
 
@@ -272,6 +266,7 @@ export function FreelancerRegisterForm() {
                 error={err("password")}
                 onChange={(e) => update("password", e.target.value)}
                 onBlur={() => handleBlur("password")}
+                placeholder={FORM_PLACEHOLDERS.freelancerRegister.password}
               />
               <Input
                 density="compact"
@@ -283,6 +278,7 @@ export function FreelancerRegisterForm() {
                 error={err("confirmPassword")}
                 onChange={(e) => update("confirmPassword", e.target.value)}
                 onBlur={() => handleBlur("confirmPassword")}
+                placeholder={FORM_PLACEHOLDERS.freelancerRegister.confirmPassword}
               />
             </div>
 

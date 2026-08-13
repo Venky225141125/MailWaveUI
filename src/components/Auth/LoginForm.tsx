@@ -6,10 +6,11 @@ import { useRouter } from "next/navigation";
 import { ApiError } from "@/lib/api";
 import { setSession, roleHomePath } from "@/lib/auth";
 import type { AuthResponse, OtpChallengeResponse } from "@/types";
-import { Alert } from "@/components/shared/alert";
 import { Button } from "@/components/shared/button";
 import { Input } from "@/components/shared/input";
 import { GENERIC_ERROR } from "@/constants/error-messages.constants";
+import { FORM_PLACEHOLDERS } from "@/constants/form-placeholders.constants";
+import { toastError } from "@/lib/helpers/toast.utils";
 
 const RESEND_COOLDOWN_SECONDS = 30;
 
@@ -46,12 +47,10 @@ export function LoginForm({
   const [step, setStep] = useState<"credentials" | "otp">("credentials");
   const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
   const [challenge, setChallenge] = useState<OtpChallengeResponse | null>(null);
   const [code, setCode] = useState("");
-  const [otpError, setOtpError] = useState<string | null>(null);
   const [otpLoading, setOtpLoading] = useState(false);
   const [resendLoading, setResendLoading] = useState(false);
   const [cooldown, setCooldown] = useState(0);
@@ -64,20 +63,18 @@ export function LoginForm({
 
   async function handleCredentialsSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setError(null);
     setLoading(true);
     try {
       const result = await onLogin(identifier, password);
       setChallenge(result);
       setCode("");
-      setOtpError(null);
       setCooldown(RESEND_COOLDOWN_SECONDS);
       setStep("otp");
     } catch (err) {
       if (err instanceof ApiError) {
-        setError(errorCopy?.[err.errorCode] ?? err.message);
+        toastError(errorCopy?.[err.errorCode] ?? err.message);
       } else {
-        setError(GENERIC_ERROR);
+        toastError(GENERIC_ERROR);
       }
     } finally {
       setLoading(false);
@@ -87,7 +84,6 @@ export function LoginForm({
   async function handleOtpSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!challenge) return;
-    setOtpError(null);
     setOtpLoading(true);
     try {
       const auth = await onVerifyOtp(challenge.challengeToken, code);
@@ -100,7 +96,7 @@ export function LoginForm({
       });
       router.push(roleHomePath(auth.role));
     } catch (err) {
-      setOtpError(err instanceof ApiError ? err.message : GENERIC_ERROR);
+      toastError(err instanceof ApiError ? err.message : GENERIC_ERROR);
     } finally {
       setOtpLoading(false);
     }
@@ -108,14 +104,13 @@ export function LoginForm({
 
   async function handleResend() {
     if (!challenge || !onResendOtp || cooldown > 0) return;
-    setOtpError(null);
     setResendLoading(true);
     try {
       const result = await onResendOtp(challenge.challengeToken);
       setChallenge(result);
       setCooldown(RESEND_COOLDOWN_SECONDS);
     } catch (err) {
-      setOtpError(err instanceof ApiError ? err.message : GENERIC_ERROR);
+      toastError(err instanceof ApiError ? err.message : GENERIC_ERROR);
     } finally {
       setResendLoading(false);
     }
@@ -125,7 +120,6 @@ export function LoginForm({
     setStep("credentials");
     setChallenge(null);
     setCode("");
-    setOtpError(null);
   }
 
   if (step === "otp" && challenge) {
@@ -136,7 +130,6 @@ export function LoginForm({
           We sent a 6-digit code to {challenge.maskedEmail}
         </p>
         <form onSubmit={handleOtpSubmit} className="auth-form">
-          <Alert message={otpError} />
           <Input
             label="Verification code"
             name="otp"
@@ -146,6 +139,7 @@ export function LoginForm({
             required
             value={code}
             onChange={(e) => setCode(e.target.value.replace(/\D/g, ""))}
+            placeholder={FORM_PLACEHOLDERS.auth.otp}
           />
           <Button type="submit" disabled={otpLoading || code.length !== 6} className="w-full">
             {otpLoading ? "Verifying…" : "Verify & Sign in"}
@@ -183,7 +177,6 @@ export function LoginForm({
         <p className="auth-card__desc">{description}</p>
       ) : null}
       <form onSubmit={handleCredentialsSubmit} className="auth-form">
-        <Alert message={error} />
         <Input
           label={identifierLabel}
           type={identifierType}
@@ -192,6 +185,11 @@ export function LoginForm({
           autoComplete={identifierName === "email" ? "email" : "username"}
           value={identifier}
           onChange={(e) => setIdentifier(e.target.value)}
+          placeholder={
+            identifierName === "email"
+              ? FORM_PLACEHOLDERS.auth.email
+              : FORM_PLACEHOLDERS.auth.username
+          }
         />
         <Input
           label="Password"
@@ -201,6 +199,7 @@ export function LoginForm({
           autoComplete="current-password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          placeholder={FORM_PLACEHOLDERS.auth.password}
         />
         {forgotPasswordHref ? (
           <Link

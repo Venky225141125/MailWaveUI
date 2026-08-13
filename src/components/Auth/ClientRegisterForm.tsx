@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { ApiError } from "@/lib/api";
 import { setSession, roleHomePath } from "@/lib/auth";
 import { registerClient } from "@/services/authService";
-import { Alert } from "@/components/shared/alert";
 import { Button } from "@/components/shared/button";
 import { Input } from "@/components/shared/input";
 import {
@@ -21,6 +20,8 @@ import {
   zodFieldErrors,
 } from "@/lib/helpers/validation.utils";
 import type { ClientRegisterPayload } from "@/types";
+import { FORM_PLACEHOLDERS } from "@/constants/form-placeholders.constants";
+import { toastError } from "@/lib/helpers/toast.utils";
 
 const INITIAL: ClientRegisterPayload = {
   companyName: "",
@@ -44,7 +45,6 @@ export function ClientRegisterForm() {
   const [fieldErrors, setFieldErrors] = useState<
     Partial<Record<keyof ClientRegisterPayload, string>>
   >({});
-  const [formError, setFormError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [touched, setTouched] = useState<
     Partial<Record<keyof ClientRegisterPayload, boolean>>
@@ -88,7 +88,6 @@ export function ClientRegisterForm() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setFormError(null);
 
     const parsed = clientRegisterSchema.safeParse(form);
     if (!parsed.success) {
@@ -103,7 +102,7 @@ export function ClientRegisterForm() {
           {} as Partial<Record<keyof ClientRegisterPayload, boolean>>
         )
       );
-      setFormError("Please fix the highlighted fields and try again.");
+      toastError("Please fix the highlighted fields and try again.");
       return;
     }
 
@@ -127,9 +126,9 @@ export function ClientRegisterForm() {
           setFieldErrors((prev) => ({ ...prev, [field]: message }));
           setTouched((prev) => ({ ...prev, [field]: true }));
         }
-        setFormError(message);
+        toastError(message);
       } else {
-        setFormError(GENERIC_ERROR);
+        toastError(GENERIC_ERROR);
       }
     } finally {
       setLoading(false);
@@ -168,11 +167,6 @@ export function ClientRegisterForm() {
       </p>
 
       <form onSubmit={handleSubmit} className="register-form" noValidate>
-        <Alert
-          message={formError}
-          className="!px-2 !py-1.5 !text-xs leading-snug"
-        />
-
         <Input
           density="compact"
           label="Company Name"
@@ -182,6 +176,7 @@ export function ClientRegisterForm() {
           error={err("companyName")}
           onChange={(e) => update("companyName", e.target.value)}
           onBlur={() => handleBlur("companyName")}
+          placeholder={FORM_PLACEHOLDERS.clientRegister.companyName}
           className="mb-2"
         />
         <div className="register-form__grid register-form__grid--2 space-x-2 mb-2">
@@ -189,7 +184,7 @@ export function ClientRegisterForm() {
             density="compact"
             label="Company Website"
             required
-            placeholder="https://example.com"
+            placeholder={FORM_PLACEHOLDERS.clientRegister.companyWebsite}
             autoComplete="url"
             value={form.companyWebsite}
             error={err("companyWebsite")}
@@ -205,6 +200,7 @@ export function ClientRegisterForm() {
             error={err("username")}
             onChange={(e) => update("username", e.target.value)}
             onBlur={() => handleBlur("username")}
+            placeholder={FORM_PLACEHOLDERS.clientRegister.username}
           />
         </div>
 
@@ -219,6 +215,7 @@ export function ClientRegisterForm() {
             error={err("officialEmail")}
             onChange={(e) => update("officialEmail", e.target.value)}
             onBlur={() => handleBlur("officialEmail")}
+            placeholder={FORM_PLACEHOLDERS.clientRegister.officialEmail}
           />
           <Input
             density="compact"
@@ -226,7 +223,7 @@ export function ClientRegisterForm() {
             required
             inputMode="tel"
             autoComplete="tel"
-            placeholder="+91 98765 43210"
+            placeholder={FORM_PLACEHOLDERS.clientRegister.phoneNumber}
             value={form.phoneNumber}
             error={err("phoneNumber")}
             onChange={(e) => update("phoneNumber", e.target.value)}
@@ -247,6 +244,7 @@ export function ClientRegisterForm() {
             error={err("password")}
             onChange={(e) => update("password", e.target.value)}
             onBlur={() => handleBlur("password")}
+            placeholder={FORM_PLACEHOLDERS.clientRegister.password}
           />
           <Input
             density="compact"
@@ -258,6 +256,7 @@ export function ClientRegisterForm() {
             error={err("confirmPassword")}
             onChange={(e) => update("confirmPassword", e.target.value)}
             onBlur={() => handleBlur("confirmPassword")}
+            placeholder={FORM_PLACEHOLDERS.clientRegister.confirmPassword}
           />
         </div>
 

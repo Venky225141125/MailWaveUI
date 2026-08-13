@@ -3,14 +3,13 @@
 import { listOrganizations, listClients } from "@/services/superAdminService";
 import { useAsyncData } from "@/hooks/useAsyncData";
 import { PageHeader } from "@/components/shared/page-header";
-import { Alert } from "@/components/shared/alert";
 import { StatTile } from "@/components/common/StatTile";
 import { LinkButton } from "@/components/shared/link-button";
 import { DashboardSkeleton } from "@/components/common/Skeleton";
 import { ROUTES } from "@/constants/routes.constants";
 
 export default function SuperAdminDashboardPage() {
-  const { data, loading, error } = useAsyncData(async () => {
+  const { data, loading } = useAsyncData(async () => {
     const [orgs, clients] = await Promise.all([
       listOrganizations(),
       listClients(),
@@ -33,7 +32,6 @@ export default function SuperAdminDashboardPage() {
         title="Dashboard"
         description="Platform-wide overview of organizations and clients."
       />
-      <Alert message={error} />
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
         <StatTile label="Organizations" value={orgs.length} />
         <StatTile label="Total Clients" value={clients.length} />

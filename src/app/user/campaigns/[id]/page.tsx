@@ -4,7 +4,6 @@ import { useParams } from "next/navigation";
 import { getCampaign } from "@/services/userCampaignService";
 import { useAsyncData } from "@/hooks/useAsyncData";
 import { PageHeader } from "@/components/shared/page-header";
-import { Alert } from "@/components/shared/alert";
 import { StatTile } from "@/components/common/StatTile";
 import { StatusBadge } from "@/components/common/StatusBadge";
 import { DetailList, DetailRow } from "@/components/shared/detail-list";
@@ -14,7 +13,7 @@ import { ROUTES } from "@/constants/routes.constants";
 
 export default function CampaignDetailPage() {
   const params = useParams<{ id: string }>();
-  const { data: campaign, loading, error } = useAsyncData(
+  const { data: campaign, loading } = useAsyncData(
     () => getCampaign(params.id),
     [params.id]
   );
@@ -23,7 +22,6 @@ export default function CampaignDetailPage() {
 
   return (
     <div className="flex flex-col gap-6">
-      <Alert message={error} />
       {campaign ? (
         <>
           <PageHeader

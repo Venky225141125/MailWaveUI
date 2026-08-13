@@ -6,11 +6,11 @@ import { ApiError } from "@/lib/api";
 import { listUploadRecords } from "@/services/superAdminService";
 import type { EmailRecordResponse, Page } from "@/types";
 import { PageHeader } from "@/components/shared/page-header";
-import { Alert } from "@/components/shared/alert";
 import { EmailRecordsPanel } from "@/components/common/EmailRecordsPanel";
 import { DEFAULT_PAGE_SIZE } from "@/constants/upload.constants";
 import { ROUTES } from "@/constants/routes.constants";
 import { GENERIC_ERROR } from "@/constants/error-messages.constants";
+import { toastError } from "@/lib/helpers/toast.utils";
 
 export default function SuperAdminUploadRecordsPage() {
   const params = useParams<{ batchId: string }>();
@@ -22,7 +22,6 @@ export default function SuperAdminUploadRecordsPage() {
     null
   );
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     async function load() {
@@ -36,7 +35,7 @@ export default function SuperAdminUploadRecordsPage() {
           })
         );
       } catch (err) {
-        setError(err instanceof ApiError ? err.message : GENERIC_ERROR);
+        toastError(err instanceof ApiError ? err.message : GENERIC_ERROR);
       } finally {
         setLoading(false);
       }
@@ -52,7 +51,6 @@ export default function SuperAdminUploadRecordsPage() {
         backHref={ROUTES.superAdmin.clients}
         backLabel="Clients"
       />
-      <Alert message={error} />
       <EmailRecordsPanel
         records={records}
         loading={loading}

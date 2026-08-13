@@ -20,7 +20,6 @@ import {
 } from "@/services/superAdminService";
 import { useAsyncData } from "@/hooks/useAsyncData";
 import { PageHeader } from "@/components/shared/page-header";
-import { Alert } from "@/components/shared/alert";
 import { Select } from "@/components/shared/select";
 import { DataTable } from "@/components/shared/data-table";
 import { RowActions, type RowAction } from "@/components/shared/row-actions";
@@ -29,6 +28,7 @@ import { TableCell, TableRow } from "@/components/ui/table";
 import { formatDateTime } from "@/lib/helpers";
 import { ROUTES } from "@/constants/routes.constants";
 import { GENERIC_ERROR } from "@/constants/error-messages.constants";
+import { toastError } from "@/lib/helpers/toast.utils";
 import { CopyableText } from "@/components/shared/copyable-text";
 
 const STATUS_OPTIONS = ["", "ACTIVE", "PENDING_APPROVAL", "DISABLED", "REJECTED"];
@@ -38,22 +38,20 @@ export default function ClientsPage() {
   const router = useRouter();
   const [status, setStatus] = useState("");
   const [type, setType] = useState("");
-  const [actionError, setActionError] = useState<string | null>(null);
   const [actingId, setActingId] = useState<number | null>(null);
 
-  const { data: clients, loading, error, reload } = useAsyncData(
+  const { data: clients, loading, reload } = useAsyncData(
     () => listClients({ status, type }),
     [status, type]
   );
 
   async function runAction(id: number, action: () => Promise<unknown>) {
-    setActionError(null);
     setActingId(id);
     try {
       await action();
       reload();
     } catch (err) {
-      setActionError(err instanceof ApiError ? err.message : GENERIC_ERROR);
+      toastError(err instanceof ApiError ? err.message : GENERIC_ERROR);
     } finally {
       setActingId(null);
     }
@@ -87,7 +85,6 @@ export default function ClientsPage() {
           }))}
         />
       </div>
-      <Alert message={error ?? actionError} />
       <DataTable
         columns={[
           "Company",

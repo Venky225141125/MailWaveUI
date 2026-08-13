@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { ApiError } from "@/lib/api";
 import { GENERIC_ERROR } from "@/constants/error-messages.constants";
+import { toastError } from "@/lib/helpers/toast.utils";
 
 interface UseAsyncState<T> {
   data: T | null;
@@ -35,7 +36,10 @@ export function useAsyncData<T>(
         if (!cancelled) setData(result);
       } catch (err) {
         if (!cancelled) {
-          setError(err instanceof ApiError ? err.message : GENERIC_ERROR);
+          const message =
+            err instanceof ApiError ? err.message : GENERIC_ERROR;
+          toastError(message);
+          setError(message);
         }
       } finally {
         if (!cancelled) setLoading(false);

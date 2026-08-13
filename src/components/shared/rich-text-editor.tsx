@@ -6,6 +6,10 @@ import StarterKit from "@tiptap/starter-kit";
 import Underline from "@tiptap/extension-underline";
 import Link from "@tiptap/extension-link";
 import Placeholder from "@tiptap/extension-placeholder";
+import TextAlign from "@tiptap/extension-text-align";
+import Highlight from "@tiptap/extension-highlight";
+import { TextStyle } from "@tiptap/extension-text-style";
+import { Color } from "@tiptap/extension-color";
 import {
   Bold,
   Italic,
@@ -14,11 +18,20 @@ import {
   List,
   ListOrdered,
   Heading2,
+  Heading3,
   Quote,
   Link2,
+  Unlink,
   Undo2,
   Redo2,
   RemoveFormatting,
+  AlignLeft,
+  AlignCenter,
+  AlignRight,
+  Code,
+  SquareCode,
+  Minus,
+  Highlighter,
 } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
@@ -90,8 +103,20 @@ function EditorToolbar({
       .chain()
       .focus()
       .extendMarkRange("link")
-      .setLink({ href: url.trim() })
+      .setLink({ href: url.trim(), target: "_blank" })
       .run();
+  }
+
+  function setColor() {
+    if (!editor) return;
+    const current = (editor.getAttributes("textStyle").color as string) ?? "";
+    const color = window.prompt("Text color (hex)", current || "#2563eb");
+    if (color === null) return;
+    if (color.trim() === "") {
+      editor.chain().focus().unsetColor().run();
+      return;
+    }
+    editor.chain().focus().setColor(color.trim()).run();
   }
 
   return (
@@ -128,18 +153,35 @@ function EditorToolbar({
       >
         <Strikethrough className="size-4" />
       </ToolbarButton>
+      <ToolbarButton
+        label="Highlight"
+        disabled={disabled}
+        active={editor.isActive("highlight")}
+        onClick={() => editor.chain().focus().toggleHighlight().run()}
+      >
+        <Highlighter className="size-4" />
+      </ToolbarButton>
+      <ToolbarButton label="Text color" disabled={disabled} onClick={setColor}>
+        <span className="text-sm font-bold">A</span>
+      </ToolbarButton>
 
       <Separator orientation="vertical" className="mx-1 h-6" />
 
       <ToolbarButton
-        label="Heading"
+        label="Heading 2"
         disabled={disabled}
         active={editor.isActive("heading", { level: 2 })}
-        onClick={() =>
-          editor.chain().focus().toggleHeading({ level: 2 }).run()
-        }
+        onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
       >
         <Heading2 className="size-4" />
+      </ToolbarButton>
+      <ToolbarButton
+        label="Heading 3"
+        disabled={disabled}
+        active={editor.isActive("heading", { level: 3 })}
+        onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
+      >
+        <Heading3 className="size-4" />
       </ToolbarButton>
       <ToolbarButton
         label="Bullet list"
@@ -166,12 +208,72 @@ function EditorToolbar({
         <Quote className="size-4" />
       </ToolbarButton>
       <ToolbarButton
+        label="Inline code"
+        disabled={disabled}
+        active={editor.isActive("code")}
+        onClick={() => editor.chain().focus().toggleCode().run()}
+      >
+        <Code className="size-4" />
+      </ToolbarButton>
+      <ToolbarButton
+        label="Code block"
+        disabled={disabled}
+        active={editor.isActive("codeBlock")}
+        onClick={() => editor.chain().focus().toggleCodeBlock().run()}
+      >
+        <SquareCode className="size-4" />
+      </ToolbarButton>
+      <ToolbarButton
+        label="Horizontal rule"
+        disabled={disabled}
+        onClick={() => editor.chain().focus().setHorizontalRule().run()}
+      >
+        <Minus className="size-4" />
+      </ToolbarButton>
+
+      <Separator orientation="vertical" className="mx-1 h-6" />
+
+      <ToolbarButton
+        label="Align left"
+        disabled={disabled}
+        active={editor.isActive({ textAlign: "left" })}
+        onClick={() => editor.chain().focus().setTextAlign("left").run()}
+      >
+        <AlignLeft className="size-4" />
+      </ToolbarButton>
+      <ToolbarButton
+        label="Align center"
+        disabled={disabled}
+        active={editor.isActive({ textAlign: "center" })}
+        onClick={() => editor.chain().focus().setTextAlign("center").run()}
+      >
+        <AlignCenter className="size-4" />
+      </ToolbarButton>
+      <ToolbarButton
+        label="Align right"
+        disabled={disabled}
+        active={editor.isActive({ textAlign: "right" })}
+        onClick={() => editor.chain().focus().setTextAlign("right").run()}
+      >
+        <AlignRight className="size-4" />
+      </ToolbarButton>
+
+      <Separator orientation="vertical" className="mx-1 h-6" />
+
+      <ToolbarButton
         label="Link"
         disabled={disabled}
         active={editor.isActive("link")}
         onClick={setLink}
       >
         <Link2 className="size-4" />
+      </ToolbarButton>
+      <ToolbarButton
+        label="Remove link"
+        disabled={disabled || !editor.isActive("link")}
+        onClick={() => editor.chain().focus().unsetLink().run()}
+      >
+        <Unlink className="size-4" />
       </ToolbarButton>
 
       <Separator orientation="vertical" className="mx-1 h-6" />
@@ -224,10 +326,16 @@ export function RichTextEditor({
         heading: { levels: [2, 3] },
       }),
       Underline,
+      TextStyle,
+      Color,
+      Highlight.configure({ multicolor: false }),
+      TextAlign.configure({ types: ["heading", "paragraph"] }),
       Link.configure({
         openOnClick: false,
         HTMLAttributes: {
           class: "text-primary underline underline-offset-2",
+          rel: "noopener noreferrer",
+          target: "_blank",
         },
       }),
       Placeholder.configure({ placeholder }),

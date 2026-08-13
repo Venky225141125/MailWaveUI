@@ -5,7 +5,6 @@ import { Plus } from "lucide-react";
 import { listOrganizations } from "@/services/superAdminService";
 import { useAsyncData } from "@/hooks/useAsyncData";
 import { PageHeader } from "@/components/shared/page-header";
-import { Alert } from "@/components/shared/alert";
 import { Button } from "@/components/shared/button";
 import { DataTable } from "@/components/shared/data-table";
 import { CreateOrganizationDrawer } from "@/components/SuperAdmin/CreateOrganizationDrawer";
@@ -13,7 +12,7 @@ import { TableCell, TableRow } from "@/components/ui/table";
 import { formatDateTime } from "@/lib/helpers";
 
 export default function OrganizationsPage() {
-  const { data: orgs, loading, error, reload } = useAsyncData(
+  const { data: orgs, loading, reload } = useAsyncData(
     () => listOrganizations(),
     []
   );
@@ -31,7 +30,6 @@ export default function OrganizationsPage() {
           </Button>
         }
       />
-      <Alert message={error} />
       <DataTable
         columns={["Name", "Website", "Registered"]}
         loading={loading}

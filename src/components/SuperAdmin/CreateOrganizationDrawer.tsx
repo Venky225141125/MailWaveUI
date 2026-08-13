@@ -4,7 +4,6 @@ import { useState } from "react";
 import { Building2 } from "lucide-react";
 import { ApiError } from "@/lib/api";
 import { createOrganization } from "@/services/superAdminService";
-import { Alert } from "@/components/shared/alert";
 import { Button } from "@/components/shared/button";
 import { Input } from "@/components/shared/input";
 import {
@@ -16,6 +15,8 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { GENERIC_ERROR } from "@/constants/error-messages.constants";
+import { FORM_PLACEHOLDERS } from "@/constants/form-placeholders.constants";
+import { toastError, toastSuccess } from "@/lib/helpers/toast.utils";
 
 interface CreateOrganizationDrawerProps {
   open: boolean;
@@ -30,13 +31,11 @@ export function CreateOrganizationDrawer({
 }: CreateOrganizationDrawerProps) {
   const [name, setName] = useState("");
   const [website, setWebsite] = useState("");
-  const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
   function resetForm() {
     setName("");
     setWebsite("");
-    setError(null);
     setLoading(false);
   }
 
@@ -47,14 +46,14 @@ export function CreateOrganizationDrawer({
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setError(null);
     setLoading(true);
     try {
       await createOrganization({ name, website });
+      toastSuccess("Organization added to the whitelist.");
       onCreated();
       handleOpenChange(false);
     } catch (err) {
-      setError(err instanceof ApiError ? err.message : GENERIC_ERROR);
+      toastError(err instanceof ApiError ? err.message : GENERIC_ERROR);
     } finally {
       setLoading(false);
     }
@@ -85,13 +84,12 @@ export function CreateOrganizationDrawer({
           onSubmit={handleSubmit}
           className="flex flex-1 flex-col gap-4 px-6 py-6"
         >
-          <Alert message={error} />
           <Input
             label="Organization name"
             required
             value={name}
             onChange={(e) => setName(e.target.value)}
-            placeholder="Acme Corp"
+            placeholder={FORM_PLACEHOLDERS.superAdmin.organizationName}
           />
           <Input
             label="Website"
@@ -99,7 +97,7 @@ export function CreateOrganizationDrawer({
             type="url"
             value={website}
             onChange={(e) => setWebsite(e.target.value)}
-            placeholder="https://example.com"
+            placeholder={FORM_PLACEHOLDERS.superAdmin.organizationDomain}
           />
           <SheetFooter className="mt-auto gap-2 p-0 pt-2 sm:flex-col">
             <Button type="submit" disabled={loading} className="w-full">

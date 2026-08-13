@@ -3,12 +3,11 @@
 import { listUsers, listUserUploads } from "@/services/clientService";
 import { useAsyncData } from "@/hooks/useAsyncData";
 import { PageHeader } from "@/components/shared/page-header";
-import { Alert } from "@/components/shared/alert";
 import { StatTile } from "@/components/common/StatTile";
 import { DashboardSkeleton } from "@/components/common/Skeleton";
 
 export default function ClientDashboardPage() {
-  const { data: aggregate, loading, error } = useAsyncData(async () => {
+  const { data: aggregate, loading } = useAsyncData(async () => {
     const users = await listUsers();
     const uploadsByUser = await Promise.all(
       users.map((u) => listUserUploads(u.id))
@@ -32,7 +31,6 @@ export default function ClientDashboardPage() {
         title="Dashboard"
         description="Rolled-up view across your team’s uploads (aggregated client-side until a dedicated backend endpoint exists)."
       />
-      <Alert message={error} />
       {aggregate ? (
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
           <StatTile label="Total Users" value={aggregate.totalUsers} />

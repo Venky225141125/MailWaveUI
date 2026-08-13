@@ -4,13 +4,12 @@ import { useParams } from "next/navigation";
 import { listUserUploads } from "@/services/superAdminService";
 import { useAsyncData } from "@/hooks/useAsyncData";
 import { PageHeader } from "@/components/shared/page-header";
-import { Alert } from "@/components/shared/alert";
 import { UploadBatchTable } from "@/components/common/UploadBatchTable";
 import { ROUTES } from "@/constants/routes.constants";
 
 export default function SuperAdminUserUploadsPage() {
   const params = useParams<{ userId: string }>();
-  const { data: batches, loading, error } = useAsyncData(
+  const { data: batches, loading } = useAsyncData(
     () => listUserUploads(params.userId),
     [params.userId]
   );
@@ -23,7 +22,6 @@ export default function SuperAdminUserUploadsPage() {
         backHref={ROUTES.superAdmin.clients}
         backLabel="Clients"
       />
-      <Alert message={error} />
       <UploadBatchTable
         batches={batches ?? []}
         loading={loading}

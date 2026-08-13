@@ -7,7 +7,6 @@ import { listUsers } from "@/services/clientService";
 import type { CreateUserResponse, UserSummary } from "@/types";
 import { useAsyncData } from "@/hooks/useAsyncData";
 import { PageHeader } from "@/components/shared/page-header";
-import { Alert } from "@/components/shared/alert";
 import { Button } from "@/components/shared/button";
 import { UsersTable } from "@/components/common/UsersTable";
 import { CreateUserDrawer } from "@/components/Client/CreateUserDrawer";
@@ -15,7 +14,7 @@ import { ROUTES } from "@/constants/routes.constants";
 
 export default function ClientUsersPage() {
   const router = useRouter();
-  const { data: users, loading, error, reload } = useAsyncData(
+  const { data: users, loading, reload } = useAsyncData(
     () => listUsers(),
     []
   );
@@ -51,7 +50,6 @@ export default function ClientUsersPage() {
           </Button>
         }
       />
-      <Alert message={error} />
       <UsersTable
         users={displayUsers}
         loading={loading && !localUsers}

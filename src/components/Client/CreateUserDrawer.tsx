@@ -5,7 +5,6 @@ import { Check, Copy, UserPlus } from "lucide-react";
 import { ApiError } from "@/lib/api";
 import { createUser } from "@/services/clientService";
 import type { CreateUserResponse } from "@/types";
-import { Alert } from "@/components/shared/alert";
 import { Button } from "@/components/shared/button";
 import { Input } from "@/components/shared/input";
 import {
@@ -17,6 +16,8 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { GENERIC_ERROR } from "@/constants/error-messages.constants";
+import { FORM_PLACEHOLDERS } from "@/constants/form-placeholders.constants";
+import { toastError, toastSuccess } from "@/lib/helpers/toast.utils";
 
 interface CreateUserDrawerProps {
   open: boolean;
@@ -31,7 +32,6 @@ export function CreateUserDrawer({
 }: CreateUserDrawerProps) {
   const [username, setUsername] = useState("");
   const [officialEmail, setOfficialEmail] = useState("");
-  const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [created, setCreated] = useState<CreateUserResponse | null>(null);
   const [copied, setCopied] = useState(false);
@@ -39,7 +39,6 @@ export function CreateUserDrawer({
   function resetForm() {
     setUsername("");
     setOfficialEmail("");
-    setError(null);
     setLoading(false);
     setCreated(null);
     setCopied(false);
@@ -52,14 +51,14 @@ export function CreateUserDrawer({
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setError(null);
     setLoading(true);
     try {
       const result = await createUser({ username, officialEmail });
+      toastSuccess(`User "${result.username}" created.`);
       setCreated(result);
       onCreated(result);
     } catch (err) {
-      setError(err instanceof ApiError ? err.message : GENERIC_ERROR);
+      toastError(err instanceof ApiError ? err.message : GENERIC_ERROR);
     } finally {
       setLoading(false);
     }
@@ -96,7 +95,7 @@ export function CreateUserDrawer({
             </SheetTitle>
             <SheetDescription className="text-sm leading-relaxed">
               {created
-                ? "Share the temporary password now — it won’t be shown again."
+                ? "Share the temporary password now — it won't be shown again."
                 : "Invite someone who can upload lists and run campaigns."}
             </SheetDescription>
           </SheetHeader>
@@ -131,7 +130,7 @@ export function CreateUserDrawer({
                 ) : null}
               </div>
               <p className="mt-3 text-xs leading-relaxed text-amber-800/90 dark:text-amber-300/90">
-                They’ll be asked to reset this password on first login.
+                They'll be asked to reset this password on first login.
               </p>
             </div>
             <SheetFooter className="p-0">
@@ -149,14 +148,13 @@ export function CreateUserDrawer({
             onSubmit={handleSubmit}
             className="flex flex-1 flex-col gap-4 px-6 py-6"
           >
-            <Alert message={error} />
             <Input
               label="Username"
               required
               autoComplete="off"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              placeholder="jane.doe"
+              placeholder={FORM_PLACEHOLDERS.client.username}
             />
             <Input
               label="Official email"
@@ -165,7 +163,7 @@ export function CreateUserDrawer({
               autoComplete="off"
               value={officialEmail}
               onChange={(e) => setOfficialEmail(e.target.value)}
-              placeholder="jane@company.com"
+              placeholder={FORM_PLACEHOLDERS.client.email}
             />
             <SheetFooter className="mt-auto gap-2 p-0 pt-2 sm:flex-col">
               <Button type="submit" disabled={loading} className="w-full">

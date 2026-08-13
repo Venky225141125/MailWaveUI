@@ -12,26 +12,26 @@ import {
   isAccountDisabledError,
 } from "@/components/providers/account-status-provider";
 import { PageHeader } from "@/components/shared/page-header";
-import { Alert } from "@/components/shared/alert";
 import { Button } from "@/components/shared/button";
 import { Input } from "@/components/shared/input";
 import { Select } from "@/components/shared/select";
 import { RichTextEditor } from "@/components/shared/rich-text-editor";
 import { ROUTES } from "@/constants/routes.constants";
 import { GENERIC_ERROR } from "@/constants/error-messages.constants";
+import { FORM_PLACEHOLDERS } from "@/constants/form-placeholders.constants";
+import { toastError, toastSuccess } from "@/lib/helpers/toast.utils";
 
 export default function NewCampaignPage() {
   const router = useRouter();
   const { isActive, markInactive } = useAccountStatus();
-  const { data: allBatches, loading: loadingBatches, error: loadError } =
-    useAsyncData(async () => {
-      try {
-        return await listUploads();
-      } catch (err) {
-        if (isAccountDisabledError(err)) markInactive();
-        throw err;
-      }
-    }, []);
+  const { data: allBatches, loading: loadingBatches } = useAsyncData(async () => {
+    try {
+      return await listUploads();
+    } catch (err) {
+      if (isAccountDisabledError(err)) markInactive();
+      throw err;
+    }
+  }, []);
   const batches = (allBatches ?? []).filter((b) => b.validCount > 0);
 
   const [name, setName] = useState("");
@@ -43,25 +43,19 @@ export default function NewCampaignPage() {
   const [timezone, setTimezone] = useState(
     TIMEZONE_OPTIONS[TIMEZONE_OPTIONS.length - 1].value
   );
-  const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
-
-  const [testEmailStatus, setTestEmailStatus] = useState<string | null>(null);
-  const [testEmailError, setTestEmailError] = useState<string | null>(null);
   const [sendingTest, setSendingTest] = useState(false);
   const canSendTest = subject.trim() && fromName.trim() && bodyHtml.trim();
 
   async function handleSendTestEmail() {
     if (!isActive) return;
-    setTestEmailError(null);
-    setTestEmailStatus(null);
     setSendingTest(true);
     try {
       const result = await sendTestEmail({ subject, fromName, bodyHtml });
-      setTestEmailStatus(`Test email sent to ${result.sentTo}`);
+      toastSuccess(`Test email sent to ${result.sentTo}`);
     } catch (err) {
       if (isAccountDisabledError(err)) markInactive();
-      setTestEmailError(err instanceof ApiError ? err.message : GENERIC_ERROR);
+      toastError(err instanceof ApiError ? err.message : GENERIC_ERROR);
     } finally {
       setSendingTest(false);
     }
@@ -70,9 +64,8 @@ export default function NewCampaignPage() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!isActive) return;
-    setError(null);
     if (!batchId) {
-      setError("Please select a batch with valid emails.");
+      toastError("Please select a batch with valid emails.");
       return;
     }
     setSubmitting(true);
@@ -90,7 +83,7 @@ export default function NewCampaignPage() {
       router.push(ROUTES.user.campaign(campaign.id));
     } catch (err) {
       if (isAccountDisabledError(err)) markInactive();
-      setError(err instanceof ApiError ? err.message : GENERIC_ERROR);
+      toastError(err instanceof ApiError ? err.message : GENERIC_ERROR);
     } finally {
       setSubmitting(false);
     }
@@ -105,12 +98,14 @@ export default function NewCampaignPage() {
         backLabel="All campaigns"
       />
       <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-4">
-        <Alert message={error ?? loadError} />
         {!isActive ? (
-          <Alert
-            tone="error"
-            message="Your account is inactive. Campaign actions are disabled until a Client admin reactivates you."
-          />
+          <div
+            role="alert"
+            className="rounded-lg border border-destructive/30 bg-destructive/10 px-4 py-3 text-sm text-destructive"
+          >
+            Your account is inactive. Campaign actions are disabled until a
+            Client admin reactivates you.
+          </div>
         ) : null}
         <fieldset
           disabled={!isActive}
@@ -121,6 +116,7 @@ export default function NewCampaignPage() {
             required
             value={name}
             onChange={(e) => setName(e.target.value)}
+            placeholder={FORM_PLACEHOLDERS.user.campaignName}
           />
           <Select
             label="Upload Batch"
@@ -137,22 +133,24 @@ export default function NewCampaignPage() {
             ]}
           />
           {!loadingBatches && batches.length === 0 ? (
-            <Alert
-              tone="info"
-              message="No batches with valid emails yet. Upload a list and wait for validation to finish."
-            />
+            <p className="text-sm text-muted-foreground">
+              No batches with valid emails yet. Upload a list and wait for
+              validation to finish.
+            </p>
           ) : null}
           <Input
             label="Subject"
             required
             value={subject}
             onChange={(e) => setSubject(e.target.value)}
+            placeholder={FORM_PLACEHOLDERS.user.subject}
           />
           <Input
             label="From Name"
             required
             value={fromName}
             onChange={(e) => setFromName(e.target.value)}
+            placeholder={FORM_PLACEHOLDERS.user.fromName}
           />
           <RichTextEditor
             label="Body (HTML)"
@@ -162,8 +160,6 @@ export default function NewCampaignPage() {
             disabled={!isActive}
             placeholder="Write the campaign message your recipients will see…"
           />
-          <Alert tone="success" message={testEmailStatus} />
-          <Alert message={testEmailError} />
           <Button
             type="button"
             variant="secondary"

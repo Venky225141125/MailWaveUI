@@ -11,42 +11,39 @@ import {
 } from "@/services/superAdminService";
 import { useAsyncData } from "@/hooks/useAsyncData";
 import { PageHeader } from "@/components/shared/page-header";
-import { Alert } from "@/components/shared/alert";
 import { UsersTable } from "@/components/common/UsersTable";
 import { ROUTES } from "@/constants/routes.constants";
 import { GENERIC_ERROR } from "@/constants/error-messages.constants";
+import { toastError } from "@/lib/helpers/toast.utils";
 
 export default function ClientUsersPage() {
   const params = useParams<{ id: string }>();
   const router = useRouter();
-  const { data: users, loading, error, reload } = useAsyncData(
+  const { data: users, loading, reload } = useAsyncData(
     () => listClientUsers(params.id),
     [params.id]
   );
-  const [actionError, setActionError] = useState<string | null>(null);
   const [actingId, setActingId] = useState<number | null>(null);
 
   async function handleActivate(id: number) {
-    setActionError(null);
     setActingId(id);
     try {
       await activateUser(id);
       reload();
     } catch (err) {
-      setActionError(err instanceof ApiError ? err.message : GENERIC_ERROR);
+      toastError(err instanceof ApiError ? err.message : GENERIC_ERROR);
     } finally {
       setActingId(null);
     }
   }
 
   async function handleDeactivate(id: number) {
-    setActionError(null);
     setActingId(id);
     try {
       await deactivateUser(id);
       reload();
     } catch (err) {
-      setActionError(err instanceof ApiError ? err.message : GENERIC_ERROR);
+      toastError(err instanceof ApiError ? err.message : GENERIC_ERROR);
     } finally {
       setActingId(null);
     }
@@ -60,7 +57,6 @@ export default function ClientUsersPage() {
         backHref={ROUTES.superAdmin.client(params.id)}
         backLabel="Client detail"
       />
-      <Alert message={error ?? actionError} />
       <UsersTable
         users={users ?? []}
         loading={loading}

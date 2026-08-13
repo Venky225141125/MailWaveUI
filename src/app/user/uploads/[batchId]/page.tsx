@@ -9,7 +9,6 @@ import {
 } from "@/services/userUploadService";
 import type { EmailRecordResponse, Page, UploadBatchSummary } from "@/types";
 import { PageHeader } from "@/components/shared/page-header";
-import { Alert } from "@/components/shared/alert";
 import { StatusBadge } from "@/components/common/StatusBadge";
 import { ValidationStatsGrid } from "@/components/common/ValidationStatsGrid";
 import { EmailRecordsPanel } from "@/components/common/EmailRecordsPanel";
@@ -18,26 +17,30 @@ import { formatDateTime } from "@/lib/helpers";
 import { ROUTES } from "@/constants/routes.constants";
 import { DEFAULT_PAGE_SIZE } from "@/constants/upload.constants";
 import { GENERIC_ERROR } from "@/constants/error-messages.constants";
+import { toastError } from "@/lib/helpers/toast.utils";
 
 export default function UploadBatchDetailPage() {
   const params = useParams<{ batchId: string }>();
   const batchId = params.batchId;
 
   const [batch, setBatch] = useState<UploadBatchSummary | null>(null);
+  const [batchLoading, setBatchLoading] = useState(true);
   const [status, setStatus] = useState("");
   const [page, setPage] = useState(0);
   const [records, setRecords] = useState<Page<EmailRecordResponse> | null>(
     null
   );
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     async function loadBatch() {
+      setBatchLoading(true);
       try {
         setBatch(await getUpload(batchId));
       } catch (err) {
-        setError(err instanceof ApiError ? err.message : GENERIC_ERROR);
+        toastError(err instanceof ApiError ? err.message : GENERIC_ERROR);
+      } finally {
+        setBatchLoading(false);
       }
     }
     if (batchId) loadBatch();
@@ -55,7 +58,7 @@ export default function UploadBatchDetailPage() {
           })
         );
       } catch (err) {
-        setError(err instanceof ApiError ? err.message : GENERIC_ERROR);
+        toastError(err instanceof ApiError ? err.message : GENERIC_ERROR);
       } finally {
         setLoading(false);
       }
@@ -76,7 +79,6 @@ export default function UploadBatchDetailPage() {
         backLabel="All uploads"
         action={batch ? <StatusBadge status={batch.status} /> : undefined}
       />
-      <Alert message={error} />
       {batch ? (
         <ValidationStatsGrid
           aggregate={{
@@ -88,7 +90,7 @@ export default function UploadBatchDetailPage() {
             pending: batch.pendingCount,
           }}
         />
-      ) : !error ? (
+      ) : batchLoading ? (
         <StatsGridSkeleton />
       ) : null}
       <EmailRecordsPanel

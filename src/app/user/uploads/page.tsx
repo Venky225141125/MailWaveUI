@@ -8,13 +8,12 @@ import {
 } from "@/components/providers/account-status-provider";
 import { PageHeader } from "@/components/shared/page-header";
 import { LinkButton } from "@/components/shared/link-button";
-import { Alert } from "@/components/shared/alert";
 import { UploadBatchTable } from "@/components/common/UploadBatchTable";
 import { ROUTES } from "@/constants/routes.constants";
 
 export default function UserUploadsPage() {
   const { isActive, markInactive } = useAccountStatus();
-  const { data: batches, loading, error } = useAsyncData(async () => {
+  const { data: batches, loading } = useAsyncData(async () => {
     try {
       return await listUploads();
     } catch (err) {
@@ -34,7 +33,6 @@ export default function UserUploadsPage() {
           </LinkButton>
         }
       />
-      <Alert message={error} />
       <UploadBatchTable
         batches={batches ?? []}
         loading={loading}
