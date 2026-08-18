@@ -10,7 +10,6 @@ import {
   Users,
   XCircle,
 } from "lucide-react";
-import { ApiError } from "@/lib/api";
 import {
   activateClient,
   approveClient,
@@ -19,16 +18,15 @@ import {
   rejectClient,
 } from "@/services/superAdminService";
 import { useAsyncData } from "@/hooks/useAsyncData";
+import { useToastOnError } from "@/hooks/useToastOnError";
 import { PageHeader } from "@/components/shared/page-header";
-import { Alert } from "@/components/shared/alert";
 import { Select } from "@/components/shared/select";
 import { DataTable } from "@/components/shared/data-table";
 import { RowActions, type RowAction } from "@/components/shared/row-actions";
 import { StatusBadge } from "@/components/common/StatusBadge";
 import { TableCell, TableRow } from "@/components/ui/table";
-import { formatDateTime } from "@/lib/helpers";
+import { formatDateTime, toastApiError, toastSuccess } from "@/lib/helpers";
 import { ROUTES } from "@/constants/routes.constants";
-import { GENERIC_ERROR } from "@/constants/error-messages.constants";
 import { CopyableText } from "@/components/shared/copyable-text";
 
 const STATUS_OPTIONS = ["", "ACTIVE", "PENDING_APPROVAL", "DISABLED", "REJECTED"];
@@ -38,22 +36,22 @@ export default function ClientsPage() {
   const router = useRouter();
   const [status, setStatus] = useState("");
   const [type, setType] = useState("");
-  const [actionError, setActionError] = useState<string | null>(null);
   const [actingId, setActingId] = useState<number | null>(null);
 
   const { data: clients, loading, error, reload } = useAsyncData(
     () => listClients({ status, type }),
     [status, type]
   );
+  useToastOnError(error);
 
-  async function runAction(id: number, action: () => Promise<unknown>) {
-    setActionError(null);
+  async function runAction(id: number, action: () => Promise<unknown>, successMessage: string) {
     setActingId(id);
     try {
       await action();
+      toastSuccess(successMessage);
       reload();
     } catch (err) {
-      setActionError(err instanceof ApiError ? err.message : GENERIC_ERROR);
+      toastApiError(err);
     } finally {
       setActingId(null);
     }
@@ -87,7 +85,6 @@ export default function ClientsPage() {
           }))}
         />
       </div>
-      <Alert message={error ?? actionError} />
       <DataTable
         columns={[
           "Company",
@@ -131,7 +128,7 @@ export default function ClientsPage() {
                 disabled: busy,
                 separatorBefore: true,
                 onSelect: () =>
-                  runAction(client.id, () => approveClient(client.id)),
+                  runAction(client.id, () => approveClient(client.id), "Client approved"),
               },
               {
                 label: busy ? "Rejecting…" : "Reject",
@@ -139,7 +136,7 @@ export default function ClientsPage() {
                 destructive: true,
                 disabled: busy,
                 onSelect: () =>
-                  runAction(client.id, () => rejectClient(client.id)),
+                  runAction(client.id, () => rejectClient(client.id), "Client rejected"),
               }
             );
           } else if (client.status === "ACTIVE") {
@@ -150,7 +147,7 @@ export default function ClientsPage() {
               disabled: busy,
               separatorBefore: true,
               onSelect: () =>
-                runAction(client.id, () => deactivateClient(client.id)),
+                runAction(client.id, () => deactivateClient(client.id), "Client deactivated"),
             });
           } else if (client.status === "DISABLED") {
             actions.push({
@@ -159,7 +156,7 @@ export default function ClientsPage() {
               disabled: busy,
               separatorBefore: true,
               onSelect: () =>
-                runAction(client.id, () => activateClient(client.id)),
+                runAction(client.id, () => activateClient(client.id), "Client activated"),
             });
           }
 

@@ -2,9 +2,7 @@
 
 import { useState } from "react";
 import { Building2 } from "lucide-react";
-import { ApiError } from "@/lib/api";
 import { createOrganization } from "@/services/superAdminService";
-import { Alert } from "@/components/shared/alert";
 import { Button } from "@/components/shared/button";
 import { Input } from "@/components/shared/input";
 import {
@@ -15,7 +13,7 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
-import { GENERIC_ERROR } from "@/constants/error-messages.constants";
+import { toastApiError, toastSuccess } from "@/lib/helpers";
 
 interface CreateOrganizationDrawerProps {
   open: boolean;
@@ -30,13 +28,11 @@ export function CreateOrganizationDrawer({
 }: CreateOrganizationDrawerProps) {
   const [name, setName] = useState("");
   const [website, setWebsite] = useState("");
-  const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
   function resetForm() {
     setName("");
     setWebsite("");
-    setError(null);
     setLoading(false);
   }
 
@@ -47,14 +43,14 @@ export function CreateOrganizationDrawer({
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setError(null);
     setLoading(true);
     try {
       await createOrganization({ name, website });
+      toastSuccess("Organization added", `${name} is now on the whitelist.`);
       onCreated();
       handleOpenChange(false);
     } catch (err) {
-      setError(err instanceof ApiError ? err.message : GENERIC_ERROR);
+      toastApiError(err);
     } finally {
       setLoading(false);
     }
@@ -85,7 +81,6 @@ export function CreateOrganizationDrawer({
           onSubmit={handleSubmit}
           className="flex flex-1 flex-col gap-4 px-6 py-6"
         >
-          <Alert message={error} />
           <Input
             label="Organization name"
             required

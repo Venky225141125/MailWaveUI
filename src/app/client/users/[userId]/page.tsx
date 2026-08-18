@@ -6,8 +6,8 @@ import {
   listUserUploads,
 } from "@/services/clientService";
 import { useAsyncData } from "@/hooks/useAsyncData";
+import { useToastOnError } from "@/hooks/useToastOnError";
 import { PageHeader } from "@/components/shared/page-header";
-import { Alert } from "@/components/shared/alert";
 import { UploadBatchTable } from "@/components/common/UploadBatchTable";
 import { CampaignTable } from "@/components/common/CampaignTable";
 import { ROUTES } from "@/constants/routes.constants";
@@ -21,6 +21,7 @@ export default function ClientUserProgressPage() {
     ]);
     return { uploads, campaigns };
   }, [params.userId]);
+  useToastOnError(error);
 
   return (
     <div className="flex flex-col gap-8">
@@ -30,7 +31,6 @@ export default function ClientUserProgressPage() {
         backHref={ROUTES.client.users}
         backLabel="All users"
       />
-      <Alert message={error} />
       <section className="flex flex-col gap-3">
         <h2 className="text-sm font-semibold uppercase tracking-wide text-[var(--text-muted)]">
           Uploads

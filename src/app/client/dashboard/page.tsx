@@ -2,8 +2,8 @@
 
 import { listUsers, listUserUploads } from "@/services/clientService";
 import { useAsyncData } from "@/hooks/useAsyncData";
+import { useToastOnError } from "@/hooks/useToastOnError";
 import { PageHeader } from "@/components/shared/page-header";
-import { Alert } from "@/components/shared/alert";
 import { StatTile } from "@/components/common/StatTile";
 import { DashboardSkeleton } from "@/components/common/Skeleton";
 
@@ -23,6 +23,7 @@ export default function ClientDashboardPage() {
       totalSoftBounce: allUploads.reduce((sum, b) => sum + b.softBounceCount, 0),
     };
   }, []);
+  useToastOnError(error);
 
   if (loading) return <DashboardSkeleton />;
 
@@ -32,7 +33,6 @@ export default function ClientDashboardPage() {
         title="Dashboard"
         description="Rolled-up view across your team’s uploads (aggregated client-side until a dedicated backend endpoint exists)."
       />
-      <Alert message={error} />
       {aggregate ? (
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
           <StatTile label="Total Users" value={aggregate.totalUsers} />

@@ -3,27 +3,31 @@
 import dynamic from "next/dynamic";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { ApiError } from "@/lib/api";
 import { TIMEZONE_OPTIONS, zonedDateTimeToUtcIso } from "@/lib/timezone";
 import { listUploads } from "@/services/userUploadService";
 import { createCampaign, sendTestEmail } from "@/services/userCampaignService";
 import { useAsyncData } from "@/hooks/useAsyncData";
+import { useToastOnError } from "@/hooks/useToastOnError";
 import {
   useAccountStatus,
   isAccountDisabledError,
 } from "@/components/providers/account-status-provider";
 import { PageHeader } from "@/components/shared/page-header";
-import { Alert } from "@/components/shared/alert";
 import { Button } from "@/components/shared/button";
 import { Input } from "@/components/shared/input";
 import { Select } from "@/components/shared/select";
 import { ROUTES } from "@/constants/routes.constants";
-import { GENERIC_ERROR } from "@/constants/error-messages.constants";
-import "ve-rich-text-editor/styles.css";
+import { toastApiError, toastError, toastSuccess } from "@/lib/helpers";
 
 const RichTextEditor = dynamic(
-  () => import("ve-rich-text-editor").then((mod) => mod.RichTextEditor),
-  { ssr: false },
+  () =>
+    import("@/components/shared/rich-text-editor").then((mod) => mod.RichTextEditor),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="h-[320px] animate-pulse rounded-xl border border-border/80 bg-muted/40" />
+    ),
+  }
 );
 
 function hasRichTextContent(value: string) {
@@ -51,6 +55,7 @@ export default function NewCampaignPage() {
       throw err;
     }
   }, []);
+  useToastOnError(loadError);
   const batches = (allBatches ?? []).filter((b) => b.validCount > 0);
 
   const [name, setName] = useState("");
@@ -60,28 +65,22 @@ export default function NewCampaignPage() {
   const [bodyHtml, setBodyHtml] = useState("");
   const [scheduledAt, setScheduledAt] = useState("");
   const [timezone, setTimezone] = useState(
-    TIMEZONE_OPTIONS[TIMEZONE_OPTIONS.length - 1].value,
+    TIMEZONE_OPTIONS[TIMEZONE_OPTIONS.length - 1].value
   );
-  const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
-
-  const [testEmailStatus, setTestEmailStatus] = useState<string | null>(null);
-  const [testEmailError, setTestEmailError] = useState<string | null>(null);
   const [sendingTest, setSendingTest] = useState(false);
   const canSendTest =
     subject.trim() && fromName.trim() && hasRichTextContent(bodyHtml);
 
   async function handleSendTestEmail() {
     if (!isActive) return;
-    setTestEmailError(null);
-    setTestEmailStatus(null);
     setSendingTest(true);
     try {
       const result = await sendTestEmail({ subject, fromName, bodyHtml });
-      setTestEmailStatus(`Test email sent to ${result.sentTo}`);
+      toastSuccess("Test email sent", `Delivered to ${result.sentTo}`);
     } catch (err) {
       if (isAccountDisabledError(err)) markInactive();
-      setTestEmailError(err instanceof ApiError ? err.message : GENERIC_ERROR);
+      toastApiError(err);
     } finally {
       setSendingTest(false);
     }
@@ -90,9 +89,12 @@ export default function NewCampaignPage() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!isActive) return;
-    setError(null);
     if (!batchId) {
-      setError("Please select a batch with valid emails.");
+      toastError("Please select a batch with valid emails.");
+      return;
+    }
+    if (!hasRichTextContent(bodyHtml)) {
+      toastError("Add an email body before creating the campaign.");
       return;
     }
     setSubmitting(true);
@@ -107,10 +109,11 @@ export default function NewCampaignPage() {
           ? { scheduledAt: zonedDateTimeToUtcIso(scheduledAt, timezone) }
           : {}),
       });
+      toastSuccess("Campaign created", campaign.name);
       router.push(ROUTES.user.campaign(campaign.id));
     } catch (err) {
       if (isAccountDisabledError(err)) markInactive();
-      setError(err instanceof ApiError ? err.message : GENERIC_ERROR);
+      toastApiError(err);
     } finally {
       setSubmitting(false);
     }
@@ -125,13 +128,6 @@ export default function NewCampaignPage() {
         backLabel="All campaigns"
       />
       <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-4">
-        <Alert message={error ?? loadError} />
-        {!isActive ? (
-          <Alert
-            tone="error"
-            message="Your account is inactive. Campaign actions are disabled until a Client admin reactivates you."
-          />
-        ) : null}
         <fieldset
           disabled={!isActive}
           className="flex flex-col gap-4 disabled:opacity-60"
@@ -139,6 +135,7 @@ export default function NewCampaignPage() {
           <Input
             label="Campaign Name"
             required
+            placeholder="Spring product launch"
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
@@ -148,7 +145,7 @@ export default function NewCampaignPage() {
             value={batchId}
             onValueChange={setBatchId}
             disabled={loadingBatches || !isActive}
-            placeholder={loadingBatches ? "Loading…" : "Select a batch"}
+            placeholder={loadingBatches ? "Loading…" : "Select a validated list"}
             options={[
               ...batches.map((b) => ({
                 value: String(b.id),
@@ -157,38 +154,39 @@ export default function NewCampaignPage() {
             ]}
           />
           {!loadingBatches && batches.length === 0 ? (
-            <Alert
-              tone="info"
-              message="No batches with valid emails yet. Upload a list and wait for validation to finish."
-            />
+            <p className="text-sm text-muted-foreground">
+              No batches with valid emails yet. Upload a list and wait for
+              validation to finish.
+            </p>
           ) : null}
           <Input
             label="Subject"
             required
+            placeholder="You’re invited — exclusive early access"
             value={subject}
             onChange={(e) => setSubject(e.target.value)}
           />
           <Input
             label="From Name"
             required
+            placeholder="Acme Marketing"
             value={fromName}
             onChange={(e) => setFromName(e.target.value)}
           />
           <div className="flex flex-col gap-1.5">
-            <label className="text-sm font-medium">Body (HTML)</label>
+            <label className="text-sm font-medium">
+              Body
+              <span className="ml-0.5 text-destructive" aria-hidden>
+                *
+              </span>
+            </label>
             <RichTextEditor
               value={bodyHtml}
               onChange={setBodyHtml}
-              placeholder="Write your email body..."
-              style={{ minHeight: 260 }}
-              className="w-full"
-              theme={{
-                borderRadius: "0.625rem",
-              }}
+              placeholder="Write the email your recipients will actually want to open…"
+              disabled={!isActive}
             />
           </div>
-          <Alert tone="success" message={testEmailStatus} />
-          <Alert message={testEmailError} />
           <Button
             type="button"
             variant="secondary"
@@ -211,6 +209,7 @@ export default function NewCampaignPage() {
               value={timezone}
               onValueChange={setTimezone}
               className="sm:w-56"
+              placeholder="Select timezone"
               options={TIMEZONE_OPTIONS.map((tz) => ({
                 value: tz.value,
                 label: tz.label,

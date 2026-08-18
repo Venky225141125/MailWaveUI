@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { ApiError } from "@/lib/api";
 import { registerFreelancer } from "@/services/authService";
-import { Alert } from "@/components/shared/alert";
 import { Button } from "@/components/shared/button";
 import { Input } from "@/components/shared/input";
 import { LinkButton } from "@/components/shared/link-button";
@@ -17,7 +16,9 @@ import {
   freelancerRegisterSchema,
   validateAddressProof,
   zodFieldErrors,
-} from "@/lib/helpers/validation.utils";
+  toastError,
+  toastSuccess,
+} from "@/lib/helpers";
 
 interface FormState {
   username: string;
@@ -46,7 +47,6 @@ export function FreelancerRegisterForm() {
     {}
   );
   const [touched, setTouched] = useState<Partial<Record<FieldKey, boolean>>>({});
-  const [formError, setFormError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -101,7 +101,6 @@ export function FreelancerRegisterForm() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setFormError(null);
     setSuccess(null);
 
     const parsed = freelancerRegisterSchema.safeParse(form);
@@ -123,7 +122,7 @@ export function FreelancerRegisterForm() {
         confirmPassword: true,
         addressProof: true,
       });
-      setFormError("Please fix the highlighted fields and try again.");
+      toastError("Please fix the highlighted fields and try again.");
       return;
     }
 
@@ -139,9 +138,10 @@ export function FreelancerRegisterForm() {
       fd.append("addressProof", addressProof as File);
 
       await registerFreelancer(fd);
-      setSuccess(
-        "Registration submitted — you'll be able to log in once a Super Admin approves your account."
-      );
+      const confirmation =
+        "Registration submitted — you'll be able to log in once a Super Admin approves your account.";
+      setSuccess(confirmation);
+      toastSuccess("Application received", confirmation);
       setForm(INITIAL);
       setAddressProof(null);
       setFieldErrors({});
@@ -154,9 +154,9 @@ export function FreelancerRegisterForm() {
         } else if (code === "EMAIL_TAKEN") {
           setFieldErrors((prev) => ({ ...prev, email: err.message }));
         }
-        setFormError(err.message);
+        toastError(err.message);
       } else {
-        setFormError(GENERIC_ERROR);
+        toastError(GENERIC_ERROR);
       }
     } finally {
       setLoading(false);
@@ -191,11 +191,7 @@ export function FreelancerRegisterForm() {
       {success ? (
         <div className="flex flex-col gap-3">
           <h1 className="auth-card__title">Application received</h1>
-          <Alert
-            tone="success"
-            message={success}
-            className="!px-2 !py-1.5 !text-xs leading-snug"
-          />
+          <p className="auth-card__desc">{success}</p>
           <LinkButton href={ROUTES.login.client}>Go to Client Login</LinkButton>
         </div>
       ) : (
@@ -206,17 +202,13 @@ export function FreelancerRegisterForm() {
           </p>
 
           <form onSubmit={handleSubmit} className="register-form" noValidate>
-            <Alert
-              message={formError}
-              className="!px-2 !py-1.5 !text-xs leading-snug"
-            />
-
             <div className="register-form__grid register-form__grid--2 space-x-2 mb-2">
               <Input
                 density="compact"
                 label="Username"
                 required
                 autoComplete="username"
+                placeholder="jane.doe"
                 value={form.username}
                 error={err("username")}
                 onChange={(e) => update("username", e.target.value)}
@@ -253,6 +245,7 @@ export function FreelancerRegisterForm() {
                 type="email"
                 required
                 autoComplete="email"
+                placeholder="jane@company.com"
                 value={form.email}
                 error={err("email")}
                 onChange={(e) => update("email", e.target.value)}
@@ -268,6 +261,7 @@ export function FreelancerRegisterForm() {
                 required
                 autoComplete="new-password"
                 hint="8+ chars · upper · lower · number"
+                placeholder="At least 8 characters"
                 value={form.password}
                 error={err("password")}
                 onChange={(e) => update("password", e.target.value)}
@@ -279,6 +273,7 @@ export function FreelancerRegisterForm() {
                 type="password"
                 required
                 autoComplete="new-password"
+                placeholder="Re-enter your password"
                 value={form.confirmPassword}
                 error={err("confirmPassword")}
                 onChange={(e) => update("confirmPassword", e.target.value)}

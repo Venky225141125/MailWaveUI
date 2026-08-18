@@ -3,8 +3,8 @@
 import { useParams } from "next/navigation";
 import { listUserUploads } from "@/services/superAdminService";
 import { useAsyncData } from "@/hooks/useAsyncData";
+import { useToastOnError } from "@/hooks/useToastOnError";
 import { PageHeader } from "@/components/shared/page-header";
-import { Alert } from "@/components/shared/alert";
 import { UploadBatchTable } from "@/components/common/UploadBatchTable";
 import { ROUTES } from "@/constants/routes.constants";
 
@@ -14,6 +14,7 @@ export default function SuperAdminUserUploadsPage() {
     () => listUserUploads(params.userId),
     [params.userId]
   );
+  useToastOnError(error);
 
   return (
     <div className="flex flex-col gap-6">
@@ -23,7 +24,6 @@ export default function SuperAdminUserUploadsPage() {
         backHref={ROUTES.superAdmin.clients}
         backLabel="Clients"
       />
-      <Alert message={error} />
       <UploadBatchTable
         batches={batches ?? []}
         loading={loading}

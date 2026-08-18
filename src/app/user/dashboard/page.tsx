@@ -3,13 +3,13 @@
 import { listUploads } from "@/services/userUploadService";
 import { aggregateUploadBatches } from "@/lib/helpers";
 import { useAsyncData } from "@/hooks/useAsyncData";
+import { useToastOnError } from "@/hooks/useToastOnError";
 import {
   useAccountStatus,
   isAccountDisabledError,
 } from "@/components/providers/account-status-provider";
 import { PageHeader } from "@/components/shared/page-header";
 import { LinkButton } from "@/components/shared/link-button";
-import { Alert } from "@/components/shared/alert";
 import { ValidationStatsGrid } from "@/components/common/ValidationStatsGrid";
 import { DashboardSkeleton } from "@/components/common/Skeleton";
 import { ROUTES } from "@/constants/routes.constants";
@@ -24,6 +24,7 @@ export default function UserDashboardPage() {
       throw err;
     }
   }, []);
+  useToastOnError(error);
   const aggregate = batches ? aggregateUploadBatches(batches) : null;
 
   if (loading) return <DashboardSkeleton />;
@@ -39,7 +40,6 @@ export default function UserDashboardPage() {
           </LinkButton>
         }
       />
-      <Alert message={error} />
       {aggregate ? <ValidationStatsGrid aggregate={aggregate} /> : null}
     </div>
   );

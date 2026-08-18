@@ -12,23 +12,21 @@ import {
   UserRound,
   Users,
 } from "lucide-react";
-import { ApiError } from "@/lib/api";
 import {
   activateClient,
   deactivateClient,
   getClient,
 } from "@/services/superAdminService";
 import { useAsyncData } from "@/hooks/useAsyncData";
+import { useToastOnError } from "@/hooks/useToastOnError";
 import { PageHeader } from "@/components/shared/page-header";
-import { Alert } from "@/components/shared/alert";
 import { LinkButton } from "@/components/shared/link-button";
 import { Button } from "@/components/shared/button";
 import { CopyableText } from "@/components/shared/copyable-text";
 import { StatusBadge } from "@/components/common/StatusBadge";
 import { DetailSkeleton } from "@/components/common/Skeleton";
-import { formatDateTime } from "@/lib/helpers";
+import { formatDateTime, toastApiError, toastSuccess } from "@/lib/helpers";
 import { ROUTES } from "@/constants/routes.constants";
-import { GENERIC_ERROR } from "@/constants/error-messages.constants";
 import { cn } from "@/lib/utils";
 
 export default function ClientDetailPage() {
@@ -37,30 +35,30 @@ export default function ClientDetailPage() {
     () => getClient(params.id),
     [params.id]
   );
-  const [actionError, setActionError] = useState<string | null>(null);
+  useToastOnError(error);
   const [acting, setActing] = useState(false);
 
   async function handleActivate() {
-    setActionError(null);
     setActing(true);
     try {
       await activateClient(params.id);
+      toastSuccess("Client activated");
       reload();
     } catch (err) {
-      setActionError(err instanceof ApiError ? err.message : GENERIC_ERROR);
+      toastApiError(err);
     } finally {
       setActing(false);
     }
   }
 
   async function handleDeactivate() {
-    setActionError(null);
     setActing(true);
     try {
       await deactivateClient(params.id);
+      toastSuccess("Client deactivated");
       reload();
     } catch (err) {
-      setActionError(err instanceof ApiError ? err.message : GENERIC_ERROR);
+      toastApiError(err);
     } finally {
       setActing(false);
     }
@@ -76,7 +74,9 @@ export default function ClientDetailPage() {
           backHref={ROUTES.superAdmin.clients}
           backLabel="All clients"
         />
-        <Alert message={error ?? "Client not found."} />
+        <p className="text-sm text-muted-foreground">
+          {error ?? "Client not found."}
+        </p>
       </div>
     );
   }
@@ -134,7 +134,6 @@ export default function ClientDetailPage() {
         backHref={ROUTES.superAdmin.clients}
         backLabel="All clients"
       />
-      <Alert message={error ?? actionError} />
 
       <section className="overflow-hidden rounded-2xl border border-border/80 bg-card shadow-sm dark:border-border">
         <div

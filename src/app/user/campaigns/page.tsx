@@ -2,13 +2,13 @@
 
 import { listCampaigns } from "@/services/userCampaignService";
 import { useAsyncData } from "@/hooks/useAsyncData";
+import { useToastOnError } from "@/hooks/useToastOnError";
 import {
   useAccountStatus,
   isAccountDisabledError,
 } from "@/components/providers/account-status-provider";
 import { PageHeader } from "@/components/shared/page-header";
 import { LinkButton } from "@/components/shared/link-button";
-import { Alert } from "@/components/shared/alert";
 import { CampaignTable } from "@/components/common/CampaignTable";
 import { ROUTES } from "@/constants/routes.constants";
 
@@ -22,6 +22,7 @@ export default function UserCampaignsPage() {
       throw err;
     }
   }, []);
+  useToastOnError(error);
 
   return (
     <div className="flex flex-col gap-6">
@@ -34,7 +35,6 @@ export default function UserCampaignsPage() {
           </LinkButton>
         }
       />
-      <Alert message={error} />
       <CampaignTable
         campaigns={campaigns ?? []}
         loading={loading}

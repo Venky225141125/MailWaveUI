@@ -3,18 +3,17 @@
 import { useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { FolderOpen, UserCheck, UserX } from "lucide-react";
-import { ApiError } from "@/lib/api";
 import {
   activateUser,
   deactivateUser,
   listClientUsers,
 } from "@/services/superAdminService";
 import { useAsyncData } from "@/hooks/useAsyncData";
+import { useToastOnError } from "@/hooks/useToastOnError";
 import { PageHeader } from "@/components/shared/page-header";
-import { Alert } from "@/components/shared/alert";
 import { UsersTable } from "@/components/common/UsersTable";
 import { ROUTES } from "@/constants/routes.constants";
-import { GENERIC_ERROR } from "@/constants/error-messages.constants";
+import { toastApiError, toastSuccess } from "@/lib/helpers";
 
 export default function ClientUsersPage() {
   const params = useParams<{ id: string }>();
@@ -23,30 +22,30 @@ export default function ClientUsersPage() {
     () => listClientUsers(params.id),
     [params.id]
   );
-  const [actionError, setActionError] = useState<string | null>(null);
+  useToastOnError(error);
   const [actingId, setActingId] = useState<number | null>(null);
 
   async function handleActivate(id: number) {
-    setActionError(null);
     setActingId(id);
     try {
       await activateUser(id);
+      toastSuccess("User activated");
       reload();
     } catch (err) {
-      setActionError(err instanceof ApiError ? err.message : GENERIC_ERROR);
+      toastApiError(err);
     } finally {
       setActingId(null);
     }
   }
 
   async function handleDeactivate(id: number) {
-    setActionError(null);
     setActingId(id);
     try {
       await deactivateUser(id);
+      toastSuccess("User deactivated");
       reload();
     } catch (err) {
-      setActionError(err instanceof ApiError ? err.message : GENERIC_ERROR);
+      toastApiError(err);
     } finally {
       setActingId(null);
     }
@@ -60,7 +59,6 @@ export default function ClientUsersPage() {
         backHref={ROUTES.superAdmin.client(params.id)}
         backLabel="Client detail"
       />
-      <Alert message={error ?? actionError} />
       <UsersTable
         users={users ?? []}
         loading={loading}

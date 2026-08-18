@@ -2,8 +2,8 @@
 
 import { listOrganizations, listClients } from "@/services/superAdminService";
 import { useAsyncData } from "@/hooks/useAsyncData";
+import { useToastOnError } from "@/hooks/useToastOnError";
 import { PageHeader } from "@/components/shared/page-header";
-import { Alert } from "@/components/shared/alert";
 import { StatTile } from "@/components/common/StatTile";
 import { LinkButton } from "@/components/shared/link-button";
 import { DashboardSkeleton } from "@/components/common/Skeleton";
@@ -17,6 +17,7 @@ export default function SuperAdminDashboardPage() {
     ]);
     return { orgs, clients };
   }, []);
+  useToastOnError(error);
 
   if (loading) return <DashboardSkeleton tiles={4} />;
 
@@ -33,7 +34,6 @@ export default function SuperAdminDashboardPage() {
         title="Dashboard"
         description="Platform-wide overview of organizations and clients."
       />
-      <Alert message={error} />
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
         <StatTile label="Organizations" value={orgs.length} />
         <StatTile label="Total Clients" value={clients.length} />

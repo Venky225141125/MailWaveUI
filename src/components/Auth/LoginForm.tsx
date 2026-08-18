@@ -6,10 +6,9 @@ import { useRouter } from "next/navigation";
 import { ApiError } from "@/lib/api";
 import { setSession, roleHomePath } from "@/lib/auth";
 import type { AuthResponse, OtpChallengeResponse } from "@/types";
-import { Alert } from "@/components/shared/alert";
 import { Button } from "@/components/shared/button";
 import { Input } from "@/components/shared/input";
-import { GENERIC_ERROR } from "@/constants/error-messages.constants";
+import { toastApiError, toastError, toastInfo, toastSuccess } from "@/lib/helpers";
 
 const RESEND_COOLDOWN_SECONDS = 30;
 
@@ -19,6 +18,7 @@ interface LoginFormProps {
   identifierLabel: string;
   identifierType?: "email" | "text";
   identifierName: "email" | "username";
+  identifierPlaceholder?: string;
   submitLabel?: string;
   footer?: React.ReactNode;
   errorCopy?: Record<string, string>;
@@ -34,6 +34,7 @@ export function LoginForm({
   identifierLabel,
   identifierType = "text",
   identifierName,
+  identifierPlaceholder,
   submitLabel = "Sign in",
   footer,
   errorCopy,
@@ -46,15 +47,19 @@ export function LoginForm({
   const [step, setStep] = useState<"credentials" | "otp">("credentials");
   const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
   const [challenge, setChallenge] = useState<OtpChallengeResponse | null>(null);
   const [code, setCode] = useState("");
-  const [otpError, setOtpError] = useState<string | null>(null);
   const [otpLoading, setOtpLoading] = useState(false);
   const [resendLoading, setResendLoading] = useState(false);
   const [cooldown, setCooldown] = useState(0);
+
+  const resolvedPlaceholder =
+    identifierPlaceholder ??
+    (identifierType === "email"
+      ? "you@company.com"
+      : "username or you@company.com");
 
   useEffect(() => {
     if (cooldown <= 0) return;
@@ -64,20 +69,19 @@ export function LoginForm({
 
   async function handleCredentialsSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setError(null);
     setLoading(true);
     try {
       const result = await onLogin(identifier, password);
       setChallenge(result);
       setCode("");
-      setOtpError(null);
       setCooldown(RESEND_COOLDOWN_SECONDS);
       setStep("otp");
+      toastInfo("Check your inbox", `We sent a 6-digit code to ${result.maskedEmail}`);
     } catch (err) {
       if (err instanceof ApiError) {
-        setError(errorCopy?.[err.errorCode] ?? err.message);
+        toastError(errorCopy?.[err.errorCode] ?? err.message);
       } else {
-        setError(GENERIC_ERROR);
+        toastApiError(err);
       }
     } finally {
       setLoading(false);
@@ -87,7 +91,6 @@ export function LoginForm({
   async function handleOtpSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!challenge) return;
-    setOtpError(null);
     setOtpLoading(true);
     try {
       const auth = await onVerifyOtp(challenge.challengeToken, code);
@@ -98,9 +101,10 @@ export function LoginForm({
         username: auth.username,
         status: auth.status ?? "ACTIVE",
       });
+      toastSuccess("Welcome back");
       router.push(roleHomePath(auth.role));
     } catch (err) {
-      setOtpError(err instanceof ApiError ? err.message : GENERIC_ERROR);
+      toastApiError(err);
     } finally {
       setOtpLoading(false);
     }
@@ -108,14 +112,14 @@ export function LoginForm({
 
   async function handleResend() {
     if (!challenge || !onResendOtp || cooldown > 0) return;
-    setOtpError(null);
     setResendLoading(true);
     try {
       const result = await onResendOtp(challenge.challengeToken);
       setChallenge(result);
       setCooldown(RESEND_COOLDOWN_SECONDS);
+      toastSuccess("Code resent", `A new code was sent to ${result.maskedEmail}`);
     } catch (err) {
-      setOtpError(err instanceof ApiError ? err.message : GENERIC_ERROR);
+      toastApiError(err);
     } finally {
       setResendLoading(false);
     }
@@ -125,7 +129,6 @@ export function LoginForm({
     setStep("credentials");
     setChallenge(null);
     setCode("");
-    setOtpError(null);
   }
 
   if (step === "otp" && challenge) {
@@ -136,7 +139,6 @@ export function LoginForm({
           We sent a 6-digit code to {challenge.maskedEmail}
         </p>
         <form onSubmit={handleOtpSubmit} className="auth-form">
-          <Alert message={otpError} />
           <Input
             label="Verification code"
             name="otp"
@@ -144,6 +146,7 @@ export function LoginForm({
             autoComplete="one-time-code"
             maxLength={6}
             required
+            placeholder="123456"
             value={code}
             onChange={(e) => setCode(e.target.value.replace(/\D/g, ""))}
           />
@@ -183,13 +186,13 @@ export function LoginForm({
         <p className="auth-card__desc">{description}</p>
       ) : null}
       <form onSubmit={handleCredentialsSubmit} className="auth-form">
-        <Alert message={error} />
         <Input
           label={identifierLabel}
           type={identifierType}
           name={identifierName}
           required
           autoComplete={identifierName === "email" ? "email" : "username"}
+          placeholder={resolvedPlaceholder}
           value={identifier}
           onChange={(e) => setIdentifier(e.target.value)}
         />
@@ -199,6 +202,7 @@ export function LoginForm({
           name="password"
           required
           autoComplete="current-password"
+          placeholder="Enter your password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />

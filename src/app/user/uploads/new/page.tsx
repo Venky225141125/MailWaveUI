@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { ApiError } from "@/lib/api";
 import { createUpload } from "@/services/userUploadService";
 import { ACCEPTED_UPLOAD_EXTENSIONS } from "@/constants/upload.constants";
 import { ROUTES } from "@/constants/routes.constants";
@@ -11,33 +10,31 @@ import {
   isAccountDisabledError,
 } from "@/components/providers/account-status-provider";
 import { PageHeader } from "@/components/shared/page-header";
-import { Alert } from "@/components/shared/alert";
 import { Button } from "@/components/shared/button";
 import { FileDropzone } from "@/components/shared/file-dropzone";
-import { GENERIC_ERROR } from "@/constants/error-messages.constants";
+import { toastApiError, toastError, toastSuccess } from "@/lib/helpers";
 
 export default function NewUploadPage() {
   const router = useRouter();
   const { isActive, markInactive } = useAccountStatus();
   const [file, setFile] = useState<File | null>(null);
-  const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!isActive) return;
     if (!file) {
-      setError("Please choose a file to upload.");
+      toastError("Please choose a file to upload.");
       return;
     }
-    setError(null);
     setLoading(true);
     try {
       const batch = await createUpload(file);
+      toastSuccess("Upload started", "Validation is running on your list.");
       router.push(ROUTES.user.upload(batch.id));
     } catch (err) {
       if (isAccountDisabledError(err)) markInactive();
-      setError(err instanceof ApiError ? err.message : GENERIC_ERROR);
+      toastApiError(err);
     } finally {
       setLoading(false);
     }
@@ -52,22 +49,12 @@ export default function NewUploadPage() {
         backLabel="All uploads"
       />
       <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-4">
-        <Alert message={error} />
-        {!isActive ? (
-          <Alert
-            tone="error"
-            message="Your account is inactive. Uploads are disabled until a Client admin reactivates you."
-          />
-        ) : null}
         <fieldset disabled={!isActive} className="flex flex-col gap-4 disabled:opacity-60">
           <FileDropzone
             accept={ACCEPTED_UPLOAD_EXTENSIONS}
             file={file}
-            onFileChange={(f) => {
-              setError(null);
-              setFile(f);
-            }}
-            onReject={setError}
+            onFileChange={setFile}
+            onReject={(message) => toastError(message)}
           />
           <Button type="submit" disabled={loading || !file || !isActive}>
             {loading ? "Uploading…" : "Upload & validate"}

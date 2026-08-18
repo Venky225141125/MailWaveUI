@@ -3,8 +3,8 @@
 import { useParams } from "next/navigation";
 import { getCampaign } from "@/services/userCampaignService";
 import { useAsyncData } from "@/hooks/useAsyncData";
+import { useToastOnError } from "@/hooks/useToastOnError";
 import { PageHeader } from "@/components/shared/page-header";
-import { Alert } from "@/components/shared/alert";
 import { StatTile } from "@/components/common/StatTile";
 import { StatusBadge } from "@/components/common/StatusBadge";
 import { DetailList, DetailRow } from "@/components/shared/detail-list";
@@ -18,12 +18,12 @@ export default function CampaignDetailPage() {
     () => getCampaign(params.id),
     [params.id]
   );
+  useToastOnError(error);
 
   if (loading) return <DetailSkeleton />;
 
   return (
     <div className="flex flex-col gap-6">
-      <Alert message={error} />
       {campaign ? (
         <>
           <PageHeader

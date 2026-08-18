@@ -5,8 +5,8 @@ import { useParams } from "next/navigation";
 import { ApiError } from "@/lib/api";
 import { listUploadRecords } from "@/services/superAdminService";
 import type { EmailRecordResponse, Page } from "@/types";
+import { useToastOnError } from "@/hooks/useToastOnError";
 import { PageHeader } from "@/components/shared/page-header";
-import { Alert } from "@/components/shared/alert";
 import { EmailRecordsPanel } from "@/components/common/EmailRecordsPanel";
 import { DEFAULT_PAGE_SIZE } from "@/constants/upload.constants";
 import { ROUTES } from "@/constants/routes.constants";
@@ -23,6 +23,7 @@ export default function SuperAdminUploadRecordsPage() {
   );
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  useToastOnError(error);
 
   useEffect(() => {
     async function load() {
@@ -52,7 +53,6 @@ export default function SuperAdminUploadRecordsPage() {
         backHref={ROUTES.superAdmin.clients}
         backLabel="Clients"
       />
-      <Alert message={error} />
       <EmailRecordsPanel
         records={records}
         loading={loading}

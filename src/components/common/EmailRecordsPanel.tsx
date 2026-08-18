@@ -32,7 +32,7 @@ export function EmailRecordsPanel({
           label="Filter by status"
           value={status}
           onValueChange={onStatusChange}
-          placeholder="All"
+          placeholder="All statuses"
           options={EMAIL_RECORD_STATUS_OPTIONS.map((opt) => ({
             value: opt,
             label: opt === "" ? "All" : opt.replaceAll("_", " "),

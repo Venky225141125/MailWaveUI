@@ -4,8 +4,8 @@ import { useState } from "react";
 import { Plus } from "lucide-react";
 import { listOrganizations } from "@/services/superAdminService";
 import { useAsyncData } from "@/hooks/useAsyncData";
+import { useToastOnError } from "@/hooks/useToastOnError";
 import { PageHeader } from "@/components/shared/page-header";
-import { Alert } from "@/components/shared/alert";
 import { Button } from "@/components/shared/button";
 import { DataTable } from "@/components/shared/data-table";
 import { CreateOrganizationDrawer } from "@/components/SuperAdmin/CreateOrganizationDrawer";
@@ -17,6 +17,7 @@ export default function OrganizationsPage() {
     () => listOrganizations(),
     []
   );
+  useToastOnError(error);
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   return (
@@ -31,7 +32,6 @@ export default function OrganizationsPage() {
           </Button>
         }
       />
-      <Alert message={error} />
       <DataTable
         columns={["Name", "Website", "Registered"]}
         loading={loading}

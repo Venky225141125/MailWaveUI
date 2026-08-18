@@ -6,11 +6,11 @@ import { Plus, Activity } from "lucide-react";
 import { listUsers } from "@/services/clientService";
 import type { CreateUserResponse, UserSummary } from "@/types";
 import { useAsyncData } from "@/hooks/useAsyncData";
+import { useToastOnError } from "@/hooks/useToastOnError";
 import { PageHeader } from "@/components/shared/page-header";
-import { Alert } from "@/components/shared/alert";
 import { Button } from "@/components/shared/button";
 import { UsersTable } from "@/components/common/UsersTable";
-import { CreateUserDrawer } from "@/components/Client/CreateUserDrawer";
+import { CreateUserDrawer } from "@/components/shared/create-user-drawer";
 import { ROUTES } from "@/constants/routes.constants";
 
 export default function ClientUsersPage() {
@@ -19,6 +19,7 @@ export default function ClientUsersPage() {
     () => listUsers(),
     []
   );
+  useToastOnError(error);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [localUsers, setLocalUsers] = useState<UserSummary[] | null>(null);
 
@@ -51,7 +52,6 @@ export default function ClientUsersPage() {
           </Button>
         }
       />
-      <Alert message={error} />
       <UsersTable
         users={displayUsers}
         loading={loading && !localUsers}

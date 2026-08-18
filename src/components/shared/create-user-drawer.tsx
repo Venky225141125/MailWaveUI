@@ -2,10 +2,8 @@
 
 import { useState } from "react";
 import { Check, Copy, UserPlus } from "lucide-react";
-import { ApiError } from "@/lib/api";
 import { createUser } from "@/services/clientService";
 import type { CreateUserResponse } from "@/types";
-import { Alert } from "@/components/shared/alert";
 import { Button } from "@/components/shared/button";
 import { Input } from "@/components/shared/input";
 import {
@@ -16,12 +14,19 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
-import { GENERIC_ERROR } from "@/constants/error-messages.constants";
+import { toastApiError, toastError, toastSuccess } from "@/lib/helpers";
 
 interface CreateUserDrawerProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onCreated: (user: CreateUserResponse) => void;
+}
+
+function isToasterEvent(event: { target: EventTarget | null }) {
+  return (
+    event.target instanceof Element &&
+    Boolean(event.target.closest("[data-sonner-toaster]"))
+  );
 }
 
 export function CreateUserDrawer({
@@ -31,7 +36,6 @@ export function CreateUserDrawer({
 }: CreateUserDrawerProps) {
   const [username, setUsername] = useState("");
   const [officialEmail, setOfficialEmail] = useState("");
-  const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [created, setCreated] = useState<CreateUserResponse | null>(null);
   const [copied, setCopied] = useState(false);
@@ -39,7 +43,6 @@ export function CreateUserDrawer({
   function resetForm() {
     setUsername("");
     setOfficialEmail("");
-    setError(null);
     setLoading(false);
     setCreated(null);
     setCopied(false);
@@ -52,14 +55,17 @@ export function CreateUserDrawer({
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setError(null);
     setLoading(true);
     try {
       const result = await createUser({ username, officialEmail });
       setCreated(result);
+      toastSuccess(
+        "User created",
+        `Temporary password is ready for ${result.username}.`
+      );
       onCreated(result);
     } catch (err) {
-      setError(err instanceof ApiError ? err.message : GENERIC_ERROR);
+      toastApiError(err);
     } finally {
       setLoading(false);
     }
@@ -70,9 +76,10 @@ export function CreateUserDrawer({
     try {
       await navigator.clipboard.writeText(created.tempPassword);
       setCopied(true);
-      setTimeout(() => setCopied(false), 1800);
+      toastSuccess("Password copied");
+      window.setTimeout(() => setCopied(false), 1800);
     } catch {
-      /* ignore */
+      toastError("Could not copy the password. Copy it manually.");
     }
   }
 
@@ -81,6 +88,15 @@ export function CreateUserDrawer({
       <SheetContent
         side="right"
         className="w-full gap-0 border-l border-border/80 p-0 sm:max-w-md"
+        onPointerDownOutside={(event) => {
+          if (isToasterEvent(event)) event.preventDefault();
+        }}
+        onFocusOutside={(event) => {
+          if (isToasterEvent(event)) event.preventDefault();
+        }}
+        onInteractOutside={(event) => {
+          if (isToasterEvent(event)) event.preventDefault();
+        }}
       >
         <div className="relative overflow-hidden border-b border-border/80 bg-gradient-to-br from-primary/12 via-card to-sky-500/8 px-6 pb-5 pt-6">
           <div
@@ -149,7 +165,6 @@ export function CreateUserDrawer({
             onSubmit={handleSubmit}
             className="flex flex-1 flex-col gap-4 px-6 py-6"
           >
-            <Alert message={error} />
             <Input
               label="Username"
               required

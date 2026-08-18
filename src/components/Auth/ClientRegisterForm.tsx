@@ -5,9 +5,9 @@ import { useRouter } from "next/navigation";
 import { ApiError } from "@/lib/api";
 import { setSession, roleHomePath } from "@/lib/auth";
 import { registerClient } from "@/services/authService";
-import { Alert } from "@/components/shared/alert";
 import { Button } from "@/components/shared/button";
 import { Input } from "@/components/shared/input";
+import { toastError, toastSuccess } from "@/lib/helpers";
 import {
   RegisterLoginHint,
   RegisterSplitLayout,
@@ -44,7 +44,6 @@ export function ClientRegisterForm() {
   const [fieldErrors, setFieldErrors] = useState<
     Partial<Record<keyof ClientRegisterPayload, string>>
   >({});
-  const [formError, setFormError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [touched, setTouched] = useState<
     Partial<Record<keyof ClientRegisterPayload, boolean>>
@@ -88,7 +87,6 @@ export function ClientRegisterForm() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setFormError(null);
 
     const parsed = clientRegisterSchema.safeParse(form);
     if (!parsed.success) {
@@ -103,7 +101,7 @@ export function ClientRegisterForm() {
           {} as Partial<Record<keyof ClientRegisterPayload, boolean>>
         )
       );
-      setFormError("Please fix the highlighted fields and try again.");
+      toastError("Please fix the highlighted fields and try again.");
       return;
     }
 
@@ -117,6 +115,7 @@ export function ClientRegisterForm() {
         username: auth.username,
         status: auth.status ?? "ACTIVE",
       });
+      toastSuccess("Account created", "Welcome to MailWave.");
       router.push(roleHomePath(auth.role));
     } catch (err) {
       if (err instanceof ApiError) {
@@ -127,9 +126,9 @@ export function ClientRegisterForm() {
           setFieldErrors((prev) => ({ ...prev, [field]: message }));
           setTouched((prev) => ({ ...prev, [field]: true }));
         }
-        setFormError(message);
+        toastError(message);
       } else {
-        setFormError(GENERIC_ERROR);
+        toastError(GENERIC_ERROR);
       }
     } finally {
       setLoading(false);
@@ -168,16 +167,12 @@ export function ClientRegisterForm() {
       </p>
 
       <form onSubmit={handleSubmit} className="register-form" noValidate>
-        <Alert
-          message={formError}
-          className="!px-2 !py-1.5 !text-xs leading-snug"
-        />
-
         <Input
           density="compact"
           label="Company Name"
           required
           autoComplete="organization"
+          placeholder="Acme Corp"
           value={form.companyName}
           error={err("companyName")}
           onChange={(e) => update("companyName", e.target.value)}
@@ -201,6 +196,7 @@ export function ClientRegisterForm() {
             label="Username"
             required
             autoComplete="username"
+            placeholder="jane.doe"
             value={form.username}
             error={err("username")}
             onChange={(e) => update("username", e.target.value)}
@@ -215,6 +211,7 @@ export function ClientRegisterForm() {
             type="email"
             required
             autoComplete="email"
+            placeholder="jane@company.com"
             value={form.officialEmail}
             error={err("officialEmail")}
             onChange={(e) => update("officialEmail", e.target.value)}
@@ -242,6 +239,7 @@ export function ClientRegisterForm() {
             type="password"
             required
             autoComplete="new-password"
+            placeholder="At least 8 characters"
             hint="8+ chars · upper · lower · number"
             value={form.password}
             error={err("password")}
@@ -254,6 +252,7 @@ export function ClientRegisterForm() {
             type="password"
             required
             autoComplete="new-password"
+            placeholder="Re-enter your password"
             value={form.confirmPassword}
             error={err("confirmPassword")}
             onChange={(e) => update("confirmPassword", e.target.value)}

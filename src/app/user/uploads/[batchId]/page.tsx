@@ -8,8 +8,8 @@ import {
   listUploadRecords,
 } from "@/services/userUploadService";
 import type { EmailRecordResponse, Page, UploadBatchSummary } from "@/types";
+import { useToastOnError } from "@/hooks/useToastOnError";
 import { PageHeader } from "@/components/shared/page-header";
-import { Alert } from "@/components/shared/alert";
 import { StatusBadge } from "@/components/common/StatusBadge";
 import { ValidationStatsGrid } from "@/components/common/ValidationStatsGrid";
 import { EmailRecordsPanel } from "@/components/common/EmailRecordsPanel";
@@ -31,6 +31,7 @@ export default function UploadBatchDetailPage() {
   );
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  useToastOnError(error);
 
   useEffect(() => {
     async function loadBatch() {
@@ -76,7 +77,6 @@ export default function UploadBatchDetailPage() {
         backLabel="All uploads"
         action={batch ? <StatusBadge status={batch.status} /> : undefined}
       />
-      <Alert message={error} />
       {batch ? (
         <ValidationStatsGrid
           aggregate={{
