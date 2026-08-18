@@ -1,5 +1,6 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { ApiError } from "@/lib/api";
@@ -16,22 +17,40 @@ import { Alert } from "@/components/shared/alert";
 import { Button } from "@/components/shared/button";
 import { Input } from "@/components/shared/input";
 import { Select } from "@/components/shared/select";
-import { Textarea } from "@/components/shared/textarea";
 import { ROUTES } from "@/constants/routes.constants";
 import { GENERIC_ERROR } from "@/constants/error-messages.constants";
+import "ve-rich-text-editor/styles.css";
+
+const RichTextEditor = dynamic(
+  () => import("ve-rich-text-editor").then((mod) => mod.RichTextEditor),
+  { ssr: false },
+);
+
+function hasRichTextContent(value: string) {
+  return (
+    value
+      .replace(/<[^>]*>/g, "")
+      .replace(/&nbsp;/gi, "")
+      .replace(/\u00A0/g, "")
+      .trim().length > 0
+  );
+}
 
 export default function NewCampaignPage() {
   const router = useRouter();
   const { isActive, markInactive } = useAccountStatus();
-  const { data: allBatches, loading: loadingBatches, error: loadError } =
-    useAsyncData(async () => {
-      try {
-        return await listUploads();
-      } catch (err) {
-        if (isAccountDisabledError(err)) markInactive();
-        throw err;
-      }
-    }, []);
+  const {
+    data: allBatches,
+    loading: loadingBatches,
+    error: loadError,
+  } = useAsyncData(async () => {
+    try {
+      return await listUploads();
+    } catch (err) {
+      if (isAccountDisabledError(err)) markInactive();
+      throw err;
+    }
+  }, []);
   const batches = (allBatches ?? []).filter((b) => b.validCount > 0);
 
   const [name, setName] = useState("");
@@ -41,7 +60,7 @@ export default function NewCampaignPage() {
   const [bodyHtml, setBodyHtml] = useState("");
   const [scheduledAt, setScheduledAt] = useState("");
   const [timezone, setTimezone] = useState(
-    TIMEZONE_OPTIONS[TIMEZONE_OPTIONS.length - 1].value
+    TIMEZONE_OPTIONS[TIMEZONE_OPTIONS.length - 1].value,
   );
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
@@ -49,7 +68,8 @@ export default function NewCampaignPage() {
   const [testEmailStatus, setTestEmailStatus] = useState<string | null>(null);
   const [testEmailError, setTestEmailError] = useState<string | null>(null);
   const [sendingTest, setSendingTest] = useState(false);
-  const canSendTest = subject.trim() && fromName.trim() && bodyHtml.trim();
+  const canSendTest =
+    subject.trim() && fromName.trim() && hasRichTextContent(bodyHtml);
 
   async function handleSendTestEmail() {
     if (!isActive) return;
@@ -154,13 +174,19 @@ export default function NewCampaignPage() {
             value={fromName}
             onChange={(e) => setFromName(e.target.value)}
           />
-          <Textarea
-            label="Body (HTML)"
-            required
-            rows={10}
-            value={bodyHtml}
-            onChange={(e) => setBodyHtml(e.target.value)}
-          />
+          <div className="flex flex-col gap-1.5">
+            <label className="text-sm font-medium">Body (HTML)</label>
+            <RichTextEditor
+              value={bodyHtml}
+              onChange={setBodyHtml}
+              placeholder="Write your email body..."
+              style={{ minHeight: 260 }}
+              className="w-full"
+              theme={{
+                borderRadius: "0.625rem",
+              }}
+            />
+          </div>
           <Alert tone="success" message={testEmailStatus} />
           <Alert message={testEmailError} />
           <Button
