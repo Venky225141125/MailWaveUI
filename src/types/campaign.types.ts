@@ -11,6 +11,9 @@ export interface CampaignSummary {
   createdAt: string;
   scheduledAt?: string;
   sentAt?: string;
+  subject: string;
+  fromName: string;
+  bodyHtml: string;
 }
 
 /** Matches the live create-campaign request body used by the UI. */

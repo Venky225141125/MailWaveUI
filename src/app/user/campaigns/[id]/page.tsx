@@ -9,7 +9,9 @@ import { StatTile } from "@/components/common/StatTile";
 import { StatusBadge } from "@/components/common/StatusBadge";
 import { DetailList, DetailRow } from "@/components/shared/detail-list";
 import { DetailSkeleton } from "@/components/common/Skeleton";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatDateTime } from "@/lib/helpers";
+import { formatScheduledAt } from "@/lib/timezone";
 import { ROUTES } from "@/constants/routes.constants";
 
 export default function CampaignDetailPage() {
@@ -50,12 +52,28 @@ export default function CampaignDetailPage() {
               {formatDateTime(campaign.createdAt)}
             </DetailRow>
             <DetailRow label="Scheduled At">
-              {formatDateTime(campaign.scheduledAt)}
+              {formatScheduledAt(campaign.scheduledAt)}
             </DetailRow>
             <DetailRow label="Sent At">
               {formatDateTime(campaign.sentAt)}
             </DetailRow>
+            <DetailRow label="Subject">{campaign.subject}</DetailRow>
+            <DetailRow label="From Name">{campaign.fromName}</DetailRow>
           </DetailList>
+          <Card>
+            <CardHeader>
+              <CardTitle>Email Content</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="mb-3 text-sm text-muted-foreground">
+                What was written for this campaign at the time it was created/scheduled.
+              </p>
+              <div
+                className="rounded-lg border border-foreground/10 bg-background p-4 text-sm [&_a]:underline"
+                dangerouslySetInnerHTML={{ __html: campaign.bodyHtml }}
+              />
+            </CardContent>
+          </Card>
         </>
       ) : (
         <p className="text-sm text-[var(--text-muted)]">Campaign not found.</p>
