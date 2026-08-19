@@ -50,3 +50,29 @@ export function zonedDateTimeToUtcIso(dateTimeLocalValue: string, timeZone: stri
   const offsetMs = formattedBackMs - asIfUtcMs;
   return new Date(asIfUtcMs - offsetMs).toISOString();
 }
+
+/**
+ * Formats a backend `scheduledAt` value for display. The backend stores this field as bare
+ * UTC-instant digits with no timezone suffix (e.g. "2026-08-20T09:00:00", not "...Z") - by
+ * design, since it's a Java LocalDateTime and zonedDateTimeToUtcIso() above always converts to
+ * UTC before sending it. `new Date("2026-08-20T09:00:00")` would otherwise be parsed as that
+ * wall-clock time in the BROWSER's own local zone (per the JS Date spec, a date-time string
+ * with no zone/offset is local, not UTC) - silently shifting the displayed time by the
+ * viewer's UTC offset from what was actually selected. Appending "Z" makes the parse explicit.
+ */
+export function formatScheduledAt(value?: string | null): string {
+  if (!value) return "—";
+  const iso = value.endsWith("Z") ? value : `${value}Z`;
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return value;
+  return (
+    d.toLocaleString(undefined, {
+      year: "numeric",
+      month: "short",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      timeZoneName: "short",
+    })
+  );
+}
