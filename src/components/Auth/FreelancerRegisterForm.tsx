@@ -170,7 +170,7 @@ export function FreelancerRegisterForm() {
   return (
     <RegisterSplitLayout
       eyebrow="Freelancer application"
-      title="Apply to use MailWave independently"
+      title="Apply to use Integrated Leads independently"
       description="Apply with identity documents. Access stays locked until Super Admin approval."
       highlights={[
         {

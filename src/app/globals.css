@@ -5,6 +5,7 @@
 @import "../styles/animations.css";
 @import "../styles/register.css";
 @import "../styles/responsive.css";
+@import "../styles/landing.css";
 
 @custom-variant dark (&:is(.dark *));
 

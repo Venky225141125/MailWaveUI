@@ -18,5 +18,6 @@ export const EMAIL_RECORD_STATUS_OPTIONS = [
 
 export const DEFAULT_PAGE_SIZE = 20;
 
-export const BRAND_NAME = "MailWave";
-export const BRAND_TAGLINE = "Validate first. Send with confidence.";
+export const BRAND_NAME = "Integrated Leads";
+export const BRAND_TAGLINE = "Keep Adding. Keep Growing.";
+export const BRAND_INITIALS = "IL";
