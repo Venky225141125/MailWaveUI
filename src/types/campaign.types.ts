@@ -1,4 +1,10 @@
-export type CampaignStatus = "DRAFT" | "SCHEDULED" | "SENDING" | "SENT";
+export type CampaignStatus =
+  | "DRAFT"
+  | "SCHEDULED"
+  | "SENDING"
+  | "SENT"
+  | "QUOTA_PAUSED"
+  | "BOUNCE_PAUSED";
 
 export interface CampaignSummary {
   id: number;

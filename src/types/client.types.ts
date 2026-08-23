@@ -16,9 +16,18 @@ export interface ClientSummary {
   phoneNumber: string;
   status: ClientStatus;
   createdAt: string;
+  dailySendLimit: number;
+  sentToday: number;
+  monthlySendLimit: number;
+  sentThisMonth: number;
 }
 
 export interface ClientListFilters {
   status?: string;
   type?: string;
+}
+
+export interface UpdateClientQuotaPayload {
+  dailySendLimit: number;
+  monthlySendLimit: number;
 }

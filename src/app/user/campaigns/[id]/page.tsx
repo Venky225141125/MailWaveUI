@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { getCampaign } from "@/services/userCampaignService";
 import { useAsyncData } from "@/hooks/useAsyncData";
@@ -13,14 +14,44 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatDateTime } from "@/lib/helpers";
 import { formatScheduledAt } from "@/lib/timezone";
 import { ROUTES } from "@/constants/routes.constants";
+import type { CampaignSummary } from "@/types";
+
+const LIVE_STATUSES = new Set(["SCHEDULED", "SENDING"]);
+const POLL_INTERVAL_MS = 3000;
 
 export default function CampaignDetailPage() {
   const params = useParams<{ id: string }>();
-  const { data: campaign, loading, error } = useAsyncData(
+  const { data: initialCampaign, loading, error } = useAsyncData(
     () => getCampaign(params.id),
     [params.id]
   );
   useToastOnError(error);
+
+  // Sent/opened counts change while a campaign is actively sending, but the initial fetch above
+  // only ever runs once - without this, the page would only ever show a snapshot from the moment
+  // it was opened, not the running total, until the user manually reloads the page. Kept as
+  // separate state (not routed through useAsyncData's own reload) so a poll tick never re-shows
+  // the full-page loading skeleton.
+  const [liveCampaign, setLiveCampaign] = useState<CampaignSummary | null>(null);
+  const campaign = liveCampaign ?? initialCampaign;
+  const isLive = campaign ? LIVE_STATUSES.has(campaign.status) : false;
+
+  useEffect(() => {
+    setLiveCampaign(null);
+  }, [params.id]);
+
+  useEffect(() => {
+    if (!isLive) return;
+    const interval = setInterval(async () => {
+      try {
+        setLiveCampaign(await getCampaign(params.id));
+      } catch {
+        // Transient poll failure - just keep showing the last known-good data and try again
+        // on the next tick.
+      }
+    }, POLL_INTERVAL_MS);
+    return () => clearInterval(interval);
+  }, [isLive, params.id]);
 
   if (loading) return <DetailSkeleton />;
 
