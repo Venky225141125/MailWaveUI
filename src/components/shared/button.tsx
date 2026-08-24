@@ -33,7 +33,7 @@ interface ButtonProps extends Omit<
   size?: AppSize;
 }
 
-/** App Button — shadcn underneath, MailWave variant names. */
+/** App Button — shadcn underneath, product variant names. */
 export function Button({
   variant = "primary",
   size = "md",

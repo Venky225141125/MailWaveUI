@@ -24,7 +24,7 @@ export default function NotFound() {
           This page drifted out of the inbox
         </h1>
         <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-[var(--text-muted)]">
-          The link you followed doesn&apos;t match any route in MailWave. It may
+          The link you followed doesn&apos;t match any route in Integrated Leads. It may
           have been moved, or the address could have a typo.
         </p>
 

@@ -115,7 +115,7 @@ export function ClientRegisterForm() {
         username: auth.username,
         status: auth.status ?? "ACTIVE",
       });
-      toastSuccess("Account created", "Welcome to MailWave.");
+      toastSuccess("Account created", "Welcome to Integrated Leads.");
       router.push(roleHomePath(auth.role));
     } catch (err) {
       if (err instanceof ApiError) {
@@ -142,7 +142,7 @@ export function ClientRegisterForm() {
   return (
     <RegisterSplitLayout
       eyebrow="Organization signup"
-      title="Join MailWave as a Client"
+      title="Join Integrated Leads as a Client"
       description="Provision team users, monitor list validation, and oversee campaigns from one place."
       highlights={[
         {

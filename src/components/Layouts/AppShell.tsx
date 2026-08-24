@@ -11,7 +11,7 @@ import {
   UserRound,
 } from "lucide-react";
 import { getUsername, logout } from "@/lib/auth";
-import { BRAND_NAME } from "@/constants/upload.constants";
+import { BRAND_INITIALS, BRAND_NAME } from "@/constants/upload.constants";
 import { useTheme } from "@/components/providers/theme-provider";
 import {
   IconChevronLeft,
@@ -112,7 +112,7 @@ export function AppShell({
       >
         <div className="app-shell__brand">
           <div className="app-shell__brand-mark" aria-hidden>
-            MW
+            {BRAND_INITIALS}
           </div>
           <div className="app-shell__brand-text">
             <div className="app-shell__brand-name">{BRAND_NAME}</div>
