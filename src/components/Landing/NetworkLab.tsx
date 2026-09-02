@@ -75,14 +75,17 @@ export function NetworkLab() {
     if (!ctx) return;
 
     let width = (canvas.width = container.clientWidth);
-    let height = (canvas.height = Math.max(340, Math.min(460, window.innerHeight * 0.48)));
+    let height = (canvas.height = Math.max(
+      340,
+      Math.min(460, window.innerHeight * 0.48),
+    ));
     seed(width, height);
 
     const onResize = () => {
       width = canvas.width = container.clientWidth;
       height = canvas.height = Math.max(
         340,
-        Math.min(460, window.innerHeight * 0.48)
+        Math.min(460, window.innerHeight * 0.48),
       );
     };
 
@@ -104,7 +107,9 @@ export function NetworkLab() {
     canvas.addEventListener("mouseleave", onLeave);
     canvas.addEventListener("click", onClick);
 
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const reduce = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
 
     const render = () => {
       ctx.clearRect(0, 0, width, height);
@@ -174,20 +179,20 @@ export function NetworkLab() {
   return (
     <section
       id="network-playground"
-      className="network-lab relative overflow-hidden border-t border-white/5 bg-[#090C16] py-20 md:py-28"
+      className="network-lab relative overflow-hidden border-t border-blue-100 bg-blue-50/40 py-20 md:py-28"
     >
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto mb-10 max-w-3xl text-center">
           <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-cyan-500/20 bg-cyan-500/10 px-3.5 py-1 font-mono text-xs text-cyan-300">
             <span>SANDBOX</span>
           </div>
-          <h2 className="font-heading text-3xl font-extrabold tracking-tight text-white sm:text-5xl">
+          <h2 className="font-heading text-3xl font-extrabold tracking-tight text-slate-900 sm:text-5xl">
             Network Lab.{" "}
-            <span className="bg-gradient-to-r from-cyan-400 via-sky-300 to-indigo-300 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-blue-700 via-blue-600 to-cyan-500 bg-clip-text text-transparent">
               A metaphor you can touch.
             </span>
           </h2>
-          <p className="mt-4 text-base text-slate-400 sm:text-lg">
+          <p className="mt-4 text-base text-slate-600 sm:text-lg">
             This is not live customer data. Click the canvas — or Add a lead —
             and watch points join. Adding creates nodes. Proximity creates
             connections. That is the brand in motion.
@@ -196,10 +201,10 @@ export function NetworkLab() {
 
         <div
           ref={containerRef}
-          className="overflow-hidden rounded-2xl border border-white/10 bg-[#0B0D16] shadow-[0_20px_60px_-18px_rgba(0,0,0,0.75)]"
+          className="overflow-hidden rounded-2xl border border-blue-100 bg-white shadow-[0_20px_60px_-18px_rgba(37,99,235,0.14)]"
         >
-          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 px-5 py-3.5 text-xs">
-            <p className="font-mono text-slate-400">
+          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-blue-100 px-5 py-3.5 text-xs">
+            <p className="font-mono text-slate-600">
               <span className="text-cyan-300">{count}</span> sandbox nodes
             </p>
             <button

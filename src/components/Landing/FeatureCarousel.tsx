@@ -14,7 +14,7 @@ export function FeatureCarousel() {
 
   const go = useCallback(
     (next: number) => setIndex((next + count) % count),
-    [count]
+    [count],
   );
 
   useEffect(() => {
@@ -32,7 +32,7 @@ export function FeatureCarousel() {
   return (
     <section
       id="carousel"
-      className="carousel relative overflow-hidden border-t border-white/5 py-20 md:py-28"
+      className="carousel relative overflow-hidden border-t border-blue-100 py-20 md:py-28"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       aria-roledescription="carousel"
@@ -42,16 +42,16 @@ export function FeatureCarousel() {
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto mb-12 max-w-3xl text-center">
-          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3.5 py-1 font-mono text-xs text-slate-300">
+          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-3.5 py-1 font-mono text-xs text-blue-700">
             <span>INTERACTIVE CAROUSEL</span>
           </div>
-          <h2 className="font-heading text-3xl font-extrabold tracking-tight text-white sm:text-5xl">
+          <h2 className="font-heading text-3xl font-extrabold tracking-tight text-slate-900 sm:text-5xl">
             Walk the loop.{" "}
-            <span className="bg-gradient-to-r from-cyan-400 via-sky-300 to-indigo-300 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-blue-700 via-blue-600 to-cyan-500 bg-clip-text text-transparent">
               One stage at a time.
             </span>
           </h2>
-          <p className="mt-4 text-base text-slate-400 sm:text-lg">
+          <p className="mt-4 text-base text-slate-600 sm:text-lg">
             Slide through how a raw list becomes a connected send — then a
             number you can grow from.
           </p>
@@ -74,10 +74,7 @@ export function FeatureCarousel() {
               className="hidden md:flex"
               onClick={() => go(prevIndex)}
             />
-            <CarouselCard
-              slide={LANDING_CAROUSEL_SLIDES[index]}
-              active
-            />
+            <CarouselCard slide={LANDING_CAROUSEL_SLIDES[index]} active />
             <CarouselCard
               slide={LANDING_CAROUSEL_SLIDES[nextIndex]}
               dimmed
@@ -106,7 +103,9 @@ export function FeatureCarousel() {
               onClick={() => setIndex(i)}
               className={cn(
                 "h-1.5 rounded-full transition-all",
-                i === index ? "w-8 bg-cyan-300" : "w-2.5 bg-white/30 hover:bg-white/50"
+                i === index
+                  ? "w-8 bg-cyan-300"
+                  : "w-2.5 bg-white/30 hover:bg-white/50",
               )}
             />
           ))}
@@ -131,11 +130,10 @@ function CarouselCard({
 }) {
   const classes = cn(
     "flex min-h-[280px] flex-col rounded-2xl border p-6 text-left transition-all duration-500 sm:p-8",
-    active &&
-      "border-cyan-400/50 bg-[#0C101D] shadow-[0_0_40px_rgba(56,189,248,0.18)]",
+    active && "border-blue-400 bg-white shadow-[0_0_40px_rgba(37,99,235,0.16)]",
     dimmed &&
-      "cursor-pointer border-white/8 bg-[#0C101D]/50 opacity-55 hover:opacity-80",
-    className
+      "cursor-pointer border-slate-200 bg-slate-50 opacity-70 hover:opacity-100",
+    className,
   );
 
   const inner = (
@@ -145,13 +143,13 @@ function CarouselCard({
       </p>
       <h3
         className={cn(
-          "font-heading mt-4 font-bold tracking-tight text-white",
-          active ? "text-2xl sm:text-3xl" : "text-xl"
+          "font-heading mt-4 font-bold tracking-tight text-slate-900",
+          active ? "text-2xl sm:text-3xl" : "text-xl",
         )}
       >
         {slide.title}
       </h3>
-      <p className="mt-3 flex-1 text-sm leading-relaxed text-slate-400 sm:text-base">
+      <p className="mt-3 flex-1 text-sm leading-relaxed text-slate-600 sm:text-base">
         {slide.body}
       </p>
     </>

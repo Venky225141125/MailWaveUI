@@ -1,7 +1,13 @@
 "use client";
 
 import Image from "next/image";
-import { useCallback, useEffect, useRef, useState, type TouchEvent } from "react";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type TouchEvent,
+} from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { PHILOSOPHY_SLIDES } from "@/constants/nav.constants";
 import { cn } from "@/lib/utils";
@@ -16,7 +22,7 @@ function PhilosophyMark({
   return (
     <svg
       viewBox="0 0 72 72"
-      className="size-16 text-cyan-300 sm:size-20"
+      className="size-16 text-blue-600 sm:size-20"
       fill="none"
       aria-hidden
     >
@@ -40,9 +46,30 @@ function PhilosophyMark({
       ) : null}
       {kind === "grow" ? (
         <>
-          <line x1="36" y1="22" x2="22" y2="48" stroke="#38BDF8" strokeWidth="1.75" />
-          <line x1="36" y1="22" x2="50" y2="48" stroke="#818CF8" strokeWidth="1.75" />
-          <line x1="22" y1="48" x2="50" y2="48" stroke="#A855F7" strokeWidth="1.75" />
+          <line
+            x1="36"
+            y1="22"
+            x2="22"
+            y2="48"
+            stroke="#38BDF8"
+            strokeWidth="1.75"
+          />
+          <line
+            x1="36"
+            y1="22"
+            x2="50"
+            y2="48"
+            stroke="#818CF8"
+            strokeWidth="1.75"
+          />
+          <line
+            x1="22"
+            y1="48"
+            x2="50"
+            y2="48"
+            stroke="#A855F7"
+            strokeWidth="1.75"
+          />
           <circle cx="36" cy="22" r="5.5" fill="#38BDF8" />
           <circle cx="22" cy="48" r="5.5" fill="#818CF8" />
           <circle cx="50" cy="48" r="5.5" fill="#A855F7" />
@@ -59,9 +86,12 @@ export function BrandStory() {
   const slide = PHILOSOPHY_SLIDES[index];
   const count = PHILOSOPHY_SLIDES.length;
 
-  const go = useCallback((next: number) => {
-    setIndex((next + count) % count);
-  }, [count]);
+  const go = useCallback(
+    (next: number) => {
+      setIndex((next + count) % count);
+    },
+    [count],
+  );
 
   const next = useCallback(() => go(index + 1), [go, index]);
   const prev = useCallback(() => go(index - 1), [go, index]);
@@ -103,7 +133,11 @@ export function BrandStory() {
         style={{ transform: `translateX(-${index * 100}%)` }}
       >
         {PHILOSOPHY_SLIDES.map((item, i) => (
-          <div key={item.id} className="philosophy__slide" aria-hidden={i !== index}>
+          <div
+            key={item.id}
+            className="philosophy__slide"
+            aria-hidden={i !== index}
+          >
             <Image
               src={item.image}
               alt=""
@@ -112,7 +146,7 @@ export function BrandStory() {
               sizes="100vw"
               className={cn(
                 "object-cover transition-transform duration-[7000ms] ease-out",
-                i === index ? "scale-105" : "scale-100"
+                i === index ? "scale-105" : "scale-100",
               )}
             />
           </div>
@@ -134,13 +168,13 @@ export function BrandStory() {
           {slide.kicker}
         </p>
 
-        <h2 className="font-heading max-w-4xl text-center text-4xl font-extrabold tracking-tight text-white sm:text-5xl md:text-6xl">
+        <h2 className="font-heading max-w-4xl text-center text-4xl font-extrabold tracking-tight text-slate-900 sm:text-5xl md:text-6xl">
           {slide.title}
         </h2>
-        <p className="mt-4 max-w-2xl text-center text-lg font-medium text-cyan-100/90 sm:text-xl">
+        <p className="mt-4 max-w-2xl text-center text-lg font-medium text-blue-700 sm:text-xl">
           {slide.statement}
         </p>
-        <p className="mt-5 max-w-2xl text-center text-sm leading-relaxed text-slate-300 sm:text-base">
+        <p className="mt-5 max-w-2xl text-center text-sm leading-relaxed text-slate-600 sm:text-base">
           {slide.body}
         </p>
 
@@ -178,7 +212,7 @@ export function BrandStory() {
               "h-1.5 rounded-full transition-all",
               i === index
                 ? "w-8 bg-cyan-300"
-                : "w-2.5 bg-white/30 hover:bg-white/50"
+                : "w-2.5 bg-white/30 hover:bg-white/50",
             )}
           />
         ))}

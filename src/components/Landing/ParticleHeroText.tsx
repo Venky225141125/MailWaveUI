@@ -19,7 +19,8 @@ interface Particle {
 
 export function ParticleHeroText() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const [activeWord, setActiveWord] = useState<ParticleWord>("INTEGRATED LEADS");
+  const [activeWord, setActiveWord] =
+    useState<ParticleWord>("INTEGRATED LEADS");
   const animationFrameId = useRef<number | null>(null);
   const mouseRef = useRef({ x: -1000, y: -1000, radius: 80 });
 
@@ -165,7 +166,8 @@ export function ParticleHeroText() {
     window.addEventListener("resize", handleResize);
 
     return () => {
-      if (animationFrameId.current) cancelAnimationFrame(animationFrameId.current);
+      if (animationFrameId.current)
+        cancelAnimationFrame(animationFrameId.current);
       canvas.removeEventListener("mousemove", handleMouseMove);
       canvas.removeEventListener("mouseleave", handleMouseLeave);
       window.removeEventListener("resize", handleResize);
@@ -182,7 +184,7 @@ export function ParticleHeroText() {
         <span className="sr-only">{activeWord}</span>
       </div>
 
-      <div className="mt-3 flex items-center gap-2 rounded-full border border-white/10 bg-slate-900/60 p-1 text-xs">
+      <div className="mt-3 flex items-center gap-2 rounded-full border border-blue-200 bg-white p-1 text-xs shadow-sm">
         <button
           type="button"
           onClick={() => setActiveWord("INTEGRATED LEADS")}
@@ -190,7 +192,7 @@ export function ParticleHeroText() {
             "rounded-full px-3 py-1 text-xs font-medium tracking-wide transition-all",
             activeWord === "INTEGRATED LEADS"
               ? "border border-cyan-500/40 bg-cyan-500/20 text-cyan-300 shadow-sm"
-              : "text-slate-400 hover:text-white"
+              : "text-slate-500 hover:text-blue-700",
           )}
         >
           ● INTEGRATED LEADS
@@ -202,7 +204,7 @@ export function ParticleHeroText() {
             "rounded-full px-3 py-1 text-xs font-medium tracking-wide transition-all",
             activeWord === "KEEP ADDING"
               ? "border border-indigo-500/40 bg-indigo-500/20 text-indigo-300 shadow-sm"
-              : "text-slate-400 hover:text-white"
+              : "text-slate-500 hover:text-blue-700",
           )}
         >
           ● KEEP ADDING

@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   description: BRAND_TAGLINE,
 };
 
-const themeBootScript = `(function(){try{var t=localStorage.getItem('mw_theme');if(t==='dark'||(t!=='light'&&window.matchMedia('(prefers-color-scheme: dark)').matches)){document.documentElement.classList.add('dark');document.documentElement.style.colorScheme='dark';}else{document.documentElement.style.colorScheme='light';}}catch(e){}})();`;
+const themeBootScript = `(function(){try{var t=localStorage.getItem('mw_theme');if(t==='dark'){document.documentElement.classList.add('dark');document.documentElement.style.colorScheme='dark';}else{document.documentElement.style.colorScheme='light';}}catch(e){}})();`;
 
 export default function RootLayout({
   children,
@@ -39,7 +39,7 @@ export default function RootLayout({
       className={cn(
         "h-full antialiased font-sans",
         inter.variable,
-        geistMono.variable
+        geistMono.variable,
       )}
     >
       <head>

@@ -27,9 +27,6 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
       if (stored === "dark" || stored === "light") initial = stored;
-      else if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-        initial = "dark";
-      }
     } catch {
       /* ignore */
     }
@@ -53,7 +50,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
   const value = React.useMemo(
     () => ({ theme, setTheme, toggleTheme }),
-    [theme, setTheme, toggleTheme]
+    [theme, setTheme, toggleTheme],
   );
 
   return (

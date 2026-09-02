@@ -37,7 +37,7 @@ export function SignInRoleModal({ open, onClose }: SignInRoleModalProps) {
     <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
       <button
         type="button"
-        className="absolute inset-0 bg-black/70 backdrop-blur-sm"
+        className="absolute inset-0 bg-slate-900/35 backdrop-blur-sm"
         aria-label="Close sign in"
         onClick={onClose}
       />
@@ -47,12 +47,12 @@ export function SignInRoleModal({ open, onClose }: SignInRoleModalProps) {
         aria-modal="true"
         aria-labelledby="signin-role-title"
         tabIndex={-1}
-        className="relative z-10 w-full max-w-lg rounded-xl border border-white/10 bg-[#0B0D16] p-5 shadow-[0_20px_48px_rgb(0_0_0_/_0.55)] outline-none sm:p-8"
+        className="relative z-10 w-full max-w-lg rounded-xl border border-slate-200 bg-white p-5 shadow-[0_20px_48px_rgb(15_23_42_/_0.2)] outline-none sm:p-8"
       >
         <button
           type="button"
           onClick={onClose}
-          className="absolute top-3 right-3 rounded-lg p-1.5 text-slate-400 transition-colors hover:bg-white/10 hover:text-white focus-visible:ring-2 focus-visible:ring-cyan-400/60 focus-visible:outline-none"
+          className="absolute top-3 right-3 rounded-lg p-1.5 text-slate-400 transition-colors hover:bg-blue-50 hover:text-blue-700 focus-visible:ring-2 focus-visible:ring-blue-400/60 focus-visible:outline-none"
           aria-label="Close"
         >
           <X className="size-4" />
@@ -60,11 +60,11 @@ export function SignInRoleModal({ open, onClose }: SignInRoleModalProps) {
 
         <p
           id="signin-role-title"
-          className="text-sm font-semibold tracking-tight text-white"
+          className="text-sm font-semibold tracking-tight text-slate-900"
         >
           Sign in
         </p>
-        <p className="mt-1 text-xs text-slate-400">
+        <p className="mt-1 text-xs text-slate-500">
           Choose your workspace role to continue.
         </p>
 
@@ -75,7 +75,7 @@ export function SignInRoleModal({ open, onClose }: SignInRoleModalProps) {
               href={role.href}
               className={cn(
                 "signin-role-btn group",
-                index === 0 && "signin-role-btn--accent"
+                index === 0 && "signin-role-btn--accent",
               )}
             >
               <span>{role.label}</span>
@@ -84,8 +84,8 @@ export function SignInRoleModal({ open, onClose }: SignInRoleModalProps) {
           ))}
         </div>
 
-        <div className="mt-6 border-t border-white/10 pt-5 text-center text-sm">
-          <p className="text-slate-400">New here?</p>
+        <div className="mt-6 border-t border-slate-200 pt-5 text-center text-sm">
+          <p className="text-slate-500">New here?</p>
           <div className="mt-2 flex flex-wrap justify-center gap-x-5 gap-y-2">
             <Link href={ROUTES.register.client} className="signin-role-link">
               Register as Client
