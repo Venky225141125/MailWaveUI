@@ -29,6 +29,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import type { NavItem } from "@/types/nav.types";
+import Image from "next/image";
 
 export type { NavItem };
 
@@ -111,13 +112,14 @@ export function AppShell({
         aria-label="Application sidebar"
       >
         <div className="app-shell__brand">
-          <div className="app-shell__brand-mark" aria-hidden>
+          <Image src="/logo/integratedleads-white-full-logo.svg" alt={BRAND_NAME} width={100} height={100} className="w-[250px] h-full object-contain" />
+          {/* <div className="app-shell__brand-mark" aria-hidden>
             {BRAND_INITIALS}
-          </div>
-          <div className="app-shell__brand-text">
+          </div> */}
+          {/* <div className="app-shell__brand-text">
             <div className="app-shell__brand-name">{BRAND_NAME}</div>
             <div className="app-shell__brand-role">{roleLabel}</div>
-          </div>
+          </div> */}
           <button
             type="button"
             className="ml-auto inline-flex h-8 w-8 items-center justify-center rounded-full text-[var(--sidebar-muted)] hover:text-[var(--sidebar-foreground)] sm:hidden"

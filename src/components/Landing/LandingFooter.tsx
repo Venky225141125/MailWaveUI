@@ -6,6 +6,7 @@ import { LogoSymbol } from "@/components/Landing/LogoSymbol";
 import { LANDING_NAV_LINKS } from "@/constants/nav.constants";
 import { BRAND_NAME, BRAND_TAGLINE } from "@/constants/upload.constants";
 import { ROUTES } from "@/constants/routes.constants";
+import Image from "next/image";
 
 interface LandingFooterProps {
   onOpenLogin: () => void;
@@ -51,14 +52,15 @@ export function LandingFooter({
         <div className="mt-14 grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
           <div className="sm:col-span-2 lg:col-span-1">
             <Link href={ROUTES.home} className="inline-flex items-center gap-3">
-              <LogoSymbol size={32} />
+              {/* <LogoSymbol size={32} />
               <span className="font-heading text-lg font-bold text-white">
                 {BRAND_NAME}
-              </span>
+              </span> */}
+              <Image src="/logo/integratedleads-white-full-logo.svg" alt={BRAND_NAME} width={100} height={100} className="w-[250px] h-full object-contain" />
             </Link>
-            <p className="mt-3 max-w-xs font-mono text-[11px] tracking-widest text-slate-500 uppercase">
+            {/* <p className="mt-3 max-w-xs font-mono text-[11px] tracking-widest text-slate-500 uppercase">
               {BRAND_TAGLINE}
-            </p>
+            </p> */}
           </div>
 
           <div>

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useEffect, useState, type MouseEvent } from "react";
 import { ArrowRight, Menu, X } from "lucide-react";
 import { LogoSymbol } from "@/components/Landing/LogoSymbol";
@@ -67,15 +68,16 @@ export function LandingNavbar({
             className="group flex items-center gap-3 focus:outline-none"
             aria-label={BRAND_NAME}
           >
-            <LogoSymbol size={34} animated />
-            <div className="flex flex-col">
+            {/* <LogoSymbol size={34} animated /> */}
+            <Image src="/logo/integratedleads-color-full-logo-black.svg" alt={BRAND_NAME} width={100} height={100} className="w-[250px] h-full object-contain" />
+            {/* <div className="flex flex-col">
               <span className="font-heading text-lg font-bold tracking-tight text-white transition-colors group-hover:text-cyan-300 sm:text-xl">
                 {BRAND_NAME}
               </span>
               <span className="-mt-1 font-mono text-[10px] font-medium tracking-widest text-slate-400 uppercase">
                 {BRAND_TAGLINE}
               </span>
-            </div>
+            </div> */}
           </Link>
 
           <nav

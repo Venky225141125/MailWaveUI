@@ -2,6 +2,7 @@ import Link from "next/link";
 import { BRAND_NAME } from "@/constants/upload.constants";
 import { ROUTES } from "@/constants/routes.constants";
 import { AuthLink } from "@/components/Auth/LoginForm";
+import Image from "next/image";
 
 interface RegisterSplitLayoutProps {
   eyebrow: string;
@@ -24,8 +25,8 @@ export function RegisterSplitLayout({
     <div className="register-split">
       <aside className="register-split__context" aria-label="Registration overview">
         <div className="register-split__context-inner">
-          <Link href={ROUTES.home} className="register-split__brand">
-            {BRAND_NAME}
+          <Link href={ROUTES.home} className="register-split__brand mb-6 flex justify-center">
+            <Image src="/logo/integratedleads-white-full-logo.svg" alt={BRAND_NAME} width={100} height={100} className="w-[250px] h-full object-contain" />
           </Link>
           <p className="register-split__eyebrow">{eyebrow}</p>
           <h1 className="register-split__title">{title}</h1>

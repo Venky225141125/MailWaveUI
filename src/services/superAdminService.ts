@@ -9,6 +9,7 @@ import type {
   EmailRecordResponse,
   OrganizationResponse,
   Page,
+  UpdateClientQuotaPayload,
   UploadBatchSummary,
   UserSummary,
 } from "@/types";
@@ -61,6 +62,16 @@ export async function activateClient(id: string | number): Promise<ClientSummary
 export async function deactivateClient(id: string | number): Promise<ClientSummary> {
   return apiClient<ClientSummary>(SUPER_ADMIN_ENDPOINTS.deactivateClient(id), {
     method: "POST",
+  });
+}
+
+export async function updateClientQuota(
+  id: string | number,
+  payload: UpdateClientQuotaPayload
+): Promise<ClientSummary> {
+  return apiClient<ClientSummary>(SUPER_ADMIN_ENDPOINTS.updateClientQuota(id), {
+    method: "POST",
+    body: payload,
   });
 }
 

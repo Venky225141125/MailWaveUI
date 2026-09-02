@@ -7,6 +7,7 @@ export const SUPER_ADMIN_ENDPOINTS = {
   activateClient: (id: string | number) => `/superadmin/clients/${id}/activate`,
   deactivateClient: (id: string | number) =>
     `/superadmin/clients/${id}/deactivate`,
+  updateClientQuota: (id: string | number) => `/superadmin/clients/${id}/quota`,
   clientUsers: (id: string | number) => `/superadmin/clients/${id}/users`,
   activateUser: (userId: string | number) => `/superadmin/users/${userId}/activate`,
   deactivateUser: (userId: string | number) =>

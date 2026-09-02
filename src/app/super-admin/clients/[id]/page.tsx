@@ -16,18 +16,22 @@ import {
   activateClient,
   deactivateClient,
   getClient,
+  updateClientQuota,
 } from "@/services/superAdminService";
 import { useAsyncData } from "@/hooks/useAsyncData";
 import { useToastOnError } from "@/hooks/useToastOnError";
 import { PageHeader } from "@/components/shared/page-header";
 import { LinkButton } from "@/components/shared/link-button";
 import { Button } from "@/components/shared/button";
+import { Input } from "@/components/shared/input";
 import { CopyableText } from "@/components/shared/copyable-text";
 import { StatusBadge } from "@/components/common/StatusBadge";
 import { DetailSkeleton } from "@/components/common/Skeleton";
-import { formatDateTime, toastApiError, toastSuccess } from "@/lib/helpers";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { formatDateTime, toastApiError, toastError, toastSuccess } from "@/lib/helpers";
 import { ROUTES } from "@/constants/routes.constants";
 import { cn } from "@/lib/utils";
+import type { ClientSummary } from "@/types";
 
 export default function ClientDetailPage() {
   const params = useParams<{ id: string }>();
@@ -216,6 +220,116 @@ export default function ClientDetailPage() {
           ))}
         </div>
       </section>
+
+      <ClientQuotaCard client={client} onUpdated={reload} />
     </div>
+  );
+}
+
+function ClientQuotaCard({
+  client,
+  onUpdated,
+}: {
+  client: ClientSummary;
+  onUpdated: () => void;
+}) {
+  const [editing, setEditing] = useState(false);
+  const [dailySendLimit, setDailySendLimit] = useState(String(client.dailySendLimit));
+  const [monthlySendLimit, setMonthlySendLimit] = useState(String(client.monthlySendLimit));
+  const [saving, setSaving] = useState(false);
+
+  function startEditing() {
+    setDailySendLimit(String(client.dailySendLimit));
+    setMonthlySendLimit(String(client.monthlySendLimit));
+    setEditing(true);
+  }
+
+  async function handleSave() {
+    const daily = Number(dailySendLimit);
+    const monthly = Number(monthlySendLimit);
+    if (!Number.isInteger(daily) || daily < 1 || !Number.isInteger(monthly) || monthly < 1) {
+      toastError("Daily and monthly limits must be whole numbers of at least 1.");
+      return;
+    }
+    setSaving(true);
+    try {
+      await updateClientQuota(client.id, {
+        dailySendLimit: daily,
+        monthlySendLimit: monthly,
+      });
+      toastSuccess("Quota updated");
+      setEditing(false);
+      onUpdated();
+    } catch (err) {
+      toastApiError(err);
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  return (
+    <Card>
+      <CardHeader className="flex flex-row items-center justify-between">
+        <CardTitle>Sending quota</CardTitle>
+        {!editing ? (
+          <Button variant="secondary" size="sm" onClick={startEditing}>
+            Edit
+          </Button>
+        ) : null}
+      </CardHeader>
+      <CardContent>
+        {editing ? (
+          <div className="flex flex-col gap-4">
+            <div className="grid gap-4 sm:grid-cols-2">
+              <Input
+                label="Daily send limit"
+                type="number"
+                min={1}
+                value={dailySendLimit}
+                onChange={(e) => setDailySendLimit(e.target.value)}
+              />
+              <Input
+                label="Monthly send limit"
+                type="number"
+                min={1}
+                value={monthlySendLimit}
+                onChange={(e) => setMonthlySendLimit(e.target.value)}
+              />
+            </div>
+            <div className="flex gap-2">
+              <Button disabled={saving} onClick={handleSave}>
+                {saving ? "Saving…" : "Save"}
+              </Button>
+              <Button
+                variant="secondary"
+                disabled={saving}
+                onClick={() => setEditing(false)}
+              >
+                Cancel
+              </Button>
+            </div>
+          </div>
+        ) : (
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.06em] text-muted-foreground">
+                Today
+              </p>
+              <p className="mt-1 text-sm font-medium text-foreground">
+                {client.sentToday} / {client.dailySendLimit} sent
+              </p>
+            </div>
+            <div>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.06em] text-muted-foreground">
+                This month
+              </p>
+              <p className="mt-1 text-sm font-medium text-foreground">
+                {client.sentThisMonth} / {client.monthlySendLimit} sent
+              </p>
+            </div>
+          </div>
+        )}
+      </CardContent>
+    </Card>
   );
 }
