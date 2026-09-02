@@ -22,3 +22,11 @@ export interface ClientListFilters {
   status?: string;
   type?: string;
 }
+
+/** A client's sending quota - shared across every user under that client. */
+export interface QuotaSummary {
+  dailySendLimit: number;
+  sentToday: number;
+  monthlySendLimit: number;
+  sentThisMonth: number;
+}

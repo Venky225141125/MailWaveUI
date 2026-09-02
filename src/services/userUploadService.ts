@@ -6,11 +6,17 @@ import type {
   EmailRecordQuery,
   EmailRecordResponse,
   Page,
+  QuotaSummary,
   UploadBatchSummary,
 } from "@/types";
 
 export async function listUploads(): Promise<UploadBatchSummary[]> {
   return apiClient<UploadBatchSummary[]>(USER_ENDPOINTS.uploads);
+}
+
+/** The logged-in user's client's sending quota (shared across every user under that client). */
+export async function getQuota(): Promise<QuotaSummary> {
+  return apiClient<QuotaSummary>(USER_ENDPOINTS.quota);
 }
 
 export async function getUpload(

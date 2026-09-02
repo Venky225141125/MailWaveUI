@@ -11,6 +11,7 @@ import {
 import { PageHeader } from "@/components/shared/page-header";
 import { LinkButton } from "@/components/shared/link-button";
 import { ValidationStatsGrid } from "@/components/common/ValidationStatsGrid";
+import { QuotaSummaryCard } from "@/components/common/QuotaSummaryCard";
 import { DashboardSkeleton } from "@/components/common/Skeleton";
 import { ROUTES } from "@/constants/routes.constants";
 
@@ -40,6 +41,7 @@ export default function UserDashboardPage() {
           </LinkButton>
         }
       />
+      <QuotaSummaryCard />
       {aggregate ? <ValidationStatsGrid aggregate={aggregate} /> : null}
     </div>
   );

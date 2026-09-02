@@ -16,6 +16,7 @@ import { PageHeader } from "@/components/shared/page-header";
 import { Button } from "@/components/shared/button";
 import { Input } from "@/components/shared/input";
 import { Select } from "@/components/shared/select";
+import { QuotaSummaryCard } from "@/components/common/QuotaSummaryCard";
 import { ROUTES } from "@/constants/routes.constants";
 import { toastApiError, toastError, toastSuccess } from "@/lib/helpers";
 
@@ -127,6 +128,9 @@ export default function NewCampaignPage() {
         backHref={ROUTES.user.campaigns}
         backLabel="All campaigns"
       />
+      <div className="mt-6">
+        <QuotaSummaryCard />
+      </div>
       <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-4">
         <fieldset
           disabled={!isActive}
