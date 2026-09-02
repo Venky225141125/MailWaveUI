@@ -16,7 +16,7 @@ function PhilosophyMark({
   return (
     <svg
       viewBox="0 0 72 72"
-      className="size-16 text-cyan-300 sm:size-20"
+      className="size-16 text-[#52ADFF] sm:size-20"
       fill="none"
       aria-hidden
     >
@@ -34,18 +34,18 @@ function PhilosophyMark({
             strokeWidth="2"
             opacity="0.7"
           />
-          <circle cx="20" cy="36" r="6" fill="#38BDF8" />
-          <circle cx="52" cy="36" r="6" fill="#818CF8" />
+          <circle cx="20" cy="36" r="6" fill="#52ADFF" />
+          <circle cx="52" cy="36" r="6" fill="#20FFA3" />
         </>
       ) : null}
       {kind === "grow" ? (
         <>
-          <line x1="36" y1="22" x2="22" y2="48" stroke="#38BDF8" strokeWidth="1.75" />
-          <line x1="36" y1="22" x2="50" y2="48" stroke="#818CF8" strokeWidth="1.75" />
-          <line x1="22" y1="48" x2="50" y2="48" stroke="#A855F7" strokeWidth="1.75" />
-          <circle cx="36" cy="22" r="5.5" fill="#38BDF8" />
-          <circle cx="22" cy="48" r="5.5" fill="#818CF8" />
-          <circle cx="50" cy="48" r="5.5" fill="#A855F7" />
+          <line x1="36" y1="22" x2="22" y2="48" stroke="#52ADFF" strokeWidth="1.75" />
+          <line x1="36" y1="22" x2="50" y2="48" stroke="#3AD6C8" strokeWidth="1.75" />
+          <line x1="22" y1="48" x2="50" y2="48" stroke="#20FFA3" strokeWidth="1.75" />
+          <circle cx="36" cy="22" r="5.5" fill="#52ADFF" />
+          <circle cx="22" cy="48" r="5.5" fill="#3AD6C8" />
+          <circle cx="50" cy="48" r="5.5" fill="#20FFA3" />
         </>
       ) : null}
     </svg>
@@ -122,7 +122,7 @@ export function BrandStory() {
       <div className="philosophy__veil" aria-hidden />
 
       <div className="relative z-10 flex min-h-[100dvh] flex-col items-center justify-center px-4 py-28 sm:px-6 lg:px-8">
-        <p className="mb-6 font-mono text-[11px] font-semibold tracking-[0.28em] text-cyan-300/90 uppercase">
+        <p className="mb-6 font-mono text-[11px] font-semibold tracking-[0.28em] text-[#52ADFF] uppercase">
           Philosophy
         </p>
 
@@ -130,21 +130,21 @@ export function BrandStory() {
           <PhilosophyMark kind={slide.mark} />
         </div>
 
-        <p className="mb-3 font-mono text-xs tracking-[0.22em] text-slate-400 uppercase">
+        <p className="mb-3 font-mono text-xs tracking-[0.22em] text-white/70 uppercase">
           {slide.kicker}
         </p>
 
         <h2 className="font-heading max-w-4xl text-center text-4xl font-extrabold tracking-tight text-white sm:text-5xl md:text-6xl">
           {slide.title}
         </h2>
-        <p className="mt-4 max-w-2xl text-center text-lg font-medium text-cyan-100/90 sm:text-xl">
+        <p className="landing-gradient-text mt-4 max-w-2xl text-center text-lg font-medium sm:text-xl">
           {slide.statement}
         </p>
-        <p className="mt-5 max-w-2xl text-center text-sm leading-relaxed text-slate-300 sm:text-base">
+        <p className="mt-5 max-w-2xl text-center text-sm leading-relaxed text-white/85 sm:text-base">
           {slide.body}
         </p>
 
-        <p className="mt-10 max-w-xl text-center font-mono text-[11px] tracking-[0.18em] text-slate-500 uppercase">
+        <p className="mt-10 max-w-xl text-center font-mono text-[11px] tracking-[0.18em] text-white/55 uppercase">
           Keep Adding. Keep Connecting. Keep Growing.
         </p>
       </div>
@@ -177,8 +177,8 @@ export function BrandStory() {
             className={cn(
               "h-1.5 rounded-full transition-all",
               i === index
-                ? "w-8 bg-cyan-300"
-                : "w-2.5 bg-white/30 hover:bg-white/50"
+                ? "w-8 bg-[linear-gradient(90deg,#52ADFF,#20FFA3)]"
+                : "w-2.5 bg-white/40 hover:bg-white/70"
             )}
           />
         ))}

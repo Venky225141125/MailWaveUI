@@ -27,40 +27,39 @@ export function HowItWorks() {
   return (
     <section
       id="how-it-works"
-      className="pipeline relative overflow-hidden border-y border-white/5 bg-[#090C16] py-20 md:py-28"
+      className="pipeline relative overflow-hidden border-y border-[#52ADFF]/15 bg-white/60 py-20 md:py-28"
     >
-      <div className="pointer-events-none absolute top-0 left-1/2 h-64 w-[40rem] -translate-x-1/2 rounded-full bg-cyan-500/8 blur-[100px]" />
+      <div className="pointer-events-none absolute top-0 left-1/2 h-64 w-[40rem] -translate-x-1/2 rounded-full bg-[#52ADFF]/15 blur-[100px]" />
+      <div className="pointer-events-none absolute right-0 bottom-0 h-56 w-56 rounded-full bg-[#20FFA3]/12 blur-[90px]" />
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto mb-14 max-w-3xl text-center">
-          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-cyan-500/20 bg-cyan-500/10 px-3.5 py-1 font-mono text-xs text-cyan-300">
+          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-[#52ADFF]/25 bg-[#52ADFF]/10 px-3.5 py-1 font-mono text-xs font-semibold text-[#4285F4]">
             <Cpu className="size-3.5" />
             <span>CONTINUOUS DATA CONDUIT</span>
           </div>
 
-          <h2 className="font-heading text-3xl font-extrabold tracking-tight text-white sm:text-5xl">
+          <h2 className="font-heading text-3xl font-extrabold tracking-tight text-[#1A1A1A] sm:text-5xl">
             Automated pipeline from ingestion to{" "}
-            <span className="bg-gradient-to-r from-cyan-400 via-sky-300 to-indigo-300 bg-clip-text text-transparent">
-              exponential reach.
-            </span>
+            <span className="landing-gradient-text">exponential reach.</span>
           </h2>
 
-          <p className="mt-4 text-base text-slate-400 sm:text-lg">
+          <p className="mt-4 text-base text-slate-600 sm:text-lg">
             Watch individual leads transform along an intelligent data highway
             that scrubs, verifies, segments, and broadcasts automatically.
           </p>
         </div>
 
-        <div className="mx-auto mb-8 flex max-w-5xl items-center justify-between rounded-xl border border-white/5 bg-slate-900/60 px-4 py-2 font-mono text-xs">
-          <div className="flex items-center gap-2 text-slate-400">
-            <span className="size-2 animate-ping rounded-full bg-cyan-400" />
+        <div className="mx-auto mb-8 flex max-w-5xl items-center justify-between rounded-xl border border-[#52ADFF]/20 bg-white/90 px-4 py-2 font-mono text-xs shadow-sm">
+          <div className="flex items-center gap-2 text-slate-600">
+            <span className="size-2 animate-ping rounded-full bg-[#52ADFF]" />
             <span>Active Conduit: {stage.name}</span>
           </div>
 
           <button
             type="button"
             onClick={() => setIsPlaying((playing) => !playing)}
-            className="flex cursor-pointer items-center gap-1.5 rounded bg-white/5 px-3 py-1 text-slate-300 transition-colors hover:bg-white/10"
+            className="flex cursor-pointer items-center gap-1.5 rounded-lg bg-[#52ADFF]/10 px-3 py-1 font-semibold text-slate-700 transition-colors hover:bg-[#52ADFF]/20"
           >
             {isPlaying ? (
               <Pause className="size-3.5" />
@@ -72,10 +71,10 @@ export function HowItWorks() {
         </div>
 
         <div className="mx-auto max-w-6xl overflow-x-auto pb-6">
-          <div className="relative grid min-w-[760px] grid-cols-7 gap-2 rounded-2xl border border-white/10 bg-[#0C101D] p-4 shadow-2xl">
-            <div className="pointer-events-none absolute top-1/2 right-8 left-8 z-0 h-1 -translate-y-1/2 bg-slate-800">
+          <div className="relative grid min-w-[760px] grid-cols-7 gap-2 rounded-2xl border border-[#52ADFF]/20 bg-white p-4 shadow-[0_20px_50px_-28px_rgba(66,133,244,0.4)]">
+            <div className="pointer-events-none absolute top-1/2 right-8 left-8 z-0 h-1 -translate-y-1/2 bg-slate-100">
               <div
-                className="h-full bg-gradient-to-r from-cyan-400 via-sky-400 to-purple-400 transition-all duration-500"
+                className="h-full bg-[linear-gradient(90deg,#52ADFF,#20FFA3)] transition-all duration-500"
                 style={{ width: `${progress}%` }}
               />
             </div>
@@ -96,37 +95,37 @@ export function HowItWorks() {
                   className={cn(
                     "relative z-10 flex cursor-pointer flex-col justify-between rounded-xl border p-4 text-left transition-all duration-300",
                     isCurrent &&
-                      "scale-105 border-cyan-400/80 bg-slate-900 shadow-[0_0_25px_rgba(56,189,248,0.25)]",
+                      "scale-105 border-[#52ADFF] bg-[#F0F7FF] shadow-[0_0_25px_rgba(82,173,255,0.3)]",
                     !isCurrent &&
                       isPassed &&
-                      "border-cyan-500/30 bg-slate-950/80 text-slate-300",
+                      "border-[#52ADFF]/30 bg-white text-slate-700",
                     !isCurrent &&
                       !isPassed &&
-                      "border-white/5 bg-slate-950/40 text-slate-500"
+                      "border-slate-100 bg-slate-50/80 text-slate-400"
                   )}
                 >
                   <div>
-                    <div className="mb-1 font-mono text-[10px] tracking-wider text-cyan-400 uppercase">
+                    <div className="mb-1 font-mono text-[10px] tracking-wider text-[#52ADFF] uppercase">
                       {item.tag}
                     </div>
                     <div
                       className={cn(
                         "font-heading text-sm font-extrabold sm:text-base",
-                        isCurrent && "text-white",
-                        !isCurrent && isPassed && "text-slate-200",
-                        !isCurrent && !isPassed && "text-slate-500"
+                        isCurrent && "text-[#1A1A1A]",
+                        !isCurrent && isPassed && "text-slate-800",
+                        !isCurrent && !isPassed && "text-slate-400"
                       )}
                     >
                       {item.name}
                     </div>
                   </div>
 
-                  <div className="mt-3 text-[11px] leading-tight text-slate-400">
+                  <div className="mt-3 text-[11px] leading-tight text-slate-500">
                     {item.desc}
                   </div>
 
                   {isCurrent ? (
-                    <span className="absolute -top-1.5 -right-1.5 size-3.5 rounded-full border-2 border-[#0C101D] bg-cyan-400 shadow-[0_0_8px_#38BDF8]" />
+                    <span className="absolute -top-1.5 -right-1.5 size-3.5 rounded-full border-2 border-white bg-[#20FFA3] shadow-[0_0_8px_#20FFA3]" />
                   ) : null}
                 </button>
               );
@@ -134,14 +133,14 @@ export function HowItWorks() {
           </div>
         </div>
 
-        <div className="mx-auto mt-2 max-w-3xl rounded-2xl border border-white/8 bg-white/[0.03] px-6 py-6 text-center backdrop-blur-sm sm:px-8">
-          <p className="font-mono text-[11px] tracking-[0.2em] text-cyan-300/80 uppercase">
+        <div className="mx-auto mt-2 max-w-3xl rounded-2xl border border-[#52ADFF]/20 bg-white/90 px-6 py-6 text-center shadow-sm backdrop-blur-sm sm:px-8">
+          <p className="font-mono text-[11px] tracking-[0.2em] text-[#52ADFF] uppercase">
             {stage.tag}
           </p>
-          <p className="font-heading mt-2 text-xl font-bold text-white sm:text-2xl">
+          <p className="font-heading mt-2 text-xl font-bold text-[#1A1A1A] sm:text-2xl">
             {stage.name}
           </p>
-          <p className="mt-3 text-sm leading-relaxed text-slate-400 sm:text-base">
+          <p className="mt-3 text-sm leading-relaxed text-slate-600 sm:text-base">
             {stage.detail}
           </p>
         </div>

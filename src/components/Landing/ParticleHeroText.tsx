@@ -43,7 +43,7 @@ export function ParticleHeroText() {
     const initParticles = () => {
       sizeCanvas();
       ctx.clearRect(0, 0, width, height);
-      ctx.fillStyle = "#ffffff";
+      ctx.fillStyle = "#1A1A1A";
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
 
@@ -66,9 +66,9 @@ export function ParticleHeroText() {
 
           if (alpha > 128) {
             const ratio = x / width;
-            let color = "#38BDF8";
-            if (ratio > 0.4 && ratio < 0.7) color = "#818CF8";
-            else if (ratio >= 0.7) color = "#C084FC";
+            let color = "#52ADFF";
+            if (ratio > 0.35 && ratio < 0.65) color = "#3AD6C8";
+            else if (ratio >= 0.65) color = "#20FFA3";
 
             particles.push({
               x: Math.random() * width,
@@ -177,20 +177,20 @@ export function ParticleHeroText() {
       <div className="relative cursor-pointer">
         <canvas
           ref={canvasRef}
-          className="max-w-full rounded-xl drop-shadow-[0_0_20px_rgba(56,189,248,0.15)] transition-all duration-300"
+          className="max-w-full rounded-xl drop-shadow-[0_0_24px_rgba(82,173,255,0.25)] transition-all duration-300"
         />
         <span className="sr-only">{activeWord}</span>
       </div>
 
-      <div className="mt-3 flex items-center gap-2 rounded-full border border-white/10 bg-slate-900/60 p-1 text-xs">
+      <div className="mt-3 flex items-center gap-2 rounded-full border border-[#52ADFF]/20 bg-white/80 p-1 text-xs shadow-sm backdrop-blur-md">
         <button
           type="button"
           onClick={() => setActiveWord("INTEGRATED LEADS")}
           className={cn(
             "rounded-full px-3 py-1 text-xs font-medium tracking-wide transition-all",
             activeWord === "INTEGRATED LEADS"
-              ? "border border-cyan-500/40 bg-cyan-500/20 text-cyan-300 shadow-sm"
-              : "text-slate-400 hover:text-white"
+              ? "bg-[linear-gradient(135deg,#52ADFF,#20FFA3)] font-semibold text-slate-950 shadow-sm"
+              : "text-slate-500 hover:text-slate-800"
           )}
         >
           ● INTEGRATED LEADS
@@ -201,8 +201,8 @@ export function ParticleHeroText() {
           className={cn(
             "rounded-full px-3 py-1 text-xs font-medium tracking-wide transition-all",
             activeWord === "KEEP ADDING"
-              ? "border border-indigo-500/40 bg-indigo-500/20 text-indigo-300 shadow-sm"
-              : "text-slate-400 hover:text-white"
+              ? "bg-[linear-gradient(135deg,#52ADFF,#20FFA3)] font-semibold text-slate-950 shadow-sm"
+              : "text-slate-500 hover:text-slate-800"
           )}
         >
           ● KEEP ADDING

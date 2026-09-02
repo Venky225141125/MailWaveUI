@@ -24,17 +24,18 @@ export function LandingHero({
       id="hero-section"
       className="bg-grid-subtle relative overflow-hidden pt-28 pb-16 md:pt-36 md:pb-24"
     >
-      <div className="pointer-events-none absolute top-1/4 left-1/2 -z-10 h-[350px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-br from-cyan-500/15 via-indigo-600/10 to-purple-600/10 blur-[120px] sm:w-[900px]" />
-      <div className="pointer-events-none absolute top-10 left-10 -z-10 size-72 rounded-full bg-cyan-500/5 blur-[90px]" />
+      <div className="pointer-events-none absolute top-1/4 left-1/2 -z-10 h-[380px] w-[640px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(ellipse_at_center,rgba(82,173,255,0.28),rgba(32,255,163,0.12),transparent_70%)] blur-[80px] sm:w-[960px]" />
+      <div className="pointer-events-none absolute top-16 right-[8%] -z-10 size-64 rounded-full bg-[#52ADFF]/15 blur-[90px]" />
+      <div className="pointer-events-none absolute bottom-10 left-[6%] -z-10 size-72 rounded-full bg-[#20FFA3]/12 blur-[100px]" />
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-6 flex justify-center">
-          <div className="inline-flex items-center gap-2.5 rounded-full border border-white/10 bg-slate-900/80 px-3.5 py-1.5 font-mono text-xs text-cyan-300 shadow-sm backdrop-blur-md">
+          <div className="inline-flex items-center gap-2.5 rounded-full border border-[#52ADFF]/25 bg-white/80 px-3.5 py-1.5 font-mono text-xs text-[#1A1A1A] shadow-sm backdrop-blur-md">
             <span className="relative flex size-2">
-              <span className="absolute inline-flex size-full animate-ping rounded-full bg-cyan-400 opacity-75" />
-              <span className="relative inline-flex size-2 rounded-full bg-cyan-500" />
+              <span className="absolute inline-flex size-full animate-ping rounded-full bg-[#52ADFF] opacity-75" />
+              <span className="relative inline-flex size-2 rounded-full bg-[#52ADFF]" />
             </span>
-            <span className="font-semibold tracking-wide">
+            <span className="font-semibold tracking-wide text-[#4285F4]">
               {BRAND_NAME.toUpperCase()} 2.0
             </span>
           </div>
@@ -45,22 +46,16 @@ export function LandingHero({
         </div>
 
         <div className="mx-auto mb-6 max-w-5xl text-center">
-          <h1 className="font-heading text-4xl leading-[1.05] font-extrabold tracking-tight text-white sm:text-6xl md:text-7xl lg:text-8xl">
-            <span className="block bg-gradient-to-b from-white via-slate-100 to-slate-400 bg-clip-text text-transparent">
-              KEEP ADDING.
-            </span>
-            <span className="block bg-gradient-to-r from-cyan-400 via-sky-300 to-indigo-300 bg-clip-text text-transparent">
-              KEEP CONNECTING.
-            </span>
-            <span className="block bg-gradient-to-b from-indigo-200 via-purple-300 to-white bg-clip-text text-transparent">
-              KEEP GROWING.
-            </span>
+          <h1 className="font-heading text-4xl leading-[1.05] font-extrabold tracking-tight text-[#1A1A1A] sm:text-6xl md:text-7xl lg:text-8xl">
+            <span className="block">KEEP ADDING.</span>
+            <span className="landing-gradient-text block">KEEP CONNECTING.</span>
+            <span className="block text-slate-700">KEEP GROWING.</span>
           </h1>
 
-          <p className="mx-auto mt-6 max-w-4xl text-lg leading-relaxed font-normal text-slate-300 sm:text-xl md:text-2xl">
+          <p className="mx-auto mt-6 max-w-4xl text-lg leading-relaxed font-normal text-slate-600 sm:text-xl md:text-2xl">
             Turn every lead into a connection. Build your network. Grow your
             reach.
-            <span className="mt-2 block text-base font-light text-slate-400 sm:text-lg">
+            <span className="mt-2 block text-base font-normal text-slate-500 sm:text-lg">
               Build, connect, and activate your lead database with a smarter
               email broadcasting and validation platform.
             </span>
@@ -71,33 +66,33 @@ export function LandingHero({
           <button
             type="button"
             onClick={onOpenGetStarted}
-            className="group flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-cyan-400 via-sky-300 to-indigo-300 px-8 py-4 text-base font-semibold text-slate-950 shadow-[0_0_30px_rgba(56,189,248,0.35)] transition-all hover:opacity-95 sm:w-auto"
+            className="landing-btn-primary w-full sm:w-auto"
           >
             <span>Start Building Your Network</span>
-            <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
+            <ArrowRight className="size-4" />
           </button>
 
           <button
             type="button"
             onClick={onOpenDemo}
-            className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/[0.04] px-7 py-4 text-base font-medium text-slate-200 transition-all hover:border-cyan-500/30 hover:bg-white/[0.08] sm:w-auto"
+            className="landing-btn-secondary w-full sm:w-auto"
           >
-            <Sparkles className="size-4 text-cyan-400" />
+            <Sparkles className="size-4 text-[#52ADFF]" />
             <span>Interactive Platform Tour</span>
           </button>
         </div>
 
-        <div className="flex flex-wrap items-center justify-center gap-6 font-mono text-xs text-slate-400 sm:gap-10 sm:text-sm">
+        <div className="flex flex-wrap items-center justify-center gap-6 font-mono text-xs text-slate-500 sm:gap-10 sm:text-sm">
           <div className="flex items-center gap-2">
-            <CheckCircle2 className="size-4 text-emerald-400" />
+            <CheckCircle2 className="size-4 text-[#20FFA3]" />
             <span>99.4% Validated Deliverability</span>
           </div>
           <div className="flex items-center gap-2">
-            <Network className="size-4 text-cyan-400" />
+            <Network className="size-4 text-[#52ADFF]" />
             <span>Multi-Node Lead Deduplication</span>
           </div>
           <div className="flex items-center gap-2">
-            <Zap className="size-4 text-indigo-400" />
+            <Zap className="size-4 text-[#4285F4]" />
             <span>Sub-Second Broadcast Conduits</span>
           </div>
         </div>
