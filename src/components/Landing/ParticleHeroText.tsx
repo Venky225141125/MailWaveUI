@@ -19,6 +19,7 @@ interface Particle {
 
 export function ParticleHeroText() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const wrapRef = useRef<HTMLDivElement | null>(null);
   const [activeWord, setActiveWord] = useState<ParticleWord>("INTEGRATED LEADS");
   const animationFrameId = useRef<number | null>(null);
   const mouseRef = useRef({ x: -1000, y: -1000, radius: 80 });
@@ -31,13 +32,16 @@ export function ParticleHeroText() {
 
     let particles: Particle[] = [];
     let width = 0;
-    let height = 140;
+    let height = 120;
 
     const sizeCanvas = () => {
-      width = Math.min(window.innerWidth - 32, 900);
-      height = 140;
+      const parentWidth = wrapRef.current?.clientWidth ?? window.innerWidth - 32;
+      width = Math.max(260, Math.min(parentWidth, 900));
+      height = width < 400 ? 88 : width < 640 ? 110 : width < 900 ? 128 : 140;
       canvas.width = width;
       canvas.height = height;
+      canvas.style.width = `${width}px`;
+      canvas.style.height = `${height}px`;
     };
 
     const initParticles = () => {
@@ -47,7 +51,8 @@ export function ParticleHeroText() {
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
 
-      const fontSize = width < 500 ? 28 : width < 768 ? 42 : 58;
+      const fontSize =
+        width < 360 ? 22 : width < 500 ? 28 : width < 768 ? 40 : 56;
       const family =
         getComputedStyle(document.body).fontFamily ||
         "ui-sans-serif, system-ui, sans-serif";
@@ -58,7 +63,7 @@ export function ParticleHeroText() {
       const data = imageData.data;
       particles = [];
 
-      const step = width < 600 ? 5 : 4;
+      const step = width < 480 ? 5 : 4;
       for (let y = 0; y < height; y += step) {
         for (let x = 0; x < width; x += step) {
           const index = (y * width + x) * 4;
@@ -66,9 +71,9 @@ export function ParticleHeroText() {
 
           if (alpha > 128) {
             const ratio = x / width;
-            let color = "#52ADFF";
-            if (ratio > 0.35 && ratio < 0.65) color = "#3AD6C8";
-            else if (ratio >= 0.65) color = "#20FFA3";
+            let color = "#1568B8";
+            if (ratio > 0.35 && ratio < 0.65) color = "#0E8A72";
+            else if (ratio >= 0.65) color = "#0B8F5A";
 
             particles.push({
               x: Math.random() * width,
@@ -77,9 +82,9 @@ export function ParticleHeroText() {
               originY: y,
               vx: (Math.random() - 0.5) * 2,
               vy: (Math.random() - 0.5) * 2,
-              size: Math.random() > 0.8 ? 2 : 1.4,
+              size: Math.random() > 0.8 ? 2.15 : 1.55,
               color,
-              alpha: Math.random() * 0.4 + 0.6,
+              alpha: Math.random() * 0.18 + 0.82,
             });
           }
         }
@@ -173,23 +178,26 @@ export function ParticleHeroText() {
   }, [activeWord]);
 
   return (
-    <div className="relative my-2 flex flex-col items-center justify-center">
-      <div className="relative cursor-pointer">
+    <div
+      ref={wrapRef}
+      className="relative mx-auto my-1 flex w-full max-w-[900px] flex-col items-center justify-center px-1 sm:my-2"
+    >
+      <div className="relative w-full cursor-pointer overflow-hidden">
         <canvas
           ref={canvasRef}
-          className="max-w-full rounded-xl drop-shadow-[0_0_24px_rgba(82,173,255,0.25)] transition-all duration-300"
+          className="mx-auto max-w-full rounded-xl drop-shadow-[0_8px_22px_rgba(21,104,184,0.22)] transition-all duration-300"
         />
         <span className="sr-only">{activeWord}</span>
       </div>
 
-      <div className="mt-3 flex items-center gap-2 rounded-full border border-[#52ADFF]/20 bg-white/80 p-1 text-xs shadow-sm backdrop-blur-md">
+      <div className="mt-2 flex max-w-full flex-wrap items-center justify-center gap-1 rounded-full border border-[#52ADFF]/20 bg-white/80 p-1 text-xs shadow-sm backdrop-blur-md sm:mt-3 sm:gap-2">
         <button
           type="button"
           onClick={() => setActiveWord("INTEGRATED LEADS")}
           className={cn(
-            "rounded-full px-3 py-1 text-xs font-medium tracking-wide transition-all",
+            "rounded-full px-2.5 py-1 text-[10px] font-medium tracking-wide transition-all sm:px-3 sm:text-xs",
             activeWord === "INTEGRATED LEADS"
-              ? "bg-[linear-gradient(135deg,#52ADFF,#20FFA3)] font-semibold text-slate-950 shadow-sm"
+              ? "bg-[linear-gradient(135deg,#1568B8,#0B8F5A)] font-semibold text-white shadow-sm"
               : "text-slate-500 hover:text-slate-800"
           )}
         >
@@ -199,9 +207,9 @@ export function ParticleHeroText() {
           type="button"
           onClick={() => setActiveWord("KEEP ADDING")}
           className={cn(
-            "rounded-full px-3 py-1 text-xs font-medium tracking-wide transition-all",
+            "rounded-full px-2.5 py-1 text-[10px] font-medium tracking-wide transition-all sm:px-3 sm:text-xs",
             activeWord === "KEEP ADDING"
-              ? "bg-[linear-gradient(135deg,#52ADFF,#20FFA3)] font-semibold text-slate-950 shadow-sm"
+              ? "bg-[linear-gradient(135deg,#1568B8,#0B8F5A)] font-semibold text-white shadow-sm"
               : "text-slate-500 hover:text-slate-800"
           )}
         >

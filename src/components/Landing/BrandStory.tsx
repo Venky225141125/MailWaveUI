@@ -16,7 +16,7 @@ function PhilosophyMark({
   return (
     <svg
       viewBox="0 0 72 72"
-      className="size-16 text-[#52ADFF] sm:size-20"
+      className="size-12 text-[#52ADFF] sm:size-16 md:size-20"
       fill="none"
       aria-hidden
     >
@@ -121,30 +121,30 @@ export function BrandStory() {
 
       <div className="philosophy__veil" aria-hidden />
 
-      <div className="relative z-10 flex min-h-[100dvh] flex-col items-center justify-center px-4 py-28 sm:px-6 lg:px-8">
-        <p className="mb-6 font-mono text-[11px] font-semibold tracking-[0.28em] text-[#52ADFF] uppercase">
+      <div className="relative z-10 flex min-h-[min(100dvh,920px)] flex-col items-center justify-center px-4 py-24 sm:min-h-[100dvh] sm:px-6 sm:py-28 lg:px-8">
+        <p className="mb-4 font-mono text-[10px] font-semibold tracking-[0.28em] text-[#52ADFF] uppercase sm:mb-6 sm:text-[11px]">
           Philosophy
         </p>
 
-        <div className="mb-8">
+        <div className="mb-5 sm:mb-8">
           <PhilosophyMark kind={slide.mark} />
         </div>
 
-        <p className="mb-3 font-mono text-xs tracking-[0.22em] text-white/70 uppercase">
+        <p className="mb-2 font-mono text-[10px] tracking-[0.22em] text-white/70 uppercase sm:mb-3 sm:text-xs">
           {slide.kicker}
         </p>
 
-        <h2 className="font-heading max-w-4xl text-center text-4xl font-extrabold tracking-tight text-white sm:text-5xl md:text-6xl">
+        <h2 className="font-heading max-w-4xl px-1 text-center text-3xl font-extrabold tracking-tight text-white sm:text-5xl md:text-6xl">
           {slide.title}
         </h2>
-        <p className="landing-gradient-text mt-4 max-w-2xl text-center text-lg font-medium sm:text-xl">
+        <p className="landing-gradient-text mt-3 max-w-2xl px-1 text-center text-base font-medium sm:mt-4 sm:text-lg md:text-xl">
           {slide.statement}
         </p>
-        <p className="mt-5 max-w-2xl text-center text-sm leading-relaxed text-white/85 sm:text-base">
+        <p className="mt-4 max-w-2xl px-1 text-center text-sm leading-relaxed text-white/85 sm:mt-5 sm:text-base">
           {slide.body}
         </p>
 
-        <p className="mt-10 max-w-xl text-center font-mono text-[11px] tracking-[0.18em] text-white/55 uppercase">
+        <p className="mt-8 max-w-xl px-2 text-center font-mono text-[10px] tracking-[0.14em] text-white/55 uppercase sm:mt-10 sm:text-[11px] sm:tracking-[0.18em]">
           Keep Adding. Keep Connecting. Keep Growing.
         </p>
       </div>
@@ -155,7 +155,7 @@ export function BrandStory() {
         className="philosophy__nav philosophy__nav--prev"
         aria-label="Previous philosophy"
       >
-        <ChevronLeft className="size-5" />
+        <ChevronLeft className="size-4 sm:size-5" />
       </button>
       <button
         type="button"
@@ -163,10 +163,10 @@ export function BrandStory() {
         className="philosophy__nav philosophy__nav--next"
         aria-label="Next philosophy"
       >
-        <ChevronRight className="size-5" />
+        <ChevronRight className="size-4 sm:size-5" />
       </button>
 
-      <div className="absolute bottom-8 left-1/2 z-10 flex -translate-x-1/2 items-center gap-2">
+      <div className="absolute bottom-5 left-1/2 z-10 flex -translate-x-1/2 items-center gap-2 sm:bottom-8">
         {PHILOSOPHY_SLIDES.map((item, i) => (
           <button
             key={item.id}

@@ -34,7 +34,7 @@ export function SignInRoleModal({ open, onClose }: SignInRoleModalProps) {
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-[60] flex items-end justify-center p-0 sm:items-center sm:p-4">
       <button
         type="button"
         className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm"
@@ -47,7 +47,7 @@ export function SignInRoleModal({ open, onClose }: SignInRoleModalProps) {
         aria-modal="true"
         aria-labelledby="signin-role-title"
         tabIndex={-1}
-        className="relative z-10 w-full max-w-lg rounded-xl border border-[#52ADFF]/25 bg-white p-5 shadow-[0_20px_48px_rgb(66_133_244_/_0.25)] outline-none sm:p-8"
+        className="relative z-10 max-h-[90dvh] w-full max-w-lg overflow-y-auto rounded-t-2xl border border-[#52ADFF]/25 bg-white p-5 shadow-[0_20px_48px_rgb(66_133_244_/_0.25)] outline-none sm:rounded-xl sm:p-8"
       >
         <button
           type="button"

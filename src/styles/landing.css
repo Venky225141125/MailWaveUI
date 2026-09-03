@@ -66,8 +66,8 @@
   gap: 0.5rem;
   border-radius: 0.75rem;
   background: var(--landing-gradient);
-  padding: 0.875rem 1.75rem;
-  font-size: 0.875rem;
+  padding: 0.75rem 1.25rem;
+  font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -77,6 +77,13 @@
     transform 220ms cubic-bezier(0.22, 1, 0.36, 1),
     box-shadow 220ms ease,
     filter 220ms ease;
+}
+
+@media (min-width: 640px) {
+  .landing-btn-primary {
+    padding: 0.875rem 1.75rem;
+    font-size: 0.875rem;
+  }
 }
 
 .landing-btn-primary:hover {
@@ -97,8 +104,8 @@
   border-radius: 0.75rem;
   border: 1px solid rgb(82 173 255 / 0.35);
   background: rgb(255 255 255 / 0.75);
-  padding: 0.875rem 1.5rem;
-  font-size: 0.875rem;
+  padding: 0.75rem 1.15rem;
+  font-size: 0.75rem;
   font-weight: 600;
   color: var(--landing-trust-dark);
   backdrop-filter: blur(8px);
@@ -107,6 +114,13 @@
     border-color 220ms ease,
     background-color 220ms ease,
     box-shadow 220ms ease;
+}
+
+@media (min-width: 640px) {
+  .landing-btn-secondary {
+    padding: 0.875rem 1.5rem;
+    font-size: 0.875rem;
+  }
 }
 
 .landing-btn-secondary:hover {
@@ -130,26 +144,44 @@
 }
 
 .landing-nav--ghost {
-  padding-block: 1rem;
+  padding-block: 0.75rem;
   background: transparent;
   border-bottom: 1px solid transparent;
 }
 
 .landing-nav--solid {
-  padding-block: 0.625rem;
+  padding-block: 0.5rem;
   background: rgb(255 255 255 / 0.88);
   border-bottom: 1px solid rgb(82 173 255 / 0.15);
   box-shadow: 0 8px 28px -16px rgb(66 133 244 / 0.35);
   backdrop-filter: blur(20px);
 }
 
+@media (min-width: 640px) {
+  .landing-nav--ghost {
+    padding-block: 1rem;
+  }
+
+  .landing-nav--solid {
+    padding-block: 0.625rem;
+  }
+}
+
 .landing-nav-link {
   position: relative;
-  padding: 0.5rem 0.875rem;
-  font-size: 0.875rem;
+  padding: 0.4rem 0.55rem;
+  font-size: 0.8rem;
   font-weight: 600;
   color: var(--landing-trust-dark);
   transition: color 200ms ease;
+  white-space: nowrap;
+}
+
+@media (min-width: 1280px) {
+  .landing-nav-link {
+    padding: 0.5rem 0.875rem;
+    font-size: 0.875rem;
+  }
 }
 
 .landing-nav-link:hover {
@@ -179,7 +211,17 @@
 .features,
 .carousel,
 .network-lab {
-  scroll-margin-top: 5.5rem;
+  scroll-margin-top: 4.5rem;
+}
+
+@media (min-width: 640px) {
+  .landing-anchor,
+  .pipeline,
+  .features,
+  .carousel,
+  .network-lab {
+    scroll-margin-top: 5.5rem;
+  }
 }
 
 .feature-card {
@@ -188,7 +230,7 @@
   border-radius: 1rem;
   border: 1px solid rgb(82 173 255 / 0.18);
   background: rgb(255 255 255 / 0.9);
-  padding: 1.5rem 1.75rem;
+  padding: 1.25rem 1.25rem;
   box-shadow: 0 16px 40px -24px rgb(66 133 244 / 0.35);
   transform: translateY(0) scale(1);
   transition:
@@ -197,12 +239,24 @@
     box-shadow 280ms ease;
 }
 
+@media (min-width: 640px) {
+  .feature-card {
+    padding: 1.5rem 1.75rem;
+  }
+}
+
 .feature-card:hover {
-  transform: translateY(-8px) scale(1.02);
+  transform: translateY(-6px) scale(1.01);
   border-color: rgb(82 173 255 / 0.45);
   box-shadow:
     0 18px 40px -18px rgb(82 173 255 / 0.35),
     0 12px 32px -20px rgb(32 255 163 / 0.25);
+}
+
+@media (min-width: 1024px) {
+  .feature-card:hover {
+    transform: translateY(-8px) scale(1.02);
+  }
 }
 
 .feature-card__glow {
@@ -302,8 +356,8 @@
 .carousel-nav {
   display: grid;
   place-items: center;
-  width: 2.75rem;
-  height: 2.75rem;
+  width: 2.5rem;
+  height: 2.5rem;
   flex-shrink: 0;
   border-radius: 9999px;
   border: 1px solid rgb(82 173 255 / 0.25);
@@ -316,6 +370,13 @@
     background-color 180ms ease,
     border-color 180ms ease,
     color 180ms ease;
+}
+
+@media (min-width: 640px) {
+  .carousel-nav {
+    width: 2.75rem;
+    height: 2.75rem;
+  }
 }
 
 .carousel-nav:hover {
@@ -333,10 +394,16 @@
 
 .philosophy {
   position: relative;
-  min-height: 100dvh;
+  min-height: min(100dvh, 920px);
   overflow: hidden;
   scroll-margin-top: 0;
   background: #e8f2ff;
+}
+
+@media (min-width: 768px) {
+  .philosophy {
+    min-height: 100dvh;
+  }
 }
 
 .philosophy__track {
@@ -349,7 +416,7 @@
 .philosophy__slide {
   position: relative;
   flex: 0 0 100%;
-  min-height: 100dvh;
+  min-height: 100%;
 }
 
 .philosophy__veil {
@@ -373,18 +440,19 @@
 
 .philosophy__nav {
   position: absolute;
-  top: 50%;
+  top: auto;
+  bottom: 5.5rem;
   z-index: 10;
   display: grid;
   place-items: center;
-  width: 2.75rem;
-  height: 2.75rem;
+  width: 2.5rem;
+  height: 2.5rem;
   border-radius: 9999px;
   border: 1px solid rgb(255 255 255 / 0.35);
   background: rgb(255 255 255 / 0.2);
   color: #fff;
   backdrop-filter: blur(12px);
-  transform: translateY(-50%);
+  transform: none;
   cursor: pointer;
   transition:
     background-color 180ms ease,
@@ -405,12 +473,71 @@
 }
 
 @media (min-width: 768px) {
+  .philosophy__nav {
+    top: 50%;
+    bottom: auto;
+    width: 2.75rem;
+    height: 2.75rem;
+    transform: translateY(-50%);
+  }
+
   .philosophy__nav--prev {
     left: 1.75rem;
   }
 
   .philosophy__nav--next {
     right: 1.75rem;
+  }
+}
+
+/* Pipeline stage cards — no forced horizontal scroll on small screens */
+.pipeline-stages {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+}
+
+@media (min-width: 640px) {
+  .pipeline-stages {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .pipeline-stages {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1280px) {
+  .pipeline-stages {
+    position: relative;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 0.5rem;
+    padding: 1rem;
+    border-radius: 1rem;
+    border: 1px solid rgb(82 173 255 / 0.2);
+    background: #fff;
+    box-shadow: 0 20px 50px -28px rgb(66 133 244 / 0.4);
+  }
+}
+
+.pipeline-stages__rail {
+  display: none;
+}
+
+@media (min-width: 1280px) {
+  .pipeline-stages__rail {
+    pointer-events: none;
+    position: absolute;
+    top: 50%;
+    right: 2rem;
+    left: 2rem;
+    z-index: 0;
+    display: block;
+    height: 0.25rem;
+    transform: translateY(-50%);
+    background: #f1f5f9;
   }
 }
 
@@ -436,5 +563,11 @@
   .signin-role-btn:hover,
   .signin-role-btn:active {
     transform: none;
+  }
+}
+
+@media only screen and (min-width: 768px) {
+  .getstarted-btn {
+    display: none;
   }
 }
