@@ -24,10 +24,7 @@ export function LandingNavbar({
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
-    };
-
+    const handleScroll = () => setScrolled(window.scrollY > 20);
     handleScroll();
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
@@ -76,7 +73,7 @@ export function LandingNavbar({
             aria-label={BRAND_NAME}
           >
             <Image
-              src="/logo/integratedleads-color-full-logo-black.svg"
+              src="/logo/integratedleads-blue-black-logo-new.svg"
               alt={BRAND_NAME}
               width={200}
               height={48}
@@ -85,10 +82,7 @@ export function LandingNavbar({
             />
           </Link>
 
-          <nav
-            className="hidden items-center gap-0.5 xl:flex"
-            aria-label="Landing"
-          >
+          <nav className="hidden items-center gap-0.5 xl:flex" aria-label="Landing">
             {LANDING_NAV_LINKS.map((link) => (
               <a
                 key={link.label}
@@ -105,7 +99,7 @@ export function LandingNavbar({
             <button
               type="button"
               onClick={onOpenLogin}
-              className="px-3 py-2 text-sm font-semibold text-slate-700 transition-colors hover:text-[#4285F4]"
+              className="px-3 py-2 text-sm font-semibold text-black transition-colors hover:text-[#2A78F6]"
             >
               Sign In
             </button>
@@ -130,16 +124,12 @@ export function LandingNavbar({
             <button
               type="button"
               onClick={() => setMobileMenuOpen((open) => !open)}
-              className="rounded-lg p-2 text-slate-700 hover:bg-[#52ADFF]/10 hover:text-[#4285F4] focus:outline-none"
+              className="rounded-lg p-2 text-black hover:bg-[#2A78F6]/8 hover:text-[#2A78F6] focus:outline-none"
               aria-expanded={mobileMenuOpen}
               aria-controls="mobile-drawer-menu"
               aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
             >
-              {mobileMenuOpen ? (
-                <X className="size-5 sm:size-6" />
-              ) : (
-                <Menu className="size-5 sm:size-6" />
-              )}
+              {mobileMenuOpen ? <X className="size-5 sm:size-6" /> : <Menu className="size-5 sm:size-6" />}
             </button>
           </div>
         </div>
@@ -148,7 +138,7 @@ export function LandingNavbar({
       {mobileMenuOpen ? (
         <div
           id="mobile-drawer-menu"
-          className="max-h-[min(80dvh,32rem)] overflow-y-auto border-b border-[#52ADFF]/20 bg-white/95 px-3 pt-3 pb-5 shadow-xl backdrop-blur-2xl sm:px-6 xl:hidden"
+          className="max-h-[min(80dvh,32rem)] overflow-y-auto border-b border-black/6 bg-white/95 px-3 pt-3 pb-5 shadow-xl backdrop-blur-2xl sm:px-6 xl:hidden"
         >
           <div className="flex flex-col space-y-1 py-2">
             {LANDING_NAV_LINKS.map((link) => (
@@ -156,31 +146,25 @@ export function LandingNavbar({
                 key={link.label}
                 href={link.href}
                 onClick={(e) => handleScrollTo(e, link.href)}
-                className="flex items-center justify-between rounded-lg px-3 py-3 text-sm font-semibold text-slate-800 transition-colors hover:bg-[#52ADFF]/10 hover:text-[#4285F4]"
+                className="flex items-center justify-between rounded-lg px-3 py-3 text-sm font-semibold text-black transition-colors hover:bg-[#2A78F6]/8 hover:text-[#2A78F6]"
               >
                 <span>{link.label}</span>
-                <ArrowRight className="size-3.5 shrink-0 text-slate-400" />
+                <ArrowRight className="size-3.5 shrink-0 text-neutral-400" />
               </a>
             ))}
           </div>
 
-          <div className="flex flex-col gap-2.5 border-t border-slate-200 pt-4 md:hidden">
+          <div className="flex flex-col gap-2.5 border-t border-neutral-200 pt-4 md:hidden">
             <button
               type="button"
-              onClick={() => {
-                setMobileMenuOpen(false);
-                onOpenLogin();
-              }}
-              className="w-full rounded-lg bg-slate-100 py-3 text-center text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-200"
+              onClick={() => { setMobileMenuOpen(false); onOpenLogin(); }}
+              className="w-full rounded-lg bg-neutral-100 py-3 text-center text-sm font-semibold text-black transition-colors hover:bg-neutral-200"
             >
               Sign In
             </button>
             <button
               type="button"
-              onClick={() => {
-                setMobileMenuOpen(false);
-                onOpenGetStarted();
-              }}
+              onClick={() => { setMobileMenuOpen(false); onOpenGetStarted(); }}
               className="landing-btn-primary w-full"
             >
               <span>Get Started Free</span>

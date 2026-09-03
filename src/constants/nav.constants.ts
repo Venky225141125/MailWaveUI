@@ -27,6 +27,7 @@ export const LANDING_NAV_LINKS = [
   { label: "How It Works", href: "#how-it-works" },
   { label: "Features", href: "#features" },
   { label: "Interactive Carousel", href: "#carousel" },
+  { label: "Contact", href: "#contact" },
   // { label: "Network Lab", href: "#network-playground" },
 ] as const;
 

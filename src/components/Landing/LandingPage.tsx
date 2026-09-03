@@ -8,6 +8,7 @@ import { BrandStory } from "@/components/Landing/BrandStory";
 import { HowItWorks } from "@/components/Landing/HowItWorks";
 import { Features } from "@/components/Landing/Features";
 import { FeatureCarousel } from "@/components/Landing/FeatureCarousel";
+import { ContactUs } from "@/components/Landing/ContactUs";
 // import { NetworkLab } from "@/components/Landing/NetworkLab";
 import { LandingFooter } from "@/components/Landing/LandingFooter";
 import { SignInRoleModal } from "@/components/Landing/SignInRoleModal";
@@ -45,6 +46,7 @@ export function LandingPage() {
         <HowItWorks />
         <Features />
         <FeatureCarousel />
+        <ContactUs />
         {/* <NetworkLab /> */}
       </main>
       <LandingFooter

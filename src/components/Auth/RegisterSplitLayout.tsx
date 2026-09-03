@@ -26,7 +26,7 @@ export function RegisterSplitLayout({
       <aside className="register-split__context" aria-label="Registration overview">
         <div className="register-split__context-inner">
           <Link href={ROUTES.home} className="register-split__brand mb-6 flex justify-center">
-            <Image src="/logo/integratedleads-white-full-logo.svg" alt={BRAND_NAME} width={100} height={100} className="w-[250px] h-full object-contain" />
+            <Image src="/logo/integratedleads-white-logo.svg" alt={BRAND_NAME} width={100} height={100} className="w-[250px] h-full object-contain" />
           </Link>
           <p className="register-split__eyebrow">{eyebrow}</p>
           <h1 className="register-split__title">{title}</h1>

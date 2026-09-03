@@ -112,7 +112,7 @@ export function AppShell({
         aria-label="Application sidebar"
       >
         <div className="app-shell__brand">
-          <Image src="/logo/integratedleads-white-full-logo.svg" alt={BRAND_NAME} width={100} height={100} className="w-[250px] h-full object-contain" />
+          <Image src="/logo/integratedleads-white-logo.svg" alt={BRAND_NAME} width={100} height={100} className="w-[250px] h-full object-contain" />
           {/* <div className="app-shell__brand-mark" aria-hidden>
             {BRAND_INITIALS}
           </div> */}
