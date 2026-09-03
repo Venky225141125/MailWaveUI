@@ -1,3 +1,4 @@
+export { LANDING_HERO_VARIANT } from "./landing.constants";
 export { AUTH_ENDPOINTS } from "./auth-endpoints.constants";
 export { SUPER_ADMIN_ENDPOINTS } from "./super-admin-endpoints.constants";
 export { CLIENT_ENDPOINTS } from "./client-endpoints.constants";

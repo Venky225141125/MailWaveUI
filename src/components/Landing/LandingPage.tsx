@@ -3,7 +3,7 @@
 import { useCallback, useState } from "react";
 import { useRouter } from "next/navigation";
 import { LandingNavbar } from "@/components/Landing/LandingNavbar";
-import { LandingHero } from "@/components/Landing/LandingHero";
+import { LandingHeroSwitch } from "@/components/Landing/LandingHeroSwitch";
 import { BrandStory } from "@/components/Landing/BrandStory";
 import { HowItWorks } from "@/components/Landing/HowItWorks";
 import { Features } from "@/components/Landing/Features";
@@ -38,7 +38,7 @@ export function LandingPage() {
         onOpenGetStarted={openGetStarted}
       />
       <main>
-        <LandingHero
+        <LandingHeroSwitch
           onOpenGetStarted={openGetStarted}
           onOpenDemo={openDemo}
         />
